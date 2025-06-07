@@ -53,7 +53,7 @@
 
 /* ~ examples */
 /* 
-* 1 - when use @apply rule classes ==> add both the light and dark classes to the element
+* 1 - when use @apply rule ==> add both the light and dark classes to the element
  <h1 className="light-primary-btn dark-primary-btn text-center font-bold">
      Gift Store is here!
   </h1>
