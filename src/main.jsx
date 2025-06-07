@@ -14,9 +14,7 @@ import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home/Home";
 const AboutComponent = lazy(() => import("../src/pages/About/About.jsx"));
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
-const ContactsComponent = lazy(() =>
-  import("../src/pages/Contact/Contact.jsx")
-);
+const ContactsComponent = lazy(() => import("../src/pages/Contact/Contact.jsx"));
 const ProfileComponent = lazy(() => import("../src/pages/Profile/Profile.jsx"));
 import NotFound from "./pages/NotFound/NotFound";
 import Login from "./pages/Login/Login";
@@ -78,7 +76,20 @@ const router = createBrowserRouter([
         path: "order-confirmation",
         element: <OrderConfirmation></OrderConfirmation>,
       },
-      { path: "gifts", element: <Products></Products> },
+      {
+        path: "gifts",
+        element: <Products></Products>,
+        children: [
+          {
+            path: ":categoryName",
+            element: (
+              <Suspense fallback={<LoadingSpinner />}>
+                <Products />
+              </Suspense>
+            ),
+          },
+        ],
+      },
       { path: "gifts/:id", element: <ProductDetails></ProductDetails> },
 
       // ^ dashboard
@@ -111,6 +122,7 @@ const router = createBrowserRouter([
 // ^ react query & redux setup
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
+import ScrollToTop from "./components/ArrowUp/ScrollToTop.jsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
@@ -118,6 +130,7 @@ createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
+        <ScrollToTop />
         <RouterProvider router={router} />
       </AuthContextProvider>
     </QueryClientProvider>

@@ -1,10 +1,9 @@
-// *Example
-// import { useQuery } from "@tanstack/react-query";
-// import { fetchUser } from "../services/userService";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCategories } from "../services/categoriesService";
 
-// export const useUser = () => {
-//   return useQuery({
-//     queryKey: ["user"],
-//     queryFn: fetchUser,
-//   });
-// };
+export const useCategories = () => {
+  return useQuery({
+    queryKey: ["categories"],
+    queryFn: getAllCategories,
+  });
+};
