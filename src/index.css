@@ -14,7 +14,7 @@
   --color-black: #000000; /*? bg-black or text-black or fill-black */
   --color-primary-dark: #d45741; /*? bg-primary-dark or text-primary-dark or fill-primary-dark */
   --color-secondary-dark: #0d1111; /*? bg-secondary-dark or text-secondary-dark or fill-secondary-dark */
-  --color-accent-dark: #2a5b7e; /*? bg-accent-dark or text-accent-dark or fill-accent-dark */
+  --color-accent-dark: #5ba0d2; /*? bg-accent-dark or text-accent-dark or fill-accent-dark */
 }
 
 /* ^light theme apply rules */
@@ -27,11 +27,11 @@
 }
 
 .light-primary-btn {
-  @apply text-white bg-primary;
+  @apply text-white bg-primary cursor-pointer hover:bg-accent transition-colors;
 }
 
 .light-secondary-btn {
-  @apply text-white bg-accent;
+  @apply text-white bg-accent cursor-pointer;
 }
 
 /* ^dark theme apply rules */
@@ -44,11 +44,19 @@
 }
 
 .dark-primary-btn {
-  @apply dark:text-light dark:bg-primary-dark;
+  @apply dark:text-light dark:bg-primary-dark cursor-pointer dark:hover:bg-accent transition-colors;
 }
 
 .dark-secondary-btn {
-  @apply dark:text-light dark:bg-accent-dark;
+  @apply dark:text-light dark:bg-accent-dark cursor-pointer;
+}
+
+[data-theme="dark"] .dark-shadow {
+  box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.7);
+}
+
+.clip-half {
+  clip-path: inset(0 50% 0 0);
 }
 
 /* ~ examples */
