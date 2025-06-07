@@ -1,1 +1,65 @@
 @import "tailwindcss";
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  /* ^ light theme */
+  --color-dark: #02020d; /*? bg-dark or text-dark or fill-dark */
+  --color-white: #ffffff; /*? bg-white or text-white or fill-white */
+  --color-primary: #c74029; /*? bg-primary or text-primary or fill-primary */
+  --color-secondary: #eef2f2; /*? bg-secondary or text-secondary or fill-secondary */
+  --color-accent: #2d72a4; /*? bg-accent or text-accent or fill-accent */
+
+  /* ^ dark theme */
+  --color-light: #f2f2fd; /*? bg-light or text-light or fill-light */
+  --color-black: #000000; /*? bg-black or text-black or fill-black */
+  --color-primary-dark: #d45741; /*? bg-primary-dark or text-primary-dark or fill-primary-dark */
+  --color-secondary-dark: #0d1111; /*? bg-secondary-dark or text-secondary-dark or fill-secondary-dark */
+  --color-accent-dark: #2a5b7e; /*? bg-accent-dark or text-accent-dark or fill-accent-dark */
+}
+
+/* ^light theme apply rules */
+.light-main-bg {
+  @apply text-dark bg-white;
+}
+
+.light-secondary-bg {
+  @apply text-dark bg-secondary;
+}
+
+.light-primary-btn {
+  @apply text-white bg-primary;
+}
+
+.light-secondary-btn {
+  @apply text-white bg-accent;
+}
+
+/* ^dark theme apply rules */
+.dark-main-bg {
+  @apply dark:text-light dark:bg-black;
+}
+
+.dark-secondary-bg {
+  @apply dark:text-light dark:bg-secondary-dark;
+}
+
+.dark-primary-btn {
+  @apply dark:text-light dark:bg-primary-dark;
+}
+
+.dark-secondary-btn {
+  @apply dark:text-light dark:bg-accent-dark;
+}
+
+/* ~ examples */
+/* 
+* 1 - when use @apply rule classes ==> add both the light and dark classes to the element
+ <h1 className="light-primary-btn dark-primary-btn text-center font-bold">
+     Gift Store is here!
+  </h1>
+
+* 2 - when use single theme variant (eg: --color-primary)
+ <h1 className="text-primary dark:text-primary-dark text-center font-bold">
+     Gift Store is here!
+  </h1>
+*/
