@@ -15,10 +15,10 @@ const LoadingSpinner = () => {
               <stop stopColor="#000" offset="0%" />
               <stop stopColor="#fff" offset="100%" />
             </linearGradient>
-            <linearGradient id="purple-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#8a2be2" />
-              <stop offset="50%" stopColor="#9932cc" />
-              <stop offset="100%" stopColor="#9400d3" />
+            <linearGradient id="custom-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+               <stop offset="0%" stopColor="#c74029" />
+              <stop offset="50%" stopColor="#c71000" />
+              <stop offset="100%" stopColor="#c70029" />
             </linearGradient>
             <mask id="loader-mask">
               <rect fill="url(#loader-grad)" height={128} width={128} y={0} x={0} />
@@ -26,15 +26,15 @@ const LoadingSpinner = () => {
           </defs>
           <g strokeDasharray="175.93 351.86" strokeWidth={12} strokeLinecap="round">
             <g>
-              <rect clipPath="url(#loader-eyes)" height={64} width={128} fill="url(#purple-gradient)" />
-              <g stroke="url(#purple-gradient)" fill="none">
+              <rect clipPath="url(#loader-eyes)" height={64} width={128} fill="url(#custom-gradient)" />
+              <g stroke="url(#custom-gradient)" fill="none">
                 <circle transform="rotate(180,64,64)" r={56} cy={64} cx={64} className="loader__mouth1" />
                 <circle transform="rotate(0,64,64)" r={56} cy={64} cx={64} className="loader__mouth2" />
               </g>
             </g>
             <g mask="url(#loader-mask)">
-              <rect clipPath="url(#loader-eyes)" height={64} width={128} fill="url(#purple-gradient)" />
-              <g stroke="url(#purple-gradient)" fill="none">
+              <rect clipPath="url(#loader-eyes)" height={64} width={128} fill="url(#custom-gradient)" />
+              <g stroke="url(#custom-gradient)" fill="none">
                 <circle transform="rotate(180,64,64)" r={56} cy={64} cx={64} className="loader__mouth1" />
                 <circle transform="rotate(0,64,64)" r={56} cy={64} cx={64} className="loader__mouth2" />
               </g>
@@ -44,7 +44,7 @@ const LoadingSpinner = () => {
       </div>
     </StyledWrapper>
   );
-}
+};
 
 const StyledWrapper = styled.div`
   display: flex;
