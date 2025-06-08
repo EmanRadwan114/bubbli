@@ -1,3 +1,7 @@
+import Loader from '../../components/LoadingSpinner/LoadingSpinner'
 export default function Home() {
-  return <div>Home</div>;
+  return <div>
+    <Loader></Loader>
+    Home</div>;
+
 }
