@@ -1,3 +1,5 @@
+import ProductDetailsCard from "../../components/ProductDetailsCard/ProductDetailsCard";
+
 export default function ProductDetails() {
-  return <div>ProductDetails</div>;
+  return <div><ProductDetailsCard></ProductDetailsCard></div>;
 }
