@@ -1,85 +1,159 @@
-import { Heart } from "lucide-react";
-import React from "react";
+import React, { useRef, useState } from "react";
+import { Gift, Heart, ChevronUp, ChevronDown, Star } from "lucide-react";
 
 const ProductDetailsCard = () => {
+  const images = [
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_10.24.38_am_4_.jpeg",
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_8.32.06_am_2_.jpeg",
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/p/i/pin_artjurnal3feb.jpg",
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_10.24.38_am_4_.jpeg",
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_8.32.06_am_2_.jpeg",
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/p/i/pin_artjurnal3feb.jpg",
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_10.24.38_am_4_.jpeg",
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_8.32.06_am_2_.jpeg",
+    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/p/i/pin_artjurnal3feb.jpg",
+  ];
+
+  const [mainImage, setMainImage] = useState(images[0]);
+  const thumbRef = useRef();
+
+  const scrollThumbnails = (direction) => {
+    if (!thumbRef.current) return;
+    const scrollAmount = 100;
+    thumbRef.current.scrollBy({
+      top: direction === "up" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
-      {/* Left - Product Image */}
-      <div className="flex justify-center items-center">
-        <img
-          src="https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-27_at_1.13.22_pm_4_.jpeg"
-          alt="Eid Said Stand"
-          className="max-w-lg w-full max-h-120  rounded-lg shadow object-cover"
-        />
-      </div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 p-6">
+      {/* Left Section - Images */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Thumbnails with arrows */}
+        <div className="flex items-center sm:flex-col sm:max-h-[480px] max-w-full overflow-x-auto sm:overflow-y-auto scrollbar-hide h-full">
+          {/* Up Arrow */}
+          {images.length > 5 && (
+            <button
+              onClick={() => scrollThumbnails("up")}
+              className="hidden sm:block mb-2 p-1 light-primary-btn dark:dark-primary-btn rounded shadow"
+            >
+              <ChevronUp size={18} />
+            </button>
+          )}
 
-      {/* Right - Product Info */}
-      <div>
-        {/* Title */}
-        <div className="flex justify-between items-start mb-2">
-          {" "}
-          <h2 className=" text-2xl md:text-4xl  font-semibold mb-2 text-[var(--color-primary)] dark:text-[var(--color-primary-dark)]">
-            Eid Said Stand Said Stand
-          </h2>
-          <button
-            // onClick={() => onAddToWishlist(product._id)}
-            className={` border border-gray-300 rounded-lg hover:bg-primary hover:text-white p-2 flex justify-center items-center gap-2 transition `}
-            //   ${
-            //   wishlistArr.includes(product._id)
-            //     ? "text-red-600 border-red-600"
-            //     : "text-gray-700 hover:bg-gray-100"
-            // }`
+          <div
+            ref={thumbRef}
+            className="flex sm:flex-col justify-between gap-2 max-w-full h-full overflow-x-auto sm:overflow-y-hidden scrollbar-hide"
           >
-            <Heart className="w-6 h-6 " />
+            {images.map((img, i) => (
+              <img
+                key={i}
+                src={img}
+                alt={`Thumbnail ${i + 1}`}
+                onClick={() => setMainImage(img)}
+                className={`w-16 h-16 rounded-md border-2 object-cover cursor-pointer mx-1 sm:mx-0 sm:my-1 ${
+                  mainImage === img ? "border-amber-500" : "border-gray-200"
+                }`}
+              />
+            ))}
+          </div>
 
-            {/* {wishlistArr.includes(product._id)
-              ? "Added to Wishlist"
-              : "Add to Wishlist"} */}
-          </button>
+          {/* Down Arrow */}
+          {images.length > 5 && (
+            <button
+              onClick={() => scrollThumbnails("down")}
+              className="hidden sm:block mt-2 p-1 light-primary-btn dark:dark-primary-btn rounded shadow"
+            >
+              <ChevronDown size={18} />
+            </button>
+          )}
         </div>
 
-        {/* Price */}
-        <p className="text-xl md:text-2xl text-[var(--color-dark)] mb-1 dark:text-[var(--color-light)]">
+        {/* Main Image */}
+        <div className="relative w-full">
+          <img
+            src={mainImage}
+            alt="Main product"
+            className="w-full max-h-[480px] object-cover rounded-lg shadow"
+          />
+          <span className="absolute text-lg top-2 right-2 bg-[#5ad980] text-white px-4 py-1 rounded-full shadow">
+            Deal
+          </span>
+        </div>
+      </div>
+
+      {/* Right Section - Info */}
+      <div className="flex flex-col justify-between px-4">
+        <div className="flex justify-between items-start mb-3">
+          <h2 className="text-2xl md:text-4xl font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-dark)]">
+            Eid Said Stand
+          </h2>
+          <button className="border border-gray-300 rounded-lg hover:bg-primary hover:text-white p-2 transition">
+            <Heart className="w-7 h-7" />
+          </button>
+        </div>
+        {/* Rating */}
+        <div className="flex items-start justify-between mb-2">
+          <div className="flex items-start">
+            {[...Array(5)].map((_, i) => {
+              const isFull = i + 1 <= 3.5;
+              const isHalf = i + 0.5 === 3.5;
+
+              return (
+                <div key={i} className="relative w-7 h-7 mr-1">
+                  {/* Empty Star Outline */}
+                  <Star className="w-7 h-7 text-yellow-500 fill-none" />
+
+                  {/* Full or Half Star Fill */}
+                  {(isFull || isHalf) && (
+                    <Star
+                      className={`w-7 h-7 text-yellow-500 fill-yellow-500 absolute top-0 left-0 ${
+                        isHalf ? "clip-half" : ""
+                      }`}
+                    />
+                  )}
+                </div>
+              );
+            })}
+            <p className="text-gray-400 text-lg mx-2 ">3.5</p>
+            <p className="ms-1 text-lg  hidden sm:inline">( 34 Reviews )</p>
+          </div>
+        </div>
+        <p className="text-xl font-semibold text-[var(--color-dark)] dark:text-[var(--color-light)] mb-1">
           LE 249.00
         </p>
-
-        {/* Stock Status */}
-        <p className=" text-green-600 mb-4">
+        <p className="text-green-600 mb-3">
           In stock: <span className="font-medium">5</span>
         </p>
-        {/* Divider */}
-        <hr className="my-4 border-gray-300" />
-        {/* <p className="text-sm text-red-500 mb-4">Out of stock</p> */}
 
-        {/* Attributes */}
-        <p className="text-gray-500 mb-2">
+        <hr className="my-4 border-gray-300" />
+
+        <p className="text-gray-700 mb-1">
           Category:{" "}
-          <span className="text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
+          <span className="font-medium text-[var(--color-accent)]">
             Stationery
           </span>
         </p>
-
-        <p className="text-gray-500 mb-2">
+        <p className="text-gray-700 mb-1">
           Material:{" "}
-          <span className="text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
+          <span className="font-medium text-[var(--color-accent)]">
             Ceramic
           </span>
         </p>
-
-        <p className="text-gray-500 mb-4 flex items-center gap-2">
-          Color:
-          <span className="inline-block w-4 h-4 rounded-full bg-[var(--color-accent-dark)]"></span>
+        <p className="text-gray-700 mb-4 flex items-center gap-2">
+          Color:{" "}
+          <span className="w-5 h-5 rounded-full bg-[var(--color-accent-dark)] inline-block" />
         </p>
 
-        {/* Description */}
-        <p className="mt-6 text-gray-600 text-sm leading-relaxed dark:text-gray-100">
-          Celebrate Eid al-Adha with our festive Eid Said Stand! This playful
-          decoration adds a touch of joy to your home during the holiday.
-          Perfect as a centerpiece for your feast table or as a cheerful gift.
+        <p className="text-gray-800 dark:text-gray-100 leading-relaxed mb-6">
+          Celebrate Eid al-Adha with our festive Eid Said Stand! A joyful
+          centerpiece for your feast table or gift.
         </p>
-        {/* Buy Button */}
-        <button className="mt-10 w-full light-primary-btn rounded-lg py-2 mb-4 transition dark:dark-primary-btn">
-          Buy it now
+
+        <button className="flex items-center justify-center gap-3 w-full py-2 text-lg font-medium rounded-lg light-primary-btn dark:dark-primary-btn">
+          <Gift />
+          Add to Cart
         </button>
       </div>
     </div>
