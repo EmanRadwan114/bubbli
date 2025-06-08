@@ -129,21 +129,21 @@ const ProductDetailsCard = () => {
 
         <hr className="my-4 border-gray-300" />
 
-        <p className="text-gray-700 mb-1">
+        <p className="text-gray-700 mb-1 dark:text-gray-400">
           Category:{" "}
-          <span className="font-medium text-[var(--color-accent)]">
+          <span className="font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
             Stationery
           </span>
         </p>
-        <p className="text-gray-700 mb-1">
+        <p className="text-gray-700 mb-1 dark:text-gray-400">
           Material:{" "}
-          <span className="font-medium text-[var(--color-accent)]">
+          <span className="font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
             Ceramic
           </span>
         </p>
-        <p className="text-gray-700 mb-4 flex items-center gap-2">
+        <p className="text-gray-700 dark:text-gray-400 mb-4 flex items-center gap-2">
           Color:{" "}
-          <span className="w-5 h-5 rounded-full bg-[var(--color-accent-dark)] inline-block" />
+          <span className="w-5 h-5 rounded-full bg-[var(--color-accent-dark)] inline-block " />
         </p>
 
         <p className="text-gray-800 dark:text-gray-100 leading-relaxed mb-6">

@@ -48,7 +48,7 @@
 }
 
 .dark-secondary-btn {
-  @apply dark:text-light dark:bg-accent-dark cursor-pointer;
+  @apply dark:text-light dark:bg-accent-dark cursor-pointer dark:hover:bg-[#4982aa];
 }
 
 [data-theme="dark"] .dark-shadow {

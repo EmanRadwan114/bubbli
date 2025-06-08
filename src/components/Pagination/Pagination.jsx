@@ -25,7 +25,7 @@ export default function Pagination({
         <button
           key={i}
           onClick={() => handleClick(i)}
-          className={`w-8 h-8 sm:w-9 sm:h-9 mx-1 rounded-full flex items-center justify-center text-sm transition-all ${
+          className={`w-7 h-7 sm:w-9 sm:h-9 mx-1 rounded-full flex items-center justify-center text-sm transition-all ${
             i === page
               ? "bg-[var(--color-primary)] text-white dark:bg-[var(--color-primary-dark)]"
               : "text-gray-600 hover:bg-gray-200 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-600"
