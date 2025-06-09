@@ -5,10 +5,15 @@ const Footer = () => {
   return (
     <footer className="text-dark bg-secondary px-6 py-10 dark:text-light dark:bg-secondary-dark mt-5">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-        <aside>
-          <Link to="/home" className="aboreto-regular text-2xl font-bold">
+        <aside className="flex flex-col gap-2">
+          <Link to="/" className="text-2xl font-bold text-primary">
             Bubbli
           </Link>
+
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 w-4/5 text-lg">
+            From birthdays to just-because moments, find the perfect gift that says it all. <br></br> Wrapped with joy, sent with heart.
+          </p>
+
           <div className="flex gap-3 mt-4 text-dark dark:text-light">
             <Instagram className="w-5 h-5 hover:text-primary cursor-pointer" />
             <Facebook className="w-5 h-5 hover:text-primary cursor-pointer" />
@@ -39,8 +44,11 @@ const Footer = () => {
           <Link to="/about" className="block mb-4 hover:text-primary transition-colors">
             About Us
           </Link>
-          <Link to="/refundPolicy" className="block hover:text-primary transition-colors">
+          <Link to="/refundPolicy" className="block hover:text-primary transition-colors  mb-4">
             Refund Policy
+          </Link>
+          <Link to="/contacts" className="block hover:text-primary transition-colors">
+            Contact Us
           </Link>
         </nav>
 
