@@ -1,10 +1,20 @@
-// *Example
-// import { useQuery } from "@tanstack/react-query";
-// import { fetchUser } from "../services/userService";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser, registerUser } from "../services/authService";
+import { toast } from "react-toastify";
 
-// export const useUser = () => {
-//   return useQuery({
-//     queryKey: ["user"],
-//     queryFn: fetchUser,
-//   });
-// };
+export const useUserRegister = () => {
+  return useMutation({
+    mutationFn: (data) => registerUser(data),
+    onError: (error) => {
+      toast.error(error?.response.data.message);
+    },
+  });
+};
+export const useLoginRegister = (navigate) => {
+  return useMutation({
+    mutationFn: (data) => loginUser(data),
+    onError: (error) => {
+      toast.error(error?.response.data.message);
+    },
+  });
+};
