@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import { toast } from "react-toastify";
 import { useAllWishlist } from "../../hooks/useWishlist";
+import { useParams } from "react-router";
+import { getProductByCategoryName } from "../../hooks/useProducts";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 const products = [
   {
@@ -45,6 +48,14 @@ const products = [
   },
 ];
 export default function Products() {
+  const { categoryName } = useParams();
+  const {
+    data: { data: categoryData = [], totalPages: catTotalPages = 1, currentPage: catCurrentPage = 1 } = {},
+    isLoading: isCatLoading,
+    isError: isCatError,
+    error: catError,
+  } = getProductByCategoryName(categoryName);
+
   // const { data, isLoading, isError, error } = useAllWishlist();
   const [wishlistArr, setWishlistArr] = useState([]);
 
@@ -61,20 +72,20 @@ export default function Products() {
       toast.success("Product is added to Wishlist");
     }
   };
-
+  if (isCatLoading) {
+    return <LoadingSpinner></LoadingSpinner>;
+  }
   return (
     <>
-      <div className="flex flex-wrap">
-        {products.map((product, indx) => (
-          <div className="w-full md:w-6/12 lg:w-4/12 p-2" key={indx}>
-            <ProductCard
-              product={product}
-              onAddToWishlist={onAddToWishlist}
-              onAddToCart={onAddToCart}
-              wishlistArr={wishlistArr}
-            />
-          </div>
-        ))}
+      <div className="flex">
+        <div className="md:flex-1/5"></div>
+        <div className="flex flex-wrap justify-center my-4 md:flex-4/5">
+          {categoryData.map((product, indx) => (
+            <div className="w-full md:w-6/12 lg:w-4/12 p-2" key={indx}>
+              <ProductCard product={product} onAddToWishlist={onAddToWishlist} onAddToCart={onAddToCart} wishlistArr={wishlistArr} />
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );

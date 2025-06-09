@@ -10,7 +10,7 @@ export default function CategoryCard() {
   if (error) return toast.error("Error loading categories");
   return (
     <>
-      <div className="flex flex-wrap flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 p-4">
+      <div className="flex flex-wrap sm:flex-row items-center justify-center gap-10 sm:gap-20 p-4">
         {categories?.map((category) => (
           <div
             key={category._id}

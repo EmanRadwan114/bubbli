@@ -1,10 +1,10 @@
-// *Example
-// import { useQuery } from "@tanstack/react-query";
-// import { fetchUser } from "../services/userService";
+import { useQuery } from "@tanstack/react-query";
+import { getProductByCategory } from "../services/productsService";
 
-// export const useUser = () => {
-//   return useQuery({
-//     queryKey: ["user"],
-//     queryFn: fetchUser,
-//   });
-// };
+export const getProductByCategoryName = (categoryName, page = 1, limit = 6) =>
+  useQuery({
+    queryKey: ["productsByCategory", categoryName, page, limit],
+    queryFn: () => getProductByCategory(categoryName, page, limit),
+    enabled: !!categoryName,
+    keepPreviousData: true,
+  });
