@@ -87,20 +87,24 @@ const router = createBrowserRouter([
       },
       {
         path: "gifts",
-        element: <Products></Products>,
         children: [
           {
-            path: ":categoryName",
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <Products />
-              </Suspense>
-            ),
+            // Handles /gifts (all products)
+            index: true, 
+            element: <Products />
           },
-        ],
+          {
+            // Handles /gifts/:categoryName
+            path: ":categoryName",
+            element: <Products />
+          },
+          {
+            // Handles /gifts/:categoryName/:id
+            path: ":categoryName/:id",
+            element: <ProductDetails />
+          }
+        ]
       },
-      { path: "gifts/:id", element: <ProductDetails></ProductDetails> },
-
       // ^ dashboard
       {
         path: "dashboard",
