@@ -54,25 +54,25 @@ const Register = () => {
   return (
     <section className=" bg-secondary dark:bg-secondary-dark py-4">
       {isSuccess ? (
-          <section className="w-full fixed top-0 end-0 bottom-0 start-0 bg-blend-overlay z-50 flex justify-center items-center min-h-screen text-center bg-black/90 text-dark dark:text-secondary px-8">
-            <div className="flex justify-center items-center flex-col bg-light dark:bg-black p-8 rounded-md shadow-2xl dark-shadow">
-              <p className="text-5xl flex justify-center flex-col sm:flex-row gap-5 mb-5">
-                <MailCheck className="w-11 h-11 m-auto sm:mt-1" />
-                Success!
-              </p>
-              <p className="text-xl mb-5">
-                Please check your email to activate it before login
-              </p>
-              <button
-                className="light-primary-btn dark-primary-btn text-xl px-4 py-2 rounded-md"
-                onClick={() => {
-                  window.open("https://mail.google.com", "_blank");
-                }}
-              >
-                Go To Email
-              </button>
-            </div>
-          </section>
+        <section className="w-full fixed top-0 end-0 bottom-0 start-0 bg-blend-overlay z-50 flex justify-center items-center min-h-screen text-center bg-black/90 text-dark dark:text-secondary px-8">
+          <div className="flex justify-center items-center flex-col bg-light dark:bg-black p-8 rounded-md shadow-2xl dark-shadow">
+            <p className="text-5xl flex justify-center flex-col sm:flex-row gap-5 mb-5">
+              <MailCheck className="w-11 h-11 m-auto sm:mt-1" />
+              Success!
+            </p>
+            <p className="text-xl mb-5">
+              Please check your email to activate it before login
+            </p>
+            <button
+              className="light-primary-btn dark-primary-btn text-xl px-4 py-2 rounded-md"
+              onClick={() => {
+                window.open("https://mail.google.com", "_blank");
+              }}
+            >
+              Go To Email
+            </button>
+          </div>
+        </section>
       ) : (
         ""
       )}
@@ -318,10 +318,12 @@ const Register = () => {
               </div>
 
               {/* Submit Button */}
-              <button
+
+              <LoadingButton
+                loading={isPending}
                 type="submit"
                 disabled={!formik.isValid || !formik.dirty || isPending}
-                className={`w-full  bg-gradient-to-r from-primary to-accent dark:from-primary-dark dark:to-accent-dark hover:opacity-90 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center shadow-sm hover:shadow-primary/30 dark:hover:shadow-primary-dark/30 relative overflow-hidden group ${
+                className={`w-full  bg-gradient-to-r from-primary to-accent dark:from-primary-dark dark:to-accent-dark hover:opacity-90 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-primary/30 dark:hover:shadow-primary-dark/30 relative overflow-hidden group ${
                   !formik.isValid || !formik.dirty || isPending
                     ? " disabled:cursor-not-allowed"
                     : "cursor-pointer"
@@ -330,16 +332,10 @@ const Register = () => {
                 {/* Animated background */}
                 <span className="absolute inset-0 bg-gradient-to-r from-accent to-primary dark:from-accent-dark dark:to-primary-dark opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 <span className="relative z-10 flex items-center">
-                  {isPending ? (
-                    <LoadingButton />
-                  ) : (
-                    <>
-                      <SquarePen className="me-2 w-5 h-5" />
-                      Create Account
-                    </>
-                  )}
+                  <SquarePen className="me-2 w-5 h-5" />
+                  Create Account
                 </span>
-              </button>
+              </LoadingButton>
             </form>
 
             {/* Login Link */}

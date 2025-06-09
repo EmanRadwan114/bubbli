@@ -11,15 +11,20 @@ import {
   X,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router";
-import { useLoginRegister } from "../../hooks/useAuth";
+import { useUserGoogleLogin, useUserLogin } from "../../hooks/useAuth";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { mutateAsync, isPending, isSuccess, data } =
-    useLoginRegister(navigate);
+  const { mutateAsync, isPending, isSuccess, data } = useUserLogin();
+  const {
+    mutateAsync: loginWithGoogleMutate,
+    data: googleLoginData,
+    isSuccess: isGoogleLoginSuccess,
+  } = useUserGoogleLogin();
   const { setUser } = useContext(AuthContext);
 
   const formik = useFormik({
@@ -46,11 +51,29 @@ const Login = () => {
   });
 
   if (isSuccess) {
-    localStorage.setItem("user", JSON.stringify(data.user));
     navigate("/");
+    localStorage.setItem("user", JSON.stringify(data.user));
     toast.success(data.message);
     setUser(data.user);
   }
+
+  const handleLoginSuccess = async (credentialResponse) => {
+    const { credential } = credentialResponse;
+
+    try {
+      await loginWithGoogleMutate(credential);
+    } catch (error) {
+      console.error("error with google login", error);
+    }
+  };
+
+  if (isGoogleLoginSuccess) {
+    navigate("/");
+    localStorage.setItem("user", JSON.stringify(googleLoginData.user));
+    toast.success(googleLoginData.message);
+    setUser(googleLoginData.user);
+  }
+
   return (
     <section className=" bg-secondary dark:bg-secondary-dark py-4">
       <div className="container m-auto p-2 sm:p-4 md:p-8 flex justify-center items-center bg-secondary dark:bg-secondary-dark min-h-screen">
@@ -76,7 +99,6 @@ const Login = () => {
             <div className="flex justify-center mb-6 relative">
               <div className="w-16 h-1 bg-primary dark:bg-primary-dark rounded-full"></div>
             </div>
-
             {/* Form */}
             <form onSubmit={formik.handleSubmit} className="space-y-5">
               {/* Email Field */}
@@ -226,10 +248,11 @@ const Login = () => {
               </div>
 
               {/* Submit Button */}
-              <button
+              <LoadingButton
+                loading={isPending}
                 type="submit"
                 disabled={!formik.isValid || !formik.dirty || isPending}
-                className={`w-full  bg-gradient-to-r from-primary to-accent dark:from-primary-dark dark:to-accent-dark hover:opacity-90 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center shadow-sm hover:shadow-primary/30 dark:hover:shadow-primary-dark/30 relative overflow-hidden group ${
+                className={`w-full mb-4 bg-gradient-to-r from-primary to-accent dark:from-primary-dark dark:to-accent-dark hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-md transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-primary/30 dark:hover:shadow-primary-dark/30 relative overflow-hidden group ${
                   !formik.isValid || !formik.dirty || isPending
                     ? " disabled:cursor-not-allowed"
                     : "cursor-pointer"
@@ -238,19 +261,21 @@ const Login = () => {
                 {/* Animated background */}
                 <span className="absolute inset-0 bg-gradient-to-r from-accent to-primary dark:from-accent-dark dark:to-primary-dark opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 <span className="relative z-10 flex items-center">
-                  {isPending ? (
-                    <LoadingButton />
-                  ) : (
-                    <>
-                      <KeyRound className="me-2 w-5 h-5" />
-                      Login
-                    </>
-                  )}
+                  <KeyRound className="me-2 w-5 h-5" />
+                  Login
                 </span>
-              </button>
+              </LoadingButton>
             </form>
-
-            {/* Login Link */}
+            {/* Google Login Box */}
+            <div className="w-full sm:w-4/12 md:4/12 mx-auto">
+              <GoogleLogin
+                onSuccess={handleLoginSuccess}
+                onError={() => console.log("Login Failed with google")}
+                text="signin_with"
+                logo_alignment="center"
+              />
+            </div>
+            {/* register Link */}
             <div className="mt-8 text-center">
               <p className=" text-dark/80 dark:text-light/80">
                 Don't have an account?{" "}

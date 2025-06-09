@@ -122,22 +122,25 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 import { ToastContainer } from "react-toastify";
 import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
-  <Provider store={store}>
-    <AuthContextProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          className="capitalize"
-        />
-      </QueryClientProvider>
-    </AuthContextProvider>
-  </Provider>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <Provider store={store}>
+      <AuthContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            className="capitalize"
+          />
+        </QueryClientProvider>
+      </AuthContextProvider>
+    </Provider>
+  </GoogleOAuthProvider>
 
   /* </StrictMode> */
 );
