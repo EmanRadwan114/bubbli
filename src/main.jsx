@@ -61,6 +61,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "refundPolicy",
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <RefundPolicy />
+          </Suspense>
+        ),
+      },
+      {
         path: "profile",
         element: (
           <Suspense fallback={<LoadingSpinner />}>
@@ -124,20 +132,26 @@ const router = createBrowserRouter([
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 import { ToastContainer } from "react-toastify";
+import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import ScrollToTop from "./components/ArrowUp/ScrollToTop.jsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
-  <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <Provider store={store}>
       <AuthContextProvider>
         <ScrollToTop />
         <RouterProvider router={router} />
         <ToastContainer position="top-right" autoClose={3000} />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <ToastContainer position="top-right" autoClose={3000} className="capitalize" />
+        </QueryClientProvider>
       </AuthContextProvider>
-    </QueryClientProvider>
-  </Provider>
+    </Provider>
+  </GoogleOAuthProvider>
 
   /* </StrictMode> */
 );
