@@ -79,8 +79,8 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
         <div className="flex items-start justify-between mb-2">
           <div className="flex items-start">
             {[...Array(5)].map((_, i) => {
-              const isFull = i + 1 <= product.rating;
-              const isHalf = i + 0.5 === product.rating;
+              const isFull = i + 1 <= product.avgRating;
+              const isHalf = i + 0.5 === product.avgRating;
 
               return (
                 <div key={i} className="relative w-6 h-6">
@@ -94,7 +94,7 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
                 </div>
               );
             })}
-            <span className="text-gray-400 ms-1">({product.rating})</span>
+            <span className="text-gray-400 ms-1">({product.avgRating})</span>
           </div>
 
           <span className="ms-1 text-lg font-semibold hidden sm:inline">{product.totalReviews} Reviews</span>
@@ -103,7 +103,7 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
         {/* Price */}
         <div className="mt-auto">
           <div className="flex justify-between items-start gap-3 mb-2">
-            {product.discount && (
+            {product.discount > 0 && (
               <div className="flex items-start gap-3 mb-2">
                 <span className="text-gray-400 text-lg line-through">EGP {product.price}</span>
 

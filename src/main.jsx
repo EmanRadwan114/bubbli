@@ -142,10 +142,8 @@ createRoot(document.getElementById("root")).render(
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <Provider store={store}>
       <AuthContextProvider>
-        <ScrollToTop />
-        <RouterProvider router={router} />
-        <ToastContainer position="top-right" autoClose={3000} />
         <QueryClientProvider client={queryClient}>
+          <ScrollToTop />
           <RouterProvider router={router} />
           <ToastContainer position="top-right" autoClose={3000} className="capitalize" />
         </QueryClientProvider>
