@@ -63,6 +63,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "refundPolicy",
+        element: (
+          <Suspense fallback={<LoadingSpinner />}>
+            <RefundPolicy />
+          </Suspense>
+        ),
+      },
+      {
         path: "profile",
         element: (
           <Suspense fallback={<LoadingSpinner />}>
@@ -113,6 +121,7 @@ const router = createBrowserRouter([
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 import { ToastContainer } from "react-toastify";
+import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
