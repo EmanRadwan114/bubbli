@@ -15,7 +15,7 @@ export default function Products() {
     isLoading: isCatLoading,
     isError: isCatError,
     error: catError,
-  } = getProductByCategoryName(categoryName, currentPage, 2);
+  } = getProductByCategoryName(categoryName, currentPage);
   function handlePagination(value) {
     setCurrentPage(value);
   }
