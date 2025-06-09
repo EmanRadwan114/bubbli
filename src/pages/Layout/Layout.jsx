@@ -1,13 +1,19 @@
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Navbar from "./../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 
 export default function Layout() {
+  const path = useLocation().pathname;
+
   return (
     <>
-      <Navbar></Navbar>
+      {path.includes("login") || path.includes("register") ? null : (
+        <Navbar></Navbar>
+      )}
       <Outlet></Outlet>
-      <Footer></Footer>
+      {path.includes("login") || path.includes("register") ? null : (
+        <Footer></Footer>
+      )}
     </>
   );
 }
