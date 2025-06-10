@@ -15,9 +15,7 @@ import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home/Home";
 const AboutComponent = lazy(() => import("../src/pages/About/About.jsx"));
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
-const ContactsComponent = lazy(() =>
-  import("../src/pages/Contact/Contact.jsx")
-);
+const ContactsComponent = lazy(() => import("../src/pages/Contact/Contact.jsx"));
 const ProfileComponent = lazy(() => import("../src/pages/Profile/Profile.jsx"));
 import NotFound from "./pages/NotFound/NotFound";
 import Login from "./pages/Login/Login";
@@ -87,9 +85,26 @@ const router = createBrowserRouter([
         path: "order-confirmation",
         element: <OrderConfirmation></OrderConfirmation>,
       },
-      { path: "gifts", element: <Products></Products> },
-      { path: "gifts/:id", element: <ProductDetails></ProductDetails> },
-
+      {
+        path: "gifts",
+        children: [
+          {
+            // Handles /gifts (all products)
+            index: true, 
+            element: <Products />
+          },
+          {
+            // Handles /gifts/:categoryName
+            path: ":categoryName",
+            element: <Products />
+          },
+          {
+            // Handles /gifts/:categoryName/:id
+            path: ":categoryName/:id",
+            element: <ProductDetails />
+          }
+        ]
+      },
       // ^ dashboard
       {
         path: "dashboard",
@@ -122,18 +137,23 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 import { ToastContainer } from "react-toastify";
 import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import ScrollToTop from "./components/ArrowUp/ScrollToTop.jsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
-  <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <Provider store={store}>
       <AuthContextProvider>
-        <RouterProvider router={router} />
-        <ToastContainer position="top-right" autoClose={3000} />
+        <QueryClientProvider client={queryClient}>
+          <ScrollToTop />
+          <RouterProvider router={router} />
+          <ToastContainer position="top-right" autoClose={3000} className="capitalize" />
+        </QueryClientProvider>
       </AuthContextProvider>
-    </QueryClientProvider>
-  </Provider>
+    </Provider>
+  </GoogleOAuthProvider>
 
   /* </StrictMode> */
 );

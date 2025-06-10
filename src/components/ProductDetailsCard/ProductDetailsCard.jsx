@@ -1,21 +1,34 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Gift, Heart, ChevronUp, ChevronDown, Star } from "lucide-react";
+import { useParams } from "react-router";
+import { useGetProductById } from "../../hooks/useProducts";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const ProductDetailsCard = () => {
-  const images = [
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_10.24.38_am_4_.jpeg",
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_8.32.06_am_2_.jpeg",
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/p/i/pin_artjurnal3feb.jpg",
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_10.24.38_am_4_.jpeg",
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_8.32.06_am_2_.jpeg",
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/p/i/pin_artjurnal3feb.jpg",
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_10.24.38_am_4_.jpeg",
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/w/h/whatsapp_image_2025-05-29_at_8.32.06_am_2_.jpeg",
-    "https://www.marketchino.com/media/catalog/product/cache/1/thumbnail/600x/17f82f742ffe127f42dca9de82fb58b1/p/i/pin_artjurnal3feb.jpg",
-  ];
+  const { categoryName, id } = useParams();
+  
+  // Fetch product data
+  const { data: response, isLoading, isError, error } = useGetProductById(id);
+  const product = response?.data?.[0];
 
-  const [mainImage, setMainImage] = useState(images[0]);
+  // State for image gallery
+  const [mainImage, setMainImage] = useState(null);
   const thumbRef = useRef();
+
+  // create mergedImages Array which includes images & thmubnail
+  const mergedImages = useMemo(() => {
+    const images = Array.isArray(product?.images) ? product.images : [];
+    const allImages = product?.thumbnail
+      ? [product.thumbnail, ...images]
+      : images;
+    return [...new Set(allImages)];
+  }, [product]);
+
+  useEffect(() => {
+    if (mergedImages.length > 0) {
+      setMainImage(mergedImages[0]);
+    }
+  }, [mergedImages]);
 
   const scrollThumbnails = (direction) => {
     if (!thumbRef.current) return;
@@ -26,6 +39,24 @@ const ProductDetailsCard = () => {
     });
   };
 
+  // Loading state
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  // Error state
+  if (isError) {
+    return (
+      <div className="text-center py-10 text-red-500">
+        Error loading product: {error.message}
+      </div>
+    );
+  }
+
+  // No product found
+  if (!product) {
+    return <div className="text-center py-10">Product not found</div>;
+  }
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 p-6">
       {/* Left Section - Images */}
@@ -33,7 +64,7 @@ const ProductDetailsCard = () => {
         {/* Thumbnails with arrows */}
         <div className="flex items-center sm:flex-col sm:max-h-[480px] max-w-full overflow-x-auto sm:overflow-y-auto scrollbar-hide h-full">
           {/* Up Arrow */}
-          {images.length > 5 && (
+          {mergedImages.length > 5 && (
             <button
               onClick={() => scrollThumbnails("up")}
               className="hidden sm:block mb-2 p-1 light-primary-btn dark:dark-primary-btn rounded shadow"
@@ -44,23 +75,23 @@ const ProductDetailsCard = () => {
 
           <div
             ref={thumbRef}
-            className="flex sm:flex-col justify-between gap-2 max-w-full h-full overflow-x-auto sm:overflow-y-hidden scrollbar-hide"
+            className="flex sm:flex-col  gap-2 max-w-full h-full overflow-x-auto sm:overflow-y-hidden scrollbar-hide"
           >
-            {images.map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt={`Thumbnail ${i + 1}`}
-                onClick={() => setMainImage(img)}
-                className={`w-16 h-16 rounded-md border-2 object-cover cursor-pointer mx-1 sm:mx-0 sm:my-1 ${
-                  mainImage === img ? "border-amber-500" : "border-gray-200"
-                }`}
-              />
-            ))}
+            {mergedImages.map((img, i) => (
+                <img
+                  key={i}
+                  src={img}
+                  alt={`Thumbnail ${i + 1}`}
+                  onClick={() => setMainImage(img)}
+                  className={`w-16 h-16 rounded-md border-2 object-cover cursor-pointer mx-1 sm:mx-0 sm:my-1 ${
+                    mainImage === img ? "border-amber-500" : "border-gray-200"
+                  }`}
+                />
+              ))}
           </div>
 
           {/* Down Arrow */}
-          {images.length > 5 && (
+          {mergedImages.length > 5 && (
             <button
               onClick={() => scrollThumbnails("down")}
               className="hidden sm:block mt-2 p-1 light-primary-btn dark:dark-primary-btn rounded shadow"
@@ -77,9 +108,11 @@ const ProductDetailsCard = () => {
             alt="Main product"
             className="w-full max-h-[480px] object-cover rounded-lg shadow"
           />
-          <span className="absolute text-lg top-2 right-2 bg-[#5ad980] text-white px-4 py-1 rounded-full shadow">
-            Deal
-          </span>
+          {product.label?.includes("deal") && (
+            <span className="absolute text-lg top-2 right-2 bg-[#5ad980] text-white px-4 py-1 rounded-full shadow">
+              Deal
+            </span>
+          )}
         </div>
       </div>
 
@@ -87,7 +120,7 @@ const ProductDetailsCard = () => {
       <div className="flex flex-col justify-between px-4">
         <div className="flex justify-between items-start mb-3">
           <h2 className="text-2xl md:text-4xl font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-dark)]">
-            Eid Said Stand
+            {product.title}
           </h2>
           <button className="border border-gray-300 rounded-lg hover:bg-primary hover:text-white p-2 transition">
             <Heart className="w-7 h-7" />
@@ -97,8 +130,8 @@ const ProductDetailsCard = () => {
         <div className="flex items-start justify-between mb-2">
           <div className="flex items-start">
             {[...Array(5)].map((_, i) => {
-              const isFull = i + 1 <= 3.5;
-              const isHalf = i + 0.5 === 3.5;
+              const isFull = i + 1 <= Math.floor(product.avgRating);
+              const isHalf = i + 0.5 === Math.floor(product.avgRating);
 
               return (
                 <div key={i} className="relative w-7 h-7 mr-1">
@@ -116,15 +149,22 @@ const ProductDetailsCard = () => {
                 </div>
               );
             })}
-            <p className="text-gray-400 text-lg mx-2 ">3.5</p>
-            <p className="ms-1 text-lg  hidden sm:inline">( 34 Reviews )</p>
+            <p className="text-gray-400 text-lg mx-2 ">{product.avgRating}</p>
+            <p className="ms-1 text-lg  hidden sm:inline">
+              ({product.numberOfReviews} Reviews)
+            </p>
           </div>
         </div>
         <p className="text-xl font-semibold text-[var(--color-dark)] dark:text-[var(--color-light)] mb-1">
-          LE 249.00
+          LE {product.price - (product.price * product.discount) / 100}
+          {product.discount > 0 && (
+            <span className="text-gray-500 line-through ml-2">
+              LE {product.price}
+            </span>
+          )}
         </p>
         <p className="text-green-600 mb-3">
-          In stock: <span className="font-medium">5</span>
+          In stock: <span className="font-medium">{product.stock}</span>
         </p>
 
         <hr className="my-4 border-gray-300" />
@@ -132,23 +172,30 @@ const ProductDetailsCard = () => {
         <p className="text-gray-700 mb-1 dark:text-gray-400">
           Category:{" "}
           <span className="font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
-            Stationery
+            {categoryName}
           </span>
         </p>
         <p className="text-gray-700 mb-1 dark:text-gray-400">
           Material:{" "}
           <span className="font-medium text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
-            Ceramic
+            {product.material}
           </span>
         </p>
         <p className="text-gray-700 dark:text-gray-400 mb-4 flex items-center gap-2">
           Color:{" "}
-          <span className="w-5 h-5 rounded-full bg-[var(--color-accent-dark)] inline-block " />
+          {product.color?.split("&").map((clr, idx) => (
+            <span
+              key={idx}
+              className="w-5 h-5 rounded-full  border-1 inline-block"
+              style={{ backgroundColor: clr.toLowerCase() }}
+              title={clr.trim()}
+            />
+          ))}
+          <span className="capitalize">{product.color}</span>
         </p>
 
         <p className="text-gray-800 dark:text-gray-100 leading-relaxed mb-6">
-          Celebrate Eid al-Adha with our festive Eid Said Stand! A joyful
-          centerpiece for your feast table or gift.
+          {product.description}
         </p>
 
         <button className="flex items-center justify-center gap-3 w-full py-2 text-lg font-medium rounded-lg light-primary-btn dark:dark-primary-btn">
