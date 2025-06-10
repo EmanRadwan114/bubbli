@@ -3,6 +3,7 @@ import Navbar from "./../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import VerifyPhone from "../../components/VerifyPhone/VerifyPhone";
 
+
 export default function Layout() {
   const path = useLocation().pathname;
 
