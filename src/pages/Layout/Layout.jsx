@@ -1,7 +1,8 @@
 import { Outlet, useLocation } from "react-router";
 import Navbar from "./../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import HomeHero from "../../components/HomeHero/HomeHero";
+import VerifyPhone from "../../components/VerifyPhone/VerifyPhone";
+
 
 export default function Layout() {
   const path = useLocation().pathname;
@@ -9,8 +10,9 @@ export default function Layout() {
   return (
     <>
       {path.includes("login") || path.includes("register") ? null : (
-          <Navbar></Navbar>
+        <Navbar></Navbar>
       )}
+      <VerifyPhone></VerifyPhone>
       <div className="pt-16">
         <Outlet></Outlet>
       </div>
