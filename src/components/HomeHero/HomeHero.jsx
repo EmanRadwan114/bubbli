@@ -123,7 +123,7 @@ const HomeHero = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 60, damping: 15 }}
-          className="flex flex-col space-y-6 text-center items-center justify-center z-50 px-6">
+          className="flex flex-col space-y-6 text-center items-center justify-center z-40 px-6">
           {/* Dynamic Artistic Images */}
           <div className="text-sm sm:text-md tracking-widest text-gray-500">
             {banner.artisticText}
