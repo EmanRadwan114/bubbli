@@ -8,9 +8,11 @@ export default function Layout() {
   return (
     <>
       {path.includes("login") || path.includes("register") ? null : (
-        <Navbar></Navbar>
+          <Navbar></Navbar>
       )}
-      <Outlet></Outlet>
+      <div className="pt-16">
+        <Outlet></Outlet>
+      </div>
       {path.includes("login") || path.includes("register") ? null : (
         <Footer></Footer>
       )}
