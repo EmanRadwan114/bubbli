@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const ChatWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -13,16 +22,34 @@ const ChatWidget = () => {
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
 
+    // Optional: Add "typing..." effect (optional visual)
+    const typingIndicator = { sender: "bot", text: "Typing..." };
+    setMessages((prev) => [...prev, typingIndicator]);
+
     try {
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/chatbot`, {
         message: input,
       });
 
-      const botMsg = { sender: "bot", text: res.data.reply };
-      setMessages((prev) => [...prev, botMsg]);
+      const botReply = res.data.reply;
+
+      // Simulate delay
+      setTimeout(() => {
+        setMessages((prev) =>
+          prev
+            .filter((msg) => msg.text !== "Typing...") // remove typing
+            .concat({ sender: "bot", text: botReply })
+        );
+      }, 1500); // 1.5s delay
     } catch (err) {
-      const errorMsg = { sender: "bot", text: "Something went wrong." };
-      setMessages((prev) => [...prev, errorMsg]);
+      console.error("Chatbot Error:", err);
+      setTimeout(() => {
+        setMessages((prev) =>
+          prev
+            .filter((msg) => msg.text !== "Typing...")
+            .concat({ sender: "bot", text: "Something went wrong." })
+        );
+      }, 1500);
     }
   };
 
@@ -31,18 +58,19 @@ const ChatWidget = () => {
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition z-50">
+        className="fixed bottom-6 right-[100px] bg-accent text-white p-4 rounded-full shadow-lg hover:bg-accent-dark cursor-pointer transition z-50">
         💬
       </button>
 
       {/* Chat Widget Panel */}
       {isOpen && (
-        <div className="fixed bottom-20 right-6 w-80 bg-white border rounded-lg shadow-lg flex flex-col z-50">
-          <div className="bg-blue-600 text-white px-4 py-2 rounded-t-lg font-semibold">
+        <div className="fixed bottom-20 right-[100px] w-80 bg-white border-2 border-gray-400 rounded-lg shadow-lg flex flex-col z-50 h-96">
+          <div className="bg-primary text-white px-4 py-2 rounded-t-lg font-semibold">
             AI Assistant
           </div>
 
-          <div className="p-3 h-64 overflow-y-auto space-y-2 flex-1">
+          {/* Messages Container */}
+          <div className="p-3 flex-1 overflow-y-auto space-y-2 bg-gray-50">
             {messages.map((msg, index) => (
               <div
                 key={index}
@@ -50,28 +78,30 @@ const ChatWidget = () => {
                   msg.sender === "user" ? "justify-end" : "justify-start"
                 }`}>
                 <div
-                  className={`px-3 py-2 rounded-lg max-w-xs text-sm ${
+                  className={`px-3 py-2 rounded-lg max-w-[80%] text-sm break-words ${
                     msg.sender === "user"
-                      ? "bg-blue-500 text-white rounded-br-none"
-                      : "bg-gray-200 text-black rounded-bl-none"
+                      ? "bg-primary text-white rounded-br-none"
+                      : "bg-secondary text-black rounded-bl-none"
                   }`}>
                   {msg.text}
                 </div>
               </div>
             ))}
+            <div ref={messagesEndRef} />
           </div>
 
-          <div className="flex border-t p-2">
+          {/* Input Area */}
+          <div className="flex border-t border-gray-400  p-2">
             <input
               type="text"
-              className="flex-1 border p-2 rounded mr-2 text-sm"
+              className="flex-1 border-2 border-gray-400  p-2 rounded text-sm"
               placeholder="Type a message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             />
             <button
-              className="bg-blue-600 text-white px-3 rounded"
+              className="bg-primary hover:bg-accent cursor-pointer text-white px-3 ml-2 rounded"
               onClick={sendMessage}>
               ➤
             </button>
