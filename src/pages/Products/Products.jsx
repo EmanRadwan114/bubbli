@@ -7,6 +7,7 @@ import { getProductByCategoryName } from "../../hooks/useProducts";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import img from "../../assets/images/emptyCart.png";
 import Pagination from "../../components/Pagination/Pagination";
+import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 export default function Products() {
   const { categoryName } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,6 +41,7 @@ export default function Products() {
   }
   return (
     <>
+      <Breadcrumb></Breadcrumb>
       <div className="flex">
         <div className="md:flex-1/5"></div>
         <div className="flex flex-col md:flex-4/5">
