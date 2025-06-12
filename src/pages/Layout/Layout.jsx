@@ -12,8 +12,12 @@ export default function Layout() {
       {path.includes("login") || path.includes("register") ? null : (
         <Navbar></Navbar>
       )}
-      <VerifyPhone></VerifyPhone>
-      <div className="pt-16">
+      {/* <VerifyPhone></VerifyPhone> */}
+      <div
+        className={` ${
+          path.includes("login") || path.includes("register") ? "pt-0" : "pt-16"
+        }`}
+      >
         <Outlet></Outlet>
       </div>
       {path.includes("login") || path.includes("register") ? null : (
