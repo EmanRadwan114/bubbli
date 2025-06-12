@@ -87,15 +87,21 @@ const router = createBrowserRouter([
       },
       {
         path: "gifts",
-        element: <Products></Products>,
         children: [
           {
+            // Handles /gifts (all products)
+            index: true,
+            element: <Products />,
+          },
+          {
+            // Handles /gifts/:categoryName
             path: ":categoryName",
-            element: (
-              <Suspense fallback={<LoadingSpinner />}>
-                <Products />
-              </Suspense>
-            ),
+            element: <Products />,
+          },
+          {
+            // Handles /gifts/:categoryName/:id
+            path: ":categoryName/:id",
+            element: <ProductDetails />,
           },
         ],
       },

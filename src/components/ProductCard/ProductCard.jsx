@@ -1,12 +1,14 @@
 import { Heart, Star } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 
 const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => {
+  const { categoryName } = useParams();
+  const productLink = categoryName ? `/gifts/${categoryName}/${product._id}` : `/gifts/${product._id}`;
   return (
     <div className="light-main-bg dark-main-bg rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full dark-shadow">
       {/* Image with badges */}
       <div className="relative flex-shrink-0">
-        <Link to={`/gifts/product/${product._id}`}>
+        <Link to={productLink}>
           <img src={product.thumbnail} alt={product.title} className="w-full h-48 object-cover hover:scale-105 transition-transform duration-200" />
         </Link>
 
@@ -60,7 +62,7 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
       {/* Product details */}
       <div className="p-4 flex-grow flex flex-col">
         <div className="flex justify-between items-start mb-2">
-          <Link to={`/gifts/product/${product._id}`} className=" no-underline w-9/12">
+          <Link to={productLink} className=" no-underline w-9/12">
             <h3 className="font-semibold text-xl mb-1 hover:text-accent dark:hover:text-accent-dark transition-colors">{product.title}</h3>
           </Link>
           <button onClick={() => onAddToWishlist(product._id)} className={`text-gray-500 cursor-pointer w-3/12 pt-1 `} aria-label="Add to wishlist">
