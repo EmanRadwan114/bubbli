@@ -1,106 +1,114 @@
-import { HeartHandshake, PencilRuler, Headset, Leaf, HelpCircle } from "lucide-react";
-import { Link } from "react-router-dom";
-import img from "../../assets/images/faq.jpg";
-const whyChooseUs = [
-  {
-    title: "Quality Craftsmanship",
-    description: "Built with care using premium materials and detailed finishes.",
-    icon: <PencilRuler className="w-6 h-6 text-yellow-400" />, // Lucide
-  },
-  {
-    title: "Customize Options",
-    description: "Design pieces your way with custom finishes and fabrics.",
-    icon: <HeartHandshake className="w-6 h-6 text-yellow-400" />,
-  },
-  {
-    title: "Exceptional Service",
-    description: "Enjoy smooth service from purchase to delivery and beyond.",
-    icon: <Headset className="w-6 h-6 text-yellow-400" />,
-  },
-  {
-    title: "Sustainable Practices",
-    description: "Committed to eco-friendly materials and responsible sourcing.",
-    icon: <Leaf className="w-6 h-6 text-yellow-400" />,
-  },
-];
+import React from "react";
+import { Gift, Heart, Star } from "lucide-react";
 
-const FAQ = [
-  {
-    question: "How long does delivery take?",
-    answer: "Standard delivery takes 5-7 business days. Custom gifts require 2-3 weeks for production plus delivery time.",
-  },
-  {
-    question: "Do you offer in-store pickup?",
-    answer: "Yes, you can select free in-store pickup during checkout at our flagship locations in Cairo and Alexandria.",
-  },
-  {
-    question: "What if my gift arrives damaged?",
-    answer: "Contact us within 48 hours with photos. We will replace it or provide a refund at no cost.",
-  },
-  {
-    question: "Can I request a personalized design?",
-    answer: "Absolutely! You can personalize gifts directly from our website or contact support for help.",
-  },
-  {
-    question: "Do you match competitor prices?",
-    answer: "Yes, we match competitor prices within 14 days of purchase. Submit proof to our support team.",
-  },
-];
-
-export default function AboutUs() {
+const AboutComponent = () => {
   return (
-    <div>
-      {/* Hero Section */}
-      <div className="relative h-[640px] mb-12 border-2">
-        <img src="/images/about2.jpg" className="scale-x-[-1] object-cover h-full w-full brightness-60" alt="Bubbli Hero" />
-        <div className="absolute top-6 sm:top-10 left-1/2 transform -translate-x-1/2 z-50">
-          <Link to="/" className="text-white text-2xl font-bold">
-            Bubbli
-          </Link>
-        </div>
-        <div className="absolute top-36 sm:top-1/3 md:top-[38%] lg:top-2/5 left-1/2 transform -translate-x-1/2 w-[90%] sm:w-4/5 md:w-2/3 lg:w-1/2 bg-white/40 backdrop-blur-lg p-4 sm:p-6 text-white rounded-sm shadow-lg text-center">
-          <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-primary">Bringing Joy, One Gift at a Time</h2>
-          <p className="mt-2 text-sm sm:text-base">At Bubbli, each gift is a story, crafted with heart to celebrate your special moments.</p>
-        </div>
-      </div>
+    <main className="light-main-bg dark-main-bg min-h-screen px-6 py-12 md:px-16">
+      {/* Header Section */}
+      <section className="text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary dark:text-primary-dark mb-4">About Our Gift Shop</h1>
+        <p className="text-gray-600 dark:text-light max-w-2xl mx-auto">
+          At our gift shop, we believe that the perfect gift tells a story. Whether you're celebrating a birthday, an anniversary, or just want to
+          surprise someone, we've got you covered.
+        </p>
+      </section>
 
-      {/* Why Choose Us */}
-      <div className="relative h-[640px] mb-12">
-        <img src="/images/why.jpg" className="scale-x-[-1] object-cover h-full w-full brightness-60" alt="Why Choose Us" />
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-center">
-          <h2 className="text-4xl font-bold mb-6">Why Choose Us</h2>
-          <div className="space-y-4">
-            {whyChooseUs.map((item, index) => (
-              <div key={index} className="bg-gray-500/50 p-4 rounded shadow-md">
-                <div className="flex items-center gap-4 mb-2">
-                  <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">{item.icon}</div>
-                  <h4 className="text-md font-bold">{item.title}</h4>
+      {/* Features Section */}
+      <section className="grid gap-10 md:grid-cols-3 text-center mb-10 pb-10 border-b-2 border-accent dark:border-accent-dark">
+        <div className="p-6 bg-secondary dark:bg-gray-900 rounded-xl shadow transition-transform duration-300 ease-in-out hover:scale-105">
+          <Gift className="mx-auto text-primary dark:text-primary-dark mb-4" size={40} />
+          <h3 className="font-semibold text-xl mb-2">Curated Gifts</h3>
+          <p className="text-sm text-gray-700 dark:text-light">
+            Our collection is handpicked to bring you the most thoughtful and meaningful gift ideas.
+          </p>
+        </div>
+        <div className="p-6 bg-secondary dark:bg-gray-900 rounded-xl shadow transition-transform duration-300 ease-in-out hover:scale-105">
+          <Heart className="mx-auto text-primary dark:text-primary-dark mb-4" size={40} />
+          <h3 className="font-semibold text-xl mb-2">Made with Love</h3>
+          <p className="text-sm text-gray-700 dark:text-light">Every item is crafted or selected with love to ensure it brings a smile.</p>
+        </div>
+        <div className="p-6 bg-secondary dark:bg-gray-900 rounded-xl shadow transition-transform duration-300 ease-in-out hover:scale-105">
+          <Star className="mx-auto text-primary dark:text-primary-dark mb-4" size={40} />
+          <h3 className="font-semibold text-xl mb-2">Customer Favorites</h3>
+          <p className="text-sm text-gray-700 dark:text-light">Discover our best-selling gifts loved by customers across the country.</p>
+        </div>
+      </section>
+
+      <section className="flex flex-col items-center gap-10 mb-10 justify-center mt-10 px-4  pb-10 border-b-2 border-accent dark:border-accent-dark">
+        <div className="w-full max-w-6xl">
+          <h2 className="text-3xl font-bold text-primary dark:text-primary-dark mb-6 text-center lg:text-left">What We Value Most</h2>
+          <div className="flex flex-col lg:flex-row items-center ">
+            <div className="flex flex-col gap-4 w-full lg:w-1/2">
+              {[
+                {
+                  title: "Quality First",
+                  description: "We ensure every gift meets high standards.",
+                  icon: <Star className="text-primary dark:text-primary-dark" size={24} />,
+                },
+                {
+                  title: "Customer Joy",
+                  description: "Seeing our customers happy is our biggest reward.",
+                  icon: <Heart className="text-primary dark:text-primary-dark" size={24} />,
+                },
+                {
+                  title: "Creativity",
+                  description: "We embrace imagination in how we design and present every gift.",
+                  icon: <Gift className="text-primary dark:text-primary-dark" size={24} />,
+                },
+                {
+                  title: "Trust",
+                  description: "Our customers count on us for reliable and thoughtful service.",
+                  icon: <Star className="text-primary dark:text-primary-dark" size={24} />,
+                },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-start gap-4 bg-secondary dark:bg-gray-900 p-4 rounded-lg shadow transition-transform duration-300 ease-in-out hover:scale-105"
+                >
+                  <div className="mt-1">{item.icon}</div>
+                  <div>
+                    <h4 className="font-semibold text-md mb-1">{item.title}</h4>
+                    <p className="text-sm text-gray-700 dark:text-light">{item.description}</p>
+                  </div>
                 </div>
-                <p className="text-sm">{item.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* Image Column */}
+            <div className="w-full lg:w-1/2 flex justify-center">
+              <img
+                src="https://img.freepik.com/free-photo/christmas-shopping-concept-with-cart-bag_23-2147719636.jpg?uid=R122390214&ga=GA1.1.1139909252.1747612214&semt=ais_hybrid&w=740"
+                alt="Our Values"
+                className="w-full max-w-md rounded-xl shadow-md"
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* FAQ Section */}
-      <div className="flex flex-wrap items-center justify-center">
-        <img src={img} alt="FAQ" className="sm:w-1/3 md:w-1/4" />
-        <div className="basis-3/5 p-6 py-24">
-          <h3 className="text-3xl md:text-4xl font-bold mb-4">Popular FAQs</h3>
-          <p className="mb-6 text-gray-600 dark:text-gray-300">Get answers to common questions about our gifts and service.</p>
-          {FAQ.map((item, index) => (
-            <div
-              key={index}
-              tabIndex={0}
-              className="my-4 collapse collapse-plus bg-base-100 border-base-300 border focus:ring-1 focus:ring-teal-600 transition-all duration-400 ease-in-out"
-            >
-              {/* <div className="collapse-title font-semibold text-gray-800 dark:text-white">{item.question}</div>
-              <div className="collapse-content text-sm text-gray-600 dark:text-gray-300">{item.answer}</div> */}
-            </div>
-          ))}
+      {/* New Section: Why Choose Us */}
+      <section className="text-center mb-5 mt-5">
+        <h2 className="text-3xl font-bold text-primary dark:text-primary-dark mb-4">Why Choose Us</h2>
+        <p className="text-gray-600 dark:text-light max-w-xl mx-auto mb-10">
+          We’re more than just a gift shop. Here’s what makes us your go-to choice for every occasion.
+        </p>
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 ">
+          <div className="bg-secondary p-6 rounded-xl shadow transition-transform duration-300 ease-in-out hover:scale-105 dark:bg-gray-900">
+            <h4 className="font-semibold text-lg mb-2">Fast & Reliable Delivery</h4>
+            <p className="text-sm text-gray-600 dark:text-light">Get your gifts delivered on time, every time, with our trusted shipping partners.</p>
+          </div>
+          <div className="bg-secondary dark:bg-gray-900 p-6 rounded-xl shadow transition-transform duration-300 ease-in-out hover:scale-105">
+            <h4 className="font-semibold text-lg mb-2">Unique Customization</h4>
+            <p className="text-sm text-gray-600 dark:text-light">Personalize your gifts with names, messages, and creative touches that stand out.</p>
+          </div>
+          <div className="bg-secondary dark:bg-gray-900 p-6 rounded-xl shadow transition-transform duration-300 ease-in-out hover:scale-105">
+            <h4 className="font-semibold text-lg mb-2">24/7 Support</h4>
+            <p className="text-sm text-gray-600 dark:text-light">We’re here to help you with any questions or issues, anytime you need us.</p>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
   );
-}
+};
+
+export default AboutComponent;

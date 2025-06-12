@@ -14,7 +14,19 @@ export const getProductByCategory = async (categoryName, page, limit) => {
     throw err;
   }
 };
-
+export const getAllProductsBack = async (page = 1, limit = 6) => {
+  const path = `/products`;
+  try {
+    const response = await api.get(path, {
+      params: { page, limit },
+    });
+    console.log("→ Got response:", response.status, response.data);
+    return response.data;
+  } catch (err) {
+    console.error("getAllProducts failed:", err);
+    throw err;
+  }
+};
 // Get Product By ID
 // export const getProductById = async (id) => {
 //   const path = `/products/${id}`;
@@ -31,7 +43,7 @@ export const getProductByCategory = async (categoryName, page, limit) => {
 export const getProductById = async (id) => {
   const path = `/products/${id}`;
   try {
-    const response = await api.get(path)
+    const response = await api.get(path);
     console.log("specific product response:", response.status, response.data);
     return response.data;
   } catch (err) {

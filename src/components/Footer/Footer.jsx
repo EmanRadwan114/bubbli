@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Instagram, Facebook, Youtube } from "lucide-react";
 const Footer = () => {
   return (
-    <footer className="text-dark bg-secondary px-6 py-10 dark:text-light dark:bg-secondary-dark mt-5">
+    <footer className="text-dark bg-secondary px-6 py-10 dark:text-light dark:bg-gray-900 mt-5">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
         <aside className="flex flex-col gap-2">
           <Link to="/" className="text-2xl font-bold text-primary">

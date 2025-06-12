@@ -9,19 +9,13 @@ export default function Layout() {
 
   return (
     <>
-      {path.includes("login") || path.includes("register") ? null : (
-        <Navbar></Navbar>
-      )}
-      <VerifyPhone></VerifyPhone>
+      {path.includes("login") || path.includes("register") ? null : <Navbar></Navbar>}
+      {/* <VerifyPhone></VerifyPhone> */}
       <div className="pt-16">
         <Outlet></Outlet>
       </div>
-      {path.includes("login") || path.includes("register") ? null : (
-        <Footer></Footer>
-      )}
-      {path.includes("login") || path.includes("register") ? null : (
-        <ChatWidget />
-      )}
+      {path.includes("login") || path.includes("register") ? null : <Footer></Footer>}
+      {path.includes("login") || path.includes("register") ? null : <ChatWidget />}
     </>
   );
 }
