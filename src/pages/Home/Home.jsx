@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div>
       <HomeHero></HomeHero>
-      <Coupons />
+      {/* <Coupons /> */}
       <CategoryCard />
     </div>
   );
