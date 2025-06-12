@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router";
 
 const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => {
   const { categoryName } = useParams();
-  const productLink = categoryName ? `/gifts/${categoryName}/${product._id}` : `/gifts/${product._id}`;
+  const productLink = categoryName ? `/gifts/${categoryName}/${product._id}` : `/gifts/product/${product._id}`;
   return (
     <div className="light-main-bg dark-main-bg rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full dark-shadow">
       {/* Image with badges */}
