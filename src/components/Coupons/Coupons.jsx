@@ -79,7 +79,7 @@ export default function Coupons({ onApplyCoupon }) {
         <button
           type="submit"
           disabled={loading}
-          className="absolute top-0 right-0 h-[51px] px-5 bg-primary text-white text-sm font-semibold rounded shadow hover:bg-primary-dark transition disabled:opacity-50 disabled:cursor-not-allowed">
+          className="absolute top-0 right-0 h-[51px] px-5 bg-primary text-white text-sm font-semibold rounded shadow hover:bg-primary-dark transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
           {loading ? (
             <svg
               className="animate-spin h-5 w-5 mx-auto text-white"
