@@ -18,11 +18,31 @@ export default function Checkout() {
   const [couponCode, setCouponCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [cart, setCartItems] = useState([]);
-  const [editingAddressIndex, setEditingAddressIndex] = useState(null);
+  // Inside Checkout component:
+
+  const [selectedAddress, setSelectedAddress] = useState("");
+
+  const handleAddressSelect = (address) => {
+    if (selectedAddress === address) {
+      // Deselecting
+      setSelectedAddress("");
+      formik.setFieldValue("address", "");
+    } else {
+      setSelectedAddress(address);
+      formik.setFieldValue("address", address);
+    }
+  };
 
   const navigate = useNavigate();
   const shippingPrice = getShippingPrice();
-  const addresses = userData?.address || [];
+  const addresses = userData?.data.address || [];
+
+  // useEffect(() => {
+  //   if (userData) {
+  //     console.log("userData:", userData.data);
+  //     console.log("address:", userData.data.address);
+  //   }
+  // }, [userData]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,10 +91,12 @@ export default function Checkout() {
       setLoading(true);
       try {
         // Save new address if not already saved
-        if (!addresses.includes(values.address)) {
+        if (!addresses.includes(values.address.trim())) {
           await updateProfile.mutateAsync({
-            addresses: [...addresses, values.address],
+            address: [...addresses, values.address.trim()],
           });
+          console.log("Updated address:", [...addresses, values.address]);
+
           await refetch();
         }
 
@@ -101,28 +123,6 @@ export default function Checkout() {
     setCouponDiscount(discount);
   };
 
-  const handleAddressSelect = (address) => {
-    formik.setFieldValue("address", address);
-    setEditingAddressIndex(null);
-  };
-
-  const handleAddressEdit = (index) => {
-    formik.setFieldValue("address", addresses[index]);
-    setEditingAddressIndex(index);
-  };
-
-  const handleAddressRemove = async (index) => {
-    const newAddresses = [...addresses];
-    newAddresses.splice(index, 1);
-    try {
-      await updateProfile.mutateAsync({ addresses: newAddresses });
-      await refetch();
-      toast.success("Address removed.");
-    } catch {
-      toast.error("Failed to remove address.");
-    }
-  };
-
   return (
     <div className="flex flex-col lg:flex-row min-h-screen px-6 gap-4 items-start">
       {/* LEFT SIDE */}
@@ -132,37 +132,44 @@ export default function Checkout() {
         </h2>
         <div className="h-[5px] w-3/4 md:w-72 bg-gradient-to-r from-[#2d72a4] to-[#c74029] mb-2" />
 
-        <form
-          onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-6 mt-4">
-          {/* EXISTING ADDRESSES */}
+        <h4 className="text-accent text-lg font-medium">Shipping Address</h4>
+
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6">
+          {/* SAVED ADDRESSES CARDS */}
           {addresses.length > 0 && (
             <div className="flex flex-col gap-2">
               <h4 className="text-accent text-sm font-medium">
                 Saved Addresses:
               </h4>
-              {addresses.map((addr, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className="text-sm text-blue-600 underline"
-                    onClick={() => handleAddressSelect(addr)}>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {addresses.map((addr, index) => (
+                  <label
+                    key={index}
+                    className={`p-3 border rounded cursor-pointer transition ${
+                      selectedAddress === addr
+                        ? "border-teal-500 bg-teal-500/10"
+                        : "border-gray-300"
+                    }`}>
+                    <input
+                      type="radio"
+                      name="savedAddress"
+                      value={addr}
+                      checked={selectedAddress === addr}
+                      onChange={() => handleAddressSelect(addr)}
+                      className="mr-2 accent-teal-600 "
+                    />
                     {addr}
-                  </button>
-                  <button
-                    type="button"
-                    className="text-xs text-yellow-600"
-                    onClick={() => handleAddressEdit(index)}>
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    className="text-xs text-red-600"
-                    onClick={() => handleAddressRemove(index)}>
-                    Remove
-                  </button>
-                </div>
-              ))}
+                  </label>
+                ))}
+              </div>
+              {selectedAddress && (
+                <button
+                  type="button"
+                  onClick={() => handleAddressSelect(selectedAddress)}
+                  className="text-sm text-red-500 underline self-start mt-1 cursor-pointer">
+                  Deselect Address to enter new one
+                </button>
+              )}
             </div>
           )}
 
@@ -171,13 +178,13 @@ export default function Checkout() {
             <label
               htmlFor="address"
               className="block text-sm font-medium text-accent mb-1">
-              Shipping Address
+              Enter New Address
             </label>
             <input
               type="text"
               id="address"
               name="address"
-              className={`w-full px-4 py-2 rounded border ${
+              className={`w-full px-4 py-2 rounded border-2 focus:border-teal-500 focus:outline-none ${
                 formik.touched.address && formik.errors.address
                   ? "border-red-500"
                   : "border-gray-300"
@@ -185,6 +192,10 @@ export default function Checkout() {
               value={formik.values.address}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
+              disabled={!!selectedAddress}
+              placeholder={
+                selectedAddress ? "Using saved address" : "Enter new address"
+              }
             />
             {formik.touched.address && formik.errors.address && (
               <p className="text-red-500 text-sm mt-1">
@@ -197,13 +208,13 @@ export default function Checkout() {
           <div>
             <label
               htmlFor="paymentMethod"
-              className="block text-sm font-medium text-accent mb-1">
+              className="block text-lg font-medium text-accent mb-1">
               Payment Method
             </label>
             <select
               id="paymentMethod"
               name="paymentMethod"
-              className={`w-full px-4 py-2 rounded border ${
+              className={`w-full px-4 py-2 rounded border-2 cursor-pointer focus:border-teal-500 focus:outline-none ${
                 formik.touched.paymentMethod && formik.errors.paymentMethod
                   ? "border-red-500"
                   : "border-gray-300"
