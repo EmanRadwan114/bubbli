@@ -3,7 +3,7 @@
 // import { fetchUser } from "../services/userService";
 
 import { useMutation } from "@tanstack/react-query";
-import { addToCart } from "../services/cartService";
+import { addToCartApi } from "../services/cartService";
 import { toast } from "react-toastify";
 
 // export const useUser = () => {
@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 
 export const useAddToCart = () => {
   return useMutation({
-    mutationFn: (id) => addToCart(id),
+    mutationFn: (id) => addToCartApi(id),
     onError: (error) => {
       console.log(error);
       toast.error(error?.response.data.message);

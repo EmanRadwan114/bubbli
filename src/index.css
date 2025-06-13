@@ -8,6 +8,8 @@
   --color-primary: #c74029; /*? bg-primary or text-primary or fill-primary */
   --color-secondary: #eef2f2; /*? bg-secondary or text-secondary or fill-secondary */
   --color-accent: #2d72a4; /*? bg-accent or text-accent or fill-accent */
+  --color-card: #f9f9f7; /*? bg-card or text-card or fill-card */
+  --color-cardAlt: #e5e5da; /*? bg-cardAlt or text-cardAlt or fill-cardAlt */
 
   /* ^ dark theme */
   --color-light: #f2f2fd; /*? bg-light or text-light or fill-light */
