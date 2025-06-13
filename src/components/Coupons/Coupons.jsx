@@ -3,6 +3,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { applyCoupon } from "../../services/couponService";
 
+import { CircleCheckBig, Ban } from "lucide-react";
+
 export default function Coupons({ onApplyCoupon }) {
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState({ message: "", success: null });
@@ -110,12 +112,19 @@ export default function Coupons({ onApplyCoupon }) {
 
       {feedback.message && (
         <div
-          className={`border-l-4 p-4 rounded ${
+          className={`border-l-4 p-4 rounded flex items-start gap-2 ${
             feedback.success
-              ? "bg-green-100 border-green-500 text-green-700"
+              ? "bg-teal-100 border-teal-500 text-teal-700"
               : "bg-red-100 border-red-500 text-red-700"
           }`}>
-          {feedback.message}
+          <span className="mt-1">
+            {feedback.success ? (
+              <CircleCheckBig className="w-5 h-5 text-teal-600" />
+            ) : (
+              <Ban className="w-5 h-5 text-red-600" />
+            )}
+          </span>
+          <p>{feedback.message}</p>
         </div>
       )}
     </form>
