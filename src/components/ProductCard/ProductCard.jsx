@@ -1,17 +1,27 @@
 import { Heart, Star } from "lucide-react";
 import { Link, useParams } from "react-router";
 
-const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => {
+const ProductCard = ({
+  product,
+  wishlistArr,
+  onAddToCart,
+  onAddToWishlist,
+}) => {
   const { categoryName } = useParams();
   const productLink = categoryName
     ? `/gifts/${categoryName}/${product._id}`
-    : `/gifts/${product._id}`;
+    : `/gifts/product/${product._id}`;
+
   return (
     <div className="light-main-bg dark-main-bg rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full dark-shadow">
       {/* Image with badges */}
       <div className="relative flex-shrink-0">
         <Link to={productLink}>
-          <img src={product.thumbnail} alt={product.title} className="w-full h-48 object-cover hover:scale-105 transition-transform duration-200" />
+          <img
+            src={product.thumbnail}
+            alt={product.title}
+            className="w-full h-48 object-cover hover:scale-105 transition-transform duration-200"
+          />
         </Link>
 
         {/* Badges */}
@@ -65,9 +75,15 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
       <div className="p-4 flex-grow flex flex-col">
         <div className="flex justify-between items-start mb-2">
           <Link to={productLink} className=" no-underline w-9/12">
-            <h3 className="font-semibold text-xl mb-1 hover:text-accent dark:hover:text-accent-dark transition-colors">{product.title}</h3>
+            <h3 className="font-semibold text-xl mb-1 hover:text-accent dark:hover:text-accent-dark transition-colors">
+              {product.title}
+            </h3>
           </Link>
-          <button onClick={() => onAddToWishlist(product._id)} className={`text-gray-500 cursor-pointer w-3/12 pt-1 `} aria-label="Add to wishlist">
+          <button
+            onClick={() => onAddToWishlist(product._id)}
+            className={`text-gray-500 cursor-pointer w-3/12 pt-1 `}
+            aria-label="Add to wishlist"
+          >
             <Heart
               className={`block ms-auto w-7 h-7 ${
                 wishlistArr.includes(product._id)
@@ -77,7 +93,9 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
             />
           </button>
         </div>
-        <p className="text-dark dark:text-[#bfbfc1] mb-3">{product.description.slice(0, 100) + "..."}</p>
+        <p className="text-dark dark:text-[#bfbfc1] mb-3">
+          {product.description.slice(0, 100) + "..."}
+        </p>
 
         {/* Rating */}
         <div className="flex items-start justify-between mb-2">
@@ -93,7 +111,11 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
 
                   {/* Full or Half Star Fill */}
                   {(isFull || isHalf) && (
-                    <Star className={`w-5 h-5 text-yellow-500 fill-yellow-500 absolute top-0 left-0 ${isHalf ? "clip-half" : ""}`} />
+                    <Star
+                      className={`w-5 h-5 text-yellow-500 fill-yellow-500 absolute top-0 left-0 ${
+                        isHalf ? "clip-half" : ""
+                      }`}
+                    />
                   )}
                 </div>
               );
@@ -101,7 +123,9 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
             <span className="text-gray-400 ms-1">({product.avgRating})</span>
           </div>
 
-          <span className="ms-1 text-lg font-semibold hidden sm:inline">{product.totalReviews} Reviews</span>
+          <span className="ms-1 text-lg font-semibold hidden sm:inline">
+            {product.totalReviews} Reviews
+          </span>
         </div>
 
         {/* Price */}
@@ -109,17 +133,28 @@ const ProductCard = ({ product, wishlistArr, onAddToCart, onAddToWishlist }) => 
           <div className="flex justify-between items-start gap-3 mb-2">
             {product.discount > 0 && (
               <div className="flex items-start gap-3 mb-2">
-                <span className="text-gray-400 text-lg line-through">EGP {product.price}</span>
+                <span className="text-gray-400 text-lg line-through">
+                  EGP {product.price}
+                </span>
 
-                <span className="text-gray-400 font-bold hidden sm:inline">(discount {product.discount}%)</span>
+                <span className="text-gray-400 font-bold hidden sm:inline">
+                  (discount {product.discount}%)
+                </span>
               </div>
             )}
-            <span className="font-semibold text-lg">EGP {product.price - ((product.discount ? product.discount : 0) * product.price) / 100}</span>
+            <span className="font-semibold text-lg">
+              EGP{" "}
+              {product.price -
+                ((product.discount ? product.discount : 0) * product.price) /
+                  100}
+            </span>
           </div>
 
           {/* Actions */}
           <button
-            onClick={onAddToCart}
+            onClick={() => {
+              onAddToCart(product._id);
+            }}
             className="light-primary-btn dark-primary-btn text-white px-4 py-2 rounded-lg font-semibold text-lg transition-colors block w-full"
           >
             Add to Cart

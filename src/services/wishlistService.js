@@ -1,9 +1,15 @@
+//just a js file for storing api methods related to wishlist
 import api from "../utils/apiUrl";
 
-//just a js file for storing api methods related to wishlist
 export const getAllUserWishlist = async () => {
   const res = await api.get("/wishlist?all=true");
-  console.log(res);
-
+  return res.data;
+};
+export const addToWishlist = async (id) => {
+  const res = await api.put(`/wishlist/${id}`);
+  return res.data;
+};
+export const removeFromWishlist = async (id) => {
+  const res = await api.delete(`/wishlist/${id}`);
   return res.data;
 };
