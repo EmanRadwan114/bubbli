@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-export default function Footer() {
-  return <div>Footer</div>;
-}
-=======
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Instagram, Facebook, Youtube } from "lucide-react";
@@ -88,4 +84,3 @@ const Footer = () => {
 };
 
 export default Footer;
->>>>>>> 8201525b6bff379c8557d3c2649df90ed82937bb
