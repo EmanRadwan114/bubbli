@@ -3,10 +3,16 @@ import { Gift, Heart, ChevronUp, ChevronDown, Star } from "lucide-react";
 import { useParams } from "react-router";
 import { useGetProductById } from "../../hooks/useProducts";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { WishlistContext } from "../../context/Wishlist.Context";
+import {
+  useAddToWishlist,
+  useAllWishlist,
+  useRemoveFromWishlist,
+} from "../../hooks/useWishlist";
 
 const ProductDetailsCard = () => {
   const { categoryName, id } = useParams();
-  
+
   // Fetch product data
   const { data: response, isLoading, isError, error } = useGetProductById(id);
   const product = response?.data?.[0];
@@ -39,6 +45,18 @@ const ProductDetailsCard = () => {
     });
   };
 
+  const {
+    data: allWishlist,
+    isLoading: isWishlistLoading,
+    isError: isWishlistError,
+    error: wishlistError,
+  } = useAllWishlist();
+
+  const wishlistArr = allWishlist?.data?.map((item) => item._id) || [];
+  const { mutate: addToWishlist } = useAddToWishlist();
+  const { mutate: removeFromWishlist } = useRemoveFromWishlist();
+
+
   // Loading state
   if (isLoading) {
     return <LoadingSpinner />;
@@ -52,11 +70,21 @@ const ProductDetailsCard = () => {
       </div>
     );
   }
-
   // No product found
   if (!product) {
     return <div className="text-center py-10">Product not found</div>;
   }
+  // Check if product is in wishlist
+  const isInWishlist = product?._id ? wishlistArr.includes(product._id) : false;
+
+  const handleWishlistClick = () => {
+    if (isInWishlist) {
+      removeFromWishlist(product._id);
+    } else {
+      addToWishlist(product._id);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 p-6">
       {/* Left Section - Images */}
@@ -78,16 +106,16 @@ const ProductDetailsCard = () => {
             className="flex sm:flex-col  gap-2 max-w-full h-full overflow-x-auto sm:overflow-y-hidden scrollbar-hide"
           >
             {mergedImages.map((img, i) => (
-                <img
-                  key={i}
-                  src={img}
-                  alt={`Thumbnail ${i + 1}`}
-                  onClick={() => setMainImage(img)}
-                  className={`w-16 h-16 rounded-md border-2 object-cover cursor-pointer mx-1 sm:mx-0 sm:my-1 ${
-                    mainImage === img ? "border-amber-500" : "border-gray-200"
-                  }`}
-                />
-              ))}
+              <img
+                key={i}
+                src={img}
+                alt={`Thumbnail ${i + 1}`}
+                onClick={() => setMainImage(img)}
+                className={`w-16 h-16 rounded-md border-2 object-cover cursor-pointer mx-1 sm:mx-0 sm:my-1 ${
+                  mainImage === img ? "border-amber-500" : "border-gray-200"
+                }`}
+              />
+            ))}
           </div>
 
           {/* Down Arrow */}
@@ -122,8 +150,18 @@ const ProductDetailsCard = () => {
           <h2 className="text-2xl md:text-4xl font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-dark)]">
             {product.title}
           </h2>
-          <button className="border border-gray-300 rounded-lg hover:bg-primary hover:text-white p-2 transition">
-            <Heart className="w-7 h-7" />
+          <button
+            onClick={handleWishlistClick}
+            className={`border rounded-lg p-2 transition ${
+              isInWishlist
+                ? "bg-primary text-white border-primary"
+                : "border-gray-300 hover:bg-primary hover:text-white"
+            }`}
+          >
+            <Heart
+              className="w-7 h-7"
+              fill={isInWishlist ? "currentColor" : "none"}
+            />
           </button>
         </div>
         {/* Rating */}
