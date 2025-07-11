@@ -25,5 +25,5 @@ export const checkout = async () => {
 
 export async function getOrderDetails(id) {
   const response = await api.get(`/orders/${id}`);
-  return response.data;
+  return response.data.data;
 }
