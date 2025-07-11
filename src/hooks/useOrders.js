@@ -1,20 +1,54 @@
-// *Example
-// import { useQuery } from "@tanstack/react-query";
-// import { fetchUser } from "../services/userService";
-
-import { useQuery } from "@tanstack/react-query";
 import { getOrderDetails } from "../services/orderService";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useOrdersContext } from "../context/OrdersContext.jsx";
 
-// export const useUser = () => {
-//   return useQuery({
-//     queryKey: ["user"],
-//     queryFn: fetchUser,
-//   });
-// };
-export const useOrder = (orderId) => {
+export const useOrders = () => {
+  const { getCartItems, getShippingPrice, createOrder, checkout } =
+    useOrdersContext();
+
+  const queryClient = useQueryClient();
+
+  // Fetch cart items
+  const {
+    data: cartData,
+    isLoading: isCartLoading,
+    isError: isCartError,
+    error: cartError,
+    refetch: refetchCart,
+  } = useQuery({
+    queryKey: ["cartItems"],
+    queryFn: getCartItems,
+  });
+
+  // Create order mutation
+  const createOrderMutation = useMutation({
+    mutationFn: createOrder,
+    onSuccess: () => {
+      // clear cart cache
+      queryClient.invalidateQueries(["cartItems"]);
+    },
+  });
+  
+  // get order details
+  export const useOrder = (orderId) => {
   return useQuery({
   queryKey: ["order", orderId],
   queryFn: () => getOrderDetails(orderId),
   enabled: !!orderId,
 });
 }
+
+  return {
+    cartData,
+    isCartLoading,
+    isCartError,
+    cartError,
+    refetchCart,
+
+    createOrder: createOrderMutation.mutateAsync,
+    isCreatingOrder: createOrderMutation.isLoading,
+
+    getShippingPrice,
+    checkout,
+  };
+};
