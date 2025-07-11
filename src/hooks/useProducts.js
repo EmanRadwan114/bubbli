@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllProductsBack, getProductByCategory, getProductById } from "../services/productsService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { addProduct, deleteProduct, getAllProductsBack, getProductByCategory, getProductById, updateProduct } from "../services/productsService";
 import { number } from "yup";
 
 export const getProductByCategoryName = (categoryName, page = 1, limit = 6) =>
@@ -39,6 +39,45 @@ export const useGetProductById = (id) => {
     },
     onSettled: (data, error) => {
       console.log("Query settled:", { data, error });
+    },
+  });
+};
+
+
+// Add product
+export const useAddProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: addProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
+    },
+    onError: (err) => {
+      console.error("Product creation failed:", err);
+      throw err;
+    },
+  });
+};
+
+// DELETE PRODUCT
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
+    },
+  });
+};
+
+// UPDATE PRODUCT
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => updateProduct(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
     },
   });
 };

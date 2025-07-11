@@ -52,3 +52,21 @@ export const addReview = async (id, details) => {
   const response = await api.post(`/products/${id}/reviews`, details);
   return response.data;
 };
+
+// ADD Product
+export const addProduct = async (newProductData) => {
+  const res = await api.post("/products", newProductData);
+  return res.data;
+};
+
+// DELETE product
+export const deleteProduct = async (id) => {
+  const response = await api.delete(`/products/${id}`);
+  return response.data;
+};
+
+// UPDATE product
+export const updateProduct = async (id, productData) => {
+  const response = await api.put(`/products/${id}`, productData);
+  return response.data;
+};
