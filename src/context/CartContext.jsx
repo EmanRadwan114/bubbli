@@ -1,16 +1,18 @@
+
+import { AuthContext } from "./AuthContext";
+// import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+// import { createContext, useContext, useEffect, useState } from "react";
+// import { editQuantity, getCartItems, removeCart } from "../services/cartApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createContext, useContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
+
 import {
   editQuantity,
   getCartItems,
   removeCart,
   addToCartApi,
 } from "../services/cartService";
-import { AuthContext } from "./AuthContext";
-// import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-// import { createContext, useContext, useEffect, useState } from "react";
-// import { editQuantity, getCartItems, removeCart } from "../services/cartApi";
-
+import { useAuth } from "./AuthContext";
 export const CartContext = createContext();
 
 export default function CartContextProvider({ children }) {

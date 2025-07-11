@@ -20,3 +20,8 @@ export const editQuantity = async ({ id, quantity }) => {
 export const addToCartApi = (productId) => {
   return api.post("/cart", { productId });
 };
+
+
+
+
+

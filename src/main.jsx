@@ -39,6 +39,7 @@ import { OrdersContextProvider } from "./context/OrdersContext";
 import CartContextProvider from "./context/CartContext";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
 
+
 // ^ routing setup
 const router = createBrowserRouter([
   {
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "contacts",
+        path: "contact",
         element: (
           <Suspense fallback={<LoadingSpinner />}>
             <ContactsComponent />
