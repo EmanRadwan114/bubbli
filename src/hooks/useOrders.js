@@ -28,15 +28,6 @@ export const useOrders = () => {
       queryClient.invalidateQueries(["cartItems"]);
     },
   });
-  
-  // get order details
-  export const useOrder = (orderId) => {
-  return useQuery({
-  queryKey: ["order", orderId],
-  queryFn: () => getOrderDetails(orderId),
-  enabled: !!orderId,
-});
-}
 
   return {
     cartData,
@@ -51,4 +42,13 @@ export const useOrders = () => {
     getShippingPrice,
     checkout,
   };
+};
+
+// get order details
+export const useOrder = (orderId) => {
+  return useQuery({
+    queryKey: ["order", orderId],
+    queryFn: () => getOrderDetails(orderId),
+    enabled: !!orderId,
+  });
 };

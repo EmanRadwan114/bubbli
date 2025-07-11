@@ -5,6 +5,7 @@ export const getAllUserWishlist = async () => {
   const res = await api.get("/wishlist?all=true");
   return res.data;
 };
+
 export const addToWishlist = async (id) => {
   const res = await api.put(`/wishlist/${id}`);
   return res.data;

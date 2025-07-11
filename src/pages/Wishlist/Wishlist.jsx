@@ -1,5 +1,8 @@
 import React from "react";
-import { useAllWishlist, useRemoveFromWishlist } from "../../hooks/useWishlist";
+import {
+  useFetchWishlist,
+  useRemoveFromWishlist,
+} from "../../hooks/useWishlist";
 import { useCart } from "../../context/CartContext";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -8,7 +11,7 @@ import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ProductCard from "../../components/ProductCard/ProductCard"; // ✅ import correctly
 
 const Wishlist = () => {
-  const { data, isLoading, isError, error } = useAllWishlist();
+  const { data, isLoading, isError, error } = useFetchWishlist();
   const { mutate: removeFromWishlist, isPending } = useRemoveFromWishlist();
   const { addToCart } = useCart();
 
@@ -25,14 +28,14 @@ const Wishlist = () => {
 
   if (isLoading || isPending) return <LoadingSpinner />;
 
-  if (isError) {
-    toast.error(error?.response?.data?.message || "Failed to fetch wishlist");
-    return (
-      <div className="text-center py-10 text-red-500">
-        Error loading wishlist.
-      </div>
-    );
-  }
+  // if (isError) {
+  //   toast.error(error?.response?.data?.message || "Failed to fetch wishlist");
+  //   return (
+  //     <div className="text-center py-10 text-red-500">
+  //       Error loading wishlist.
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="py-12 px-4 md:px-10">

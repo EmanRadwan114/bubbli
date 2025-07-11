@@ -28,6 +28,17 @@ export const getAllProductsBack = async (page = 1, limit = 6) => {
   }
 };
 
+export const getFeaturedProducts = async (label) => {
+  const path = `/products/label/${label}`;
+  try {
+    const response = await api.get(path);
+    return response.data;
+  } catch (err) {
+    console.error("getAllProducts failed:", err);
+    throw err;
+  }
+};
+
 // Get Product By ID
 export const getProductById = async (id) => {
   const path = `/products/${id}`;
@@ -41,7 +52,7 @@ export const getProductById = async (id) => {
   }
 };
 
-// reviews 
+// reviews
 export const getReviews = async (id, page) => {
   const response = await api.get(`/products/${id}/reviews?page=${page}`);
   console.log("", response.data);

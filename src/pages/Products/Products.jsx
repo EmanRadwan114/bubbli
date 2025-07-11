@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import { toast } from "react-toastify";
-import { useAddToWishlist, useAllWishlist, useRemoveFromWishlist } from "../../hooks/useWishlist";
+import {
+  useAddToWishlist,
+  useAllWishlist,
+  useRemoveFromWishlist,
+} from "../../hooks/useWishlist";
 import { useParams } from "react-router";
-import { getAllProducts, getProductByCategoryName } from "../../hooks/useProducts";
+import {
+  getAllProducts,
+  getProductByCategoryName,
+} from "../../hooks/useProducts";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import img from "../../assets/images/emptyCart.png";
 import Pagination from "../../components/Pagination/Pagination";
@@ -32,19 +39,38 @@ export default function Products() {
     isLoading,
     isError,
     error,
-  } = categoryName ? getProductByCategoryName(categoryName, currentPage) : getAllProducts(currentPage);
+  } = categoryName
+    ? getProductByCategoryName(categoryName, currentPage)
+    : getAllProducts(currentPage);
 
   function handlePagination(value) {
     setCurrentPage(value);
   }
-  const { data: allWishlist, isLoading: isWishlistLoading, isError: isWishlistError, error: wishlistError } = useAllWishlist();
+  const {
+    data: allWishlist,
+    isLoading: isWishlistLoading,
+    isError: isWishlistError,
+    error: wishlistError,
+  } = useAllWishlist();
 
   const [wishlistArr, setWishlistArr] = useState([]);
 
-  const { mutateAsync: addProToWishlist, isPending: pendingAddToWishlist, isSuccess: addToWishlistSuccess } = useAddToWishlist();
-  const { mutateAsync: removeProFromWishlist, isPending: pendingRemoveFromWishlist, isSuccess: removeFromWishlistSuccess } = useRemoveFromWishlist();
+  const {
+    mutateAsync: addProToWishlist,
+    isPending: pendingAddToWishlist,
+    isSuccess: addToWishlistSuccess,
+  } = useAddToWishlist();
+  const {
+    mutateAsync: removeProFromWishlist,
+    isPending: pendingRemoveFromWishlist,
+    isSuccess: removeFromWishlistSuccess,
+  } = useRemoveFromWishlist();
 
-  const { mutateAsync: addProToCart, isPending: pendingAddToCart, isSuccess: addToCartSuccess } = useAddToCart();
+  const {
+    mutateAsync: addProToCart,
+    isPending: pendingAddToCart,
+    isSuccess: addToCartSuccess,
+  } = useAddToCart();
 
   useEffect(() => {
     if (allWishlist) {
@@ -57,7 +83,6 @@ export default function Products() {
 
   const onAddToCart = async (id) => {
     await addProToCart(id);
-    toast.success("Product is added to Cart");
   };
 
   const onAddToWishlist = async (id) => {
@@ -83,19 +108,32 @@ export default function Products() {
             {productList.length > 0 &&
               productList.map((product, indx) => (
                 <div className="w-full md:w-6/12 lg:w-4/12 p-2" key={indx}>
-                  <ProductCard product={product} onAddToWishlist={onAddToWishlist} onAddToCart={onAddToCart} wishlistArr={wishlistArr} />
+                  <ProductCard
+                    product={product}
+                    onAddToWishlist={onAddToWishlist}
+                    onAddToCart={onAddToCart}
+                    wishlistArr={wishlistArr}
+                  />
                 </div>
               ))}
             {productList.length <= 0 && (
               <div className="flex justify-center items-center flex-col gap-5 relative my-20">
-                <img src="https://cdn-icons-png.flaticon.com/128/17569/17569003.png" alt="no products found" className="w-6/12"></img>
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/17569/17569003.png"
+                  alt="no products found"
+                  className="w-6/12"
+                ></img>
                 <p className="font-semibold">Sorry, No products found!</p>
               </div>
             )}
           </div>
           <div>
             {productList.length > 0 && (
-              <Pagination currentPage={currentPage} totalPages={totalPages} handlePagination={handlePagination}></Pagination>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                handlePagination={handlePagination}
+              ></Pagination>
             )}
           </div>
         </div>
