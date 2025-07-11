@@ -53,10 +53,7 @@ export default function Coupons({ onApplyCoupon }) {
     formik;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      noValidate
-      className="w-full flex flex-col gap-2">
+    <div className="w-full flex flex-col gap-2">
       <label
         htmlFor="coupon"
         className="block text-sm font-medium text-primary mb-1">
@@ -79,7 +76,8 @@ export default function Coupons({ onApplyCoupon }) {
         />
 
         <button
-          type="submit"
+          type="button"
+          onClick={handleSubmit}
           disabled={loading}
           className="absolute top-0 right-0 h-[51px] px-5 bg-primary text-white text-sm font-semibold rounded shadow hover:bg-primary-dark transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
           {loading ? (
@@ -127,6 +125,6 @@ export default function Coupons({ onApplyCoupon }) {
           <p>{feedback.message}</p>
         </div>
       )}
-    </form>
+    </div>
   );
 }
