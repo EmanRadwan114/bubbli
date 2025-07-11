@@ -1,7 +1,22 @@
-import { createContext } from "react";
+import { createContext, useContext, useState } from "react";
 
-export const CouponContext = createContext();
+const CouponContext = createContext();
 
-export default function CouponContextProvider({ children }) {
-  return <CouponContext.Provider value={{}}>{children}</CouponContext.Provider>;
-}
+export const CouponProvider = ({ children }) => {
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+
+  const setAppliedCouponCode = (code, discount) => {
+    setAppliedCoupon({ code, discount });
+  };
+
+  const clearCoupon = () => setAppliedCoupon(null);
+
+  return (
+    <CouponContext.Provider
+      value={{ appliedCoupon, setAppliedCouponCode, clearCoupon }}>
+      {children}
+    </CouponContext.Provider>
+  );
+};
+
+export const useCouponContext = () => useContext(CouponContext);
