@@ -1,3 +1,4 @@
+import { getOrderDetails } from "../services/orderService";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useOrdersContext } from "../context/OrdersContext.jsx";
 
@@ -27,6 +28,15 @@ export const useOrders = () => {
       queryClient.invalidateQueries(["cartItems"]);
     },
   });
+  
+  // get order details
+  export const useOrder = (orderId) => {
+  return useQuery({
+  queryKey: ["order", orderId],
+  queryFn: () => getOrderDetails(orderId),
+  enabled: !!orderId,
+});
+}
 
   return {
     cartData,
