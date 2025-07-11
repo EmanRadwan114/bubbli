@@ -39,7 +39,6 @@ import { OrdersContextProvider } from "./context/OrdersContext";
 import CartContextProvider from "./context/CartContext";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
 
-
 // ^ routing setup
 const router = createBrowserRouter([
   {
@@ -83,7 +82,7 @@ const router = createBrowserRouter([
       },
       { path: "login", element: <Login></Login> },
       { path: "register", element: <Register></Register> },
-      { path: "wishlist", element: <Wishlist></Wishlist> },
+      { path: "favorites", element: <Wishlist></Wishlist> },
       { path: "cart", element: <Cart></Cart> },
       { path: "checkout", element: <Checkout></Checkout> },
       {
@@ -146,6 +145,7 @@ import { ToastContainer } from "react-toastify";
 import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ScrollToTop from "./components/ArrowUp/ScrollToTop.jsx";
+import WishlistContextProvider from "./context/Wishlist.Context.jsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
@@ -156,13 +156,15 @@ createRoot(document.getElementById("root")).render(
         <QueryClientProvider client={queryClient}>
           <OrdersContextProvider>
             <CartContextProvider>
-              <ScrollToTop />
-              <RouterProvider router={router} />
-              <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                className="capitalize"
-              />
+              <WishlistContextProvider>
+                <ScrollToTop />
+                <RouterProvider router={router} />
+                <ToastContainer
+                  position="top-right"
+                  autoClose={3000}
+                  className="capitalize"
+                />
+              </WishlistContextProvider>
             </CartContextProvider>
           </OrdersContextProvider>
         </QueryClientProvider>
