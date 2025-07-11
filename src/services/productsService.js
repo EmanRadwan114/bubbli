@@ -38,18 +38,7 @@ export const getFeaturedProducts = async (label) => {
     throw err;
   }
 };
-// Get Product By ID
-// export const getProductById = async (id) => {
-//   const path = `/products/${id}`;
-//   try {
-//     const response = await api.get(path)
-//     console.log("specific product response:", response.status, response.data);
-//     return response.data;
-//   } catch (err) {
-//     console.error("getProductByID failed:", err);
-//     throw err;
-//   }
-// };
+
 // Get Product By ID
 export const getProductById = async (id) => {
   const path = `/products/${id}`;
@@ -61,4 +50,16 @@ export const getProductById = async (id) => {
     console.error("getProductByID failed:", err);
     throw err;
   }
+};
+
+// reviews
+export const getReviews = async (id, page) => {
+  const response = await api.get(`/products/${id}/reviews?page=${page}`);
+  console.log("", response.data);
+  return response.data;
+};
+
+export const addReview = async (id, details) => {
+  const response = await api.post(`/products/${id}/reviews`, details);
+  return response.data;
 };
