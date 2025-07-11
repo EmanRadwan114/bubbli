@@ -1,33 +1,53 @@
 import { toast } from "react-toastify";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useContext } from "react";
 import {
   addToWishlist,
   getAllUserWishlist,
   removeFromWishlist,
 } from "../services/wishlistService";
+import { WishlistContext } from "../context/Wishlist.Context";
 
 export const useAllWishlist = () => {
-  return useQuery({
-    queryKey: ["wishlist"],
-    queryFn: getAllUserWishlist,
-  });
-};
+  const { setAllUserWishlist } = useContext(WishlistContext);
 
-export const useAddToWishlist = () => {
-  return useMutation({
-    mutationFn: (id) => addToWishlist(id),
-    onError: (error) => {
-      console.log(error);
-      toast.error(error?.response.data.message);
+  return useQuery({
+    queryKey: ["all-wishlist"], 
+    queryFn: getAllUserWishlist,
+    onSuccess: (data) => {
+      setAllUserWishlist(data.wishlist);
     },
   });
 };
-export const useRemoveFromWishlist = () => {
+
+// ✅ Fix for useAddToWishlist
+export const useAddToWishlist = () => {
+  const queryClient = useQueryClient(); 
+
   return useMutation({
-    mutationFn: (id) => removeFromWishlist(id),
+    mutationFn: (id) => addToWishlist(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["all-wishlist"]);
+      toast.success("Product is added to Wishlist");
+    },
     onError: (error) => {
       console.log(error);
-      toast.error(error?.response.data.message);
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    },
+  });
+};
+
+export const useRemoveFromWishlist = () => {
+  const queryClient = useQueryClient(); 
+  return useMutation({
+    mutationFn: (id) => removeFromWishlist(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["all-wishlist"]);
+      toast.success("Product is removed from Wishlist");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.response?.data?.message || "Something went wrong");
     },
   });
 };
