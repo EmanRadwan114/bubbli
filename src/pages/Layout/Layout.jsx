@@ -1,18 +1,26 @@
 import { Outlet, useLocation } from "react-router";
 import Navbar from "./../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
-import VerifyPhone from "../../components/VerifyPhone/VerifyPhone";
 import ChatWidget from "../../components/ChatWidget/ChatWidget.jsx";
+import { useEffect } from "react";
 
 export default function Layout() {
   const path = useLocation().pathname;
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [pathname]);
 
   return (
     <>
       {path.includes("login") || path.includes("register") ? null : (
         <Navbar></Navbar>
       )}
-      {/* <VerifyPhone></VerifyPhone> */}
       <div
         className={` ${
           path.includes("login") || path.includes("register") ? "pt-0" : "pt-16"

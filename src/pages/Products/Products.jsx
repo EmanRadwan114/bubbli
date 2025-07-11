@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import { toast } from "react-toastify";
 import {
   useAddToWishlist,
   useAllWishlist,
@@ -83,7 +82,6 @@ export default function Products() {
 
   const onAddToCart = async (id) => {
     await addProToCart(id);
-    toast.success("Product is added to Cart");
   };
 
   const onAddToWishlist = async (id) => {
