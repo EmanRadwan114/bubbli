@@ -40,7 +40,7 @@ const GiftTipsSection = () => {
   ];
 
   return (
-    <section className="light-main-bg dark-main-bg py-16 pt-4 px-4 sm:px-6 lg:px-8">
+    <section className="light-main-bg dark-main-bg py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-dark dark:text-light mb-3">

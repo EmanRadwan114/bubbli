@@ -101,7 +101,7 @@ const BestSellers = () => {
   }
 
   return (
-    <section className="light-main-bg dark-main-bg py-12 px-4 sm:px-6 lg:px-8">
+    <section className="light-secondary-bg dark-secondary-bg py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center mb-4">
@@ -125,7 +125,7 @@ const BestSellers = () => {
                 className={`flex items-center px-4 py-2 rounded-full transition-colors ${
                   activeTab === tab.id
                     ? "bg-primary dark:bg-primary-dark text-white"
-                    : "light-secondary-bg dark-secondary-bg hover:bg-opacity-80"
+                    : "light-main-bg dark-main-bg hover:bg-opacity-80"
                 }`}
               >
                 <span className="mr-2">
@@ -144,7 +144,7 @@ const BestSellers = () => {
         </div>
 
         {/* Product Grid */}
-        <div className="flex flex-wrap sm:flex-row items-center justify-center gap-10 sm:gap-20 px-16">
+        <div className="flex flex-wrap sm:flex-row items-center justify-center gap-10 sm:gap-20 lg:px-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
               <ProductCard

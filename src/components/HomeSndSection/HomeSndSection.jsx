@@ -50,23 +50,25 @@ const WhyChooseUs = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="light-secondary-bg dark-secondary-bg rounded-xl p-6 text-center hover:shadow-md transition-shadow flex flex-col items-center"
-            >
-              <div className="bg-card dark:bg-cardAlt p-3 rounded-full mb-4">
-                {feature.icon}
+        <div className="flex flex-wrap sm:flex-row items-center justify-center gap-10 sm:gap-20 lg:px-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="light-secondary-bg dark-secondary-bg rounded-xl p-6 text-center hover:shadow-md transition-shadow flex flex-col items-center"
+              >
+                <div className="bg-card dark:bg-cardAlt p-3 rounded-full mb-4">
+                  {feature.icon}
+                </div>
+                <h3 className="text-xl font-semibold text-dark dark:text-light mb-2">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {feature.description}
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-dark dark:text-light mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <div className="light-secondary-bg dark-secondary-bg rounded-xl p-8 mt-12 text-center">
