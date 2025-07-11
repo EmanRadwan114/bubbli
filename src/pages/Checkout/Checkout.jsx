@@ -219,7 +219,7 @@ export default function Checkout() {
           <div>
             <label
               htmlFor="phone"
-              className="block text-sm font-medium text-accent mb-1">
+              className="block text-lg font-medium text-accent mb-1">
               Phone Number
             </label>
             <input
@@ -271,7 +271,7 @@ export default function Checkout() {
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="flex-[0.4] bg-secondary sticky top-20 mx-auto rounded-lg p-6 flex flex-col gap-4 w-full sm:w-4/5 mt-8 mb-6 md:min-w-[357px]">
+      <div className="flex-[0.4] bg-secondary sticky top-20 mx-auto rounded-lg px-5 py-6 flex flex-col gap-4 w-full sm:w-4/5 mt-8 mb-6 md:min-w-[365px]">
         <MultiCardSlider />
         <div className="border-t pt-2 border-accent">
           <Coupons onApplyCoupon={handleCouponApply} />
