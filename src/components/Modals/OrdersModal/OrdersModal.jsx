@@ -22,16 +22,20 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
     shippingStatus: Yup.string().required("Shipping status is required"),
   });
 
+  // ❇️ Disable all update functionality if canceled
+  const isCanceled =
+    orderData?.shippingStatus === "cancelled" ||
+    orderData?.orderStatus === "cancelled";
+
   const handleSubmit = (values, { setSubmitting }) => {
-    if (!orderId) return;
+    if (!orderId || isCanceled) {
+      setSubmitting(false);
+      return;
+    }
     if (values.shippingStatus === orderData?.shippingStatus) {
       setSubmitting(false);
       return;
     }
-    console.log("🟡 Submitting status update:", {
-      id: orderId,
-      data: { shippingStatus: values.shippingStatus },
-    });
 
     updateMutation.mutate(
       { id: orderId, shippingStatus: values.shippingStatus },
@@ -46,6 +50,25 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
           console.error("❌ Update Error:", err);
         },
         onSettled: () => setSubmitting(false),
+      }
+    );
+  };
+
+  // ❇️ Handle Cancel Order button
+  const handleCancelOrder = () => {
+    if (!orderId || isCanceled) return;
+
+    updateMutation.mutate(
+      { id: orderId, shippingStatus: "cancelled" },
+      {
+        onSuccess: () => {
+          toast.success("Order cancelled successfully");
+          onRefresh();
+          onClose();
+        },
+        onError: () => {
+          toast.error("Failed to cancel order");
+        },
       }
     );
   };
@@ -67,51 +90,71 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
         </button>
 
         {/* UPDATE MODE */}
-        {isUpdate && orderData && (
-          <Formik
-            initialValues={{
-              shippingStatus: orderData.shippingStatus || "",
-            }}
-            enableReinitialize
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}>
-            {({ isSubmitting }) => (
-              <Form>
-                <h2 className="text-2xl font-bold text-teal-600 mb-4 border-b pb-2">
-                  Update Shipping Status
-                </h2>
+        {isUpdate &&
+          orderData &&
+          (isCanceled ? (
+            <div className="text-center space-y-4">
+              <h2 className="text-2xl font-bold text-red-600 mb-4 border-b pb-2">
+                This order is cancelled
+              </h2>
+              <p className="text-gray-700">Updates are disabled.</p>
+            </div>
+          ) : (
+            <Formik
+              initialValues={{
+                shippingStatus: orderData.shippingStatus || "",
+              }}
+              enableReinitialize
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}>
+              {({ isSubmitting }) => (
+                <Form>
+                  <h2 className="text-2xl font-bold text-teal-600 mb-4 border-b pb-2">
+                    Update Shipping Status
+                  </h2>
 
-                <div className="space-y-4">
-                  <div>
-                    <label className="block mb-1 text-teal-900 font-medium">
-                      Shipping Status
-                    </label>
-                    <Field as="select" name="shippingStatus" className="input">
-                      <option value="" disabled>
-                        Select Shipping Status
-                      </option>
-                      <option value="pending">Pending</option>
-                      <option value="prepared">Prepared</option>
-                      <option value="shipped">Shipped</option>
-                    </Field>
-                    <ErrorMessage
-                      name="shippingStatus"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block mb-1 text-teal-900 font-medium">
+                        Shipping Status
+                      </label>
+                      <Field
+                        as="select"
+                        name="shippingStatus"
+                        className="input">
+                        <option value="" disabled>
+                          Select Shipping Status
+                        </option>
+                        <option value="pending">Pending</option>
+                        <option value="prepared">Prepared</option>
+                        <option value="shipped">Shipped</option>
+                      </Field>
+                      <ErrorMessage
+                        name="shippingStatus"
+                        component="div"
+                        className="text-red-500 text-sm mt-1"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="btn-teal w-full">
+                      {isSubmitting ? "Updating..." : "Update Order"}
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={isSubmitting}
+                      onClick={handleCancelOrder}
+                      className="btn-red w-full mt-2">
+                      Cancel Order
+                    </button>
                   </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="btn-teal w-full">
-                    {isSubmitting ? "Updating..." : "Update Order"}
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        )}
+                </Form>
+              )}
+            </Formik>
+          ))}
 
         {/* VIEW MODE */}
         {isView && isLoading && (

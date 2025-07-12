@@ -16,14 +16,10 @@ export default function OrdersDashboard() {
   const limit = 7;
 
   const { data, isLoading, refetch } = useGetAllOrders(currentPage, limit);
-  console.log(data);
-
   const deleteMutation = useDeleteOrder();
 
   const orders = data?.data?.data || [];
   const totalPages = data?.data?.totalPages || 1;
-
-  console.log(orders);
 
   const handleOpenModal = (type, id = null) => {
     setActiveModal(type);
@@ -107,16 +103,19 @@ export default function OrdersDashboard() {
 
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold
-                        ${
-                          o?.orderStatus === "paid"
-                            ? "bg-purple-50 text-purple-600"
-                            : "bg-pink-50 text-pink-600"
-                        }`}>
+                      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
+                        o?.orderStatus === "paid"
+                          ? "bg-purple-50 text-purple-600"
+                          : o?.orderStatus === "cancelled"
+                          ? "bg-red-50 text-red-600"
+                          : "bg-pink-50 text-pink-600"
+                      }`}>
                       <span
                         className={`h-1.5 w-1.5 rounded-full ${
                           o?.orderStatus === "paid"
                             ? "bg-purple-600"
+                            : o?.orderStatus === "cancelled"
+                            ? "bg-red-600"
                             : "bg-pink-600"
                         }`}></span>
                       {o?.orderStatus}
@@ -143,21 +142,28 @@ export default function OrdersDashboard() {
 
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold
-                        ${
-                          o?.shippingStatus === "pending"
-                            ? "bg-yellow-50 text-yellow-600"
-                            : o?.shippingStatus === "prepared"
-                            ? "bg-blue-50 text-blue-600"
-                            : "bg-green-50 text-green-600"
-                        }`}>
+                      className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${
+                        o?.shippingStatus === "pending"
+                          ? "bg-yellow-50 text-yellow-600"
+                          : o?.shippingStatus === "prepared"
+                          ? "bg-blue-50 text-blue-600"
+                          : o?.shippingStatus === "shipped"
+                          ? "bg-green-50 text-green-600"
+                          : o?.shippingStatus === "cancelled"
+                          ? "bg-red-50 text-red-600"
+                          : ""
+                      }`}>
                       <span
                         className={`h-1.5 w-1.5 rounded-full ${
                           o?.shippingStatus === "pending"
                             ? "bg-yellow-600"
                             : o?.shippingStatus === "prepared"
                             ? "bg-blue-600"
-                            : "bg-green-600"
+                            : o?.shippingStatus === "shipped"
+                            ? "bg-green-600"
+                            : o?.shippingStatus === "cancelled"
+                            ? "bg-red-600"
+                            : ""
                         }`}></span>
                       {o?.shippingStatus}
                     </span>
