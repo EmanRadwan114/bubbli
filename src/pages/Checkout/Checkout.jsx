@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Coupons from "../../components/Coupons/Coupons";
-import MultiCardSlider from "../../components/slider/slider";
+import MultiCardSlider from "../../components/Slider/Slider.jsx";
 import { useOrders } from "../../hooks/useOrders";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
