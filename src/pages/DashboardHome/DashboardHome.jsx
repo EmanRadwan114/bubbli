@@ -44,11 +44,11 @@ export default function DashboardHome() {
   
   return (
     <div className="space-y-8">
-      {/* Financial Progress Section */}
+      {/* Analytics Progress Section */}
       <div className="border border-cardAlt dark:border-secondary-dark rounded-xl shadow-sm overflow-hidden">
         <div className="light-main-bg dark-secondary-bg text-center p-8 border-b border-cardAlt dark:border-secondary-dark">
           <h2 className="text-4xl  font-bold  text-[var(--color-accent)] dark:text-[var(--color-accent-dark)]">
-            Track Your Financial Progress
+            Track Your Website Analytics Progress
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
             Visualize your monthly orders and revenue growth to make data-driven
