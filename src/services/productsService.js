@@ -82,3 +82,33 @@ export const updateProduct = async (id, productData) => {
   const response = await api.put(`/products/${id}`, productData);
   return response.data;
 };
+
+// GET BestSelling 
+  export const getBestSellingProducts = async (page = 1, limit = 6) => {
+    const path = `/products/best-selling-products`;
+    try {
+      const response = await api.get(path, {
+        params: { page, limit },
+      });
+      console.log("→ Got response:", response.status, response.data);
+      return response.data;
+    } catch (err) {
+      console.error("getBestSellingProducts failed:", err);
+      throw err;
+    }
+  };
+
+// GET least-ordered
+  export const getLeastOrderedProducts = async (page = 1, limit = 6) => {
+    const path = `/products/least-ordered-products`;
+    try {
+      const response = await api.get(path, {
+        params: { page, limit },
+      });
+      console.log("→ Got response:", response.status, response.data);
+      return response.data;
+    } catch (err) {
+      console.error("getLeastOrderedProducts failed:", err);
+      throw err;
+    }
+  };
