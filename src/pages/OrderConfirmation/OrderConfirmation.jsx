@@ -7,6 +7,7 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 const OrderConfirmation = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const OrderConfirmation = () => {
   if (isLoading)
     return (
       <div className="text-center py-8 text-accent dark:text-accent-dark">
-        Loading order details...
+        <LoadingSpinner/>
       </div>
     );
   if (isError || !order)

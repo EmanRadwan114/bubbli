@@ -1,6 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllProductsBack, getProductByCategory, getProductById } from "../services/productsService";
-import { number } from "yup";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  addProduct, deleteProduct, getAllProductsBack,
+  getFeaturedProducts,
+  getProductByCategory,
+  getProductById, updateProduct,
+} from "../services/productsService";
 
 export const getProductByCategoryName = (categoryName, page = 1, limit = 6) =>
   useQuery({
@@ -16,6 +20,20 @@ export const getAllProducts = (page = 1, limit = 6) => {
     keepPreviousData: true,
   });
 };
+export const useFeaturedProducts = (label = "bestseller") => {
+  return useQuery({
+    queryKey: ["featured-products", label],
+    queryFn: () => getFeaturedProducts(label),
+    keepPreviousData: true,
+  });
+};
+// export const useBestSellersProducts = () => {
+//   return useQuery({
+//     queryKey: ["best-sellers"],
+//     queryFn: () => getBestSellers(),
+//     keepPreviousData: true,
+//   });
+// };
 // get product by ID
 // export const useGetProductById = (id) =>
 //   useQuery({
@@ -39,6 +57,45 @@ export const useGetProductById = (id) => {
     },
     onSettled: (data, error) => {
       console.log("Query settled:", { data, error });
+    },
+  });
+};
+
+
+// Add product
+export const useAddProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: addProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
+    },
+    onError: (err) => {
+      console.error("Product creation failed:", err);
+      throw err;
+    },
+  });
+};
+
+// DELETE PRODUCT
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
+    },
+  });
+};
+
+// UPDATE PRODUCT
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }) => updateProduct(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
     },
   });
 };

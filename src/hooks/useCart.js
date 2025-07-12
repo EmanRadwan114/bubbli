@@ -18,7 +18,7 @@ export const useAddToCart = () => {
     mutationFn: (id) => addToCartApi(id),
     onError: (error) => {
       console.log(error);
-      toast.error(error?.response.data.message);
+      toast.error("Login to add product to cart");
     },
   });
 };
