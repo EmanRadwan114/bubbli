@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Gift, Star, Zap, Flame, Clock, BadgePercent } from "lucide-react";
 import {
   useAddToWishlist,
@@ -9,6 +9,8 @@ import { useAddToCart } from "../../hooks/useCart";
 import ProductCard from "../ProductCard/ProductCard";
 import { useFeaturedProducts } from "../../hooks/useProducts";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import { WishlistContext } from "../../context/Wishlist.Context";
+import { useCart } from "../../context/CartContext";
 
 const BestSellers = () => {
   const [activeTab, setActiveTab] = useState("bestseller");
@@ -16,9 +18,8 @@ const BestSellers = () => {
     data: allProducts,
     isLoading,
     isError,
-  } = useFeaturedProducts("bestseller");
-  const { data: allWishlist, isLoading: isWishlistLoading } = useAllWishlist();
-  const [wishlistArr, setWishlistArr] = useState([]);
+  } = useFeaturedProducts(activeTab);
+  const { allUserWishlist, setAllUserWishlist } = useContext(WishlistContext);
 
   // Tab configuration
   const tabs = [
@@ -57,35 +58,31 @@ const BestSellers = () => {
   // Get current tab's filter function
   const currentFilter = tabs.find((tab) => tab.id === activeTab)?.filter;
   const filteredProducts =
-    allProducts?.data?.filter(currentFilter).slice(0, 6) || [];
+    allProducts?.data?.filter(currentFilter).slice(0, 8) || [];
 
   const { mutateAsync: addProToWishlist } = useAddToWishlist();
   const { mutateAsync: removeProFromWishlist } = useRemoveFromWishlist();
-  const { mutateAsync: addProToCart } = useAddToCart();
-
-  useEffect(() => {
-    if (allWishlist?.data) {
-      setWishlistArr(allWishlist.data.map((item) => item._id));
-    }
-  }, [allWishlist]);
+  const { addToCart } = useCart();
 
   const handleAddToCart = async (id) => {
-    await addProToCart(id);
+    await addToCart(id);
   };
 
   const handleWishlistToggle = async (id) => {
-    if (wishlistArr.includes(id)) {
-      await removeProFromWishlist(id);
-      setWishlistArr(wishlistArr.filter((item) => item !== id));
-    } else {
-      await addProToWishlist(id);
-      setWishlistArr([...wishlistArr, id]);
+    const isInWishlist = allUserWishlist.includes(id);
+
+    try {
+      if (isInWishlist) {
+        await removeProFromWishlist(id);
+        setAllUserWishlist((prev) => prev.filter((itemId) => itemId !== id));
+      } else {
+        await addProToWishlist(id);
+        setAllUserWishlist((prev) => [...prev, id]);
+      }
+    } catch (error) {
+      console.error("Error while updating wishlist:", error);
     }
   };
-
-  if (isLoading || isWishlistLoading) {
-    return <LoadingSpinner />;
-  }
 
   if (isError) {
     return (
@@ -142,19 +139,26 @@ const BestSellers = () => {
         </nav>
 
         {/* Product Grid */}
-        <div className="flex flex-wrap sm:flex-row items-center justify-center gap-10 sm:gap-20 md:px-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
-              <ProductCard
-                key={product._id}
-                product={product}
-                onAddToWishlist={handleWishlistToggle}
-                onAddToCart={handleAddToCart}
-                wishlistArr={wishlistArr}
-              />
-            ))}
+
+        {isLoading ? (
+          <div className="min-h-screen">
+            <LoadingSpinner />;
           </div>
-        </div>
+        ) : (
+          <div className="flex flex-wrap sm:flex-row items-center justify-center gap-10 sm:gap-20 md:px-16  ">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product) => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  onAddToWishlist={handleWishlistToggle}
+                  onAddToCart={handleAddToCart}
+                  wishlistArr={allUserWishlist}
+                />
+              ))}
+            </div>
+          </div>
+        )}
 
         {filteredProducts.length === 0 && (
           <div className="text-center py-12">

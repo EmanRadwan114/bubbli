@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useLocation, Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   Menu,
@@ -9,6 +9,8 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
+import { WishlistContext } from "../../context/Wishlist.Context";
+import { useCart } from "../../context/CartContext";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -16,8 +18,6 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const favorites = [];
-  const totalCartItems = 0;
   const user = localStorage.getItem("user");
   const navLinks = [
     { label: "Home", to: "/" },
@@ -25,6 +25,10 @@ const Navbar = () => {
     { label: "About", to: "/about" },
     { label: "Contact Us", to: "/contact" },
   ];
+
+  const { allUserWishlist } = useContext(WishlistContext);
+
+  const { cartItems } = useCart();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -178,7 +182,7 @@ const Navbar = () => {
                 />
               </RouterLink>
 
-              {/* Favorites */}
+              {/* wishlist */}
               <RouterLink
                 to="/wishlist"
                 className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative"
@@ -187,15 +191,15 @@ const Navbar = () => {
                   className={`
                   h-5 w-5 
                   ${
-                    location.pathname === "/favorites"
+                    location.pathname === "/wishlist"
                       ? "text-primary dark:text-primary-light"
                       : "text-gray-700 dark:text-gray-300"
                   }
                 `}
                 />
-                {favorites.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {favorites.length}
+                {allUserWishlist.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {allUserWishlist.length}
                   </span>
                 )}
               </RouterLink>
@@ -215,9 +219,9 @@ const Navbar = () => {
                   }
                 `}
                 />
-                {totalCartItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {totalCartItems}
+                {cartItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItems}
                   </span>
                 )}
               </RouterLink>

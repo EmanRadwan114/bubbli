@@ -99,55 +99,58 @@ export default function Reviews() {
   }
 
   return (
-    <div className="px-4 py-2 sm:px-8 sm:py-6 mt-12 light-secondary-bg dark-secondary-bg">
+    <div className="px-4 py-2 sm:px-8 sm:py-6 mt-12 light-secondary-bg dark-secondary-bg lg:px-16">
       <div className="group flex flex-col gap-4 justify-center items-center mb-8 cursor-pointer">
-        <p className="mt-4 text-5xl font-semibold transition-colors duration-300 dark: group-hover:text-[var(--color-accent)] dark:group-hover:text-[var(--color-accent-dark)]">
+        <h3 className="mt-4 text-2xl md:text-4xl font-semibold transition-colors duration-300 dark: group-hover:text-[var(--color-accent)] dark:group-hover:text-[var(--color-accent-dark)]">
           Reviews
-        </p>
+        </h3>
         <hr className="w-[25%] md:w-[15%] lg:w-[8%] md:group-hover:w-[14%] transition-all duration-300 ease-in-out h-1 border-0 rounded bg-[var(--color-accent)] dark:bg-[var(--color-accent-dark)]" />
       </div>
 
-      <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-        Customer Reviews
-      </h3>
-
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-10 p-6">
         {/* Reviews List */}
-        <div className="flex flex-col items-center justify-center">
-          {reviews.length === 0 ? (
-            <p className="text-2xl text-gray-500 dark:text-[var(--color-accent-dark)]">
-              No reviews yet. Be the first to review!
-            </p>
-          ) : (
-            <div className="flex flex-col gap-6">
-              {reviews.map((review) => (
-                <article
-                  key={review._id}
-                  className="border-b border-gray-200 p-4 sm:p-6 bg-gray-50 dark:bg-zinc-800"
-                >
-                  <div className="flex items-start gap-3 mb-3">
-                    <div className="flex-1">
-                      <div className="flex justify-between items-start">
-                        <h4 className="font-medium text-[var(--color-primary) dark:text-[var(--color-primary-dark)]">
-                          {review?.user?.name || "Anonymous"}
-                        </h4>
-                        <div className="mt-1">{renderStars(review.rating)}</div>
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 text-center">
+            Customer Reviews
+          </h3>
+          <div className="flex flex-col items-center justify-center h-full">
+            {reviews.length === 0 ? (
+              <p className="text-2xl text-gray-500 dark:text-[var(--color-accent-dark)]">
+                No reviews yet. Be the first to review!
+              </p>
+            ) : (
+              <div className="flex flex-col gap-6">
+                {reviews.map((review) => (
+                  <article
+                    key={review._id}
+                    className="border-b border-gray-200 p-4 sm:p-6 bg-gray-50 dark:bg-zinc-800"
+                  >
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start">
+                          <h4 className="font-medium text-[var(--color-primary) dark:text-[var(--color-primary-dark)]">
+                            {review?.user?.name || "Anonymous"}
+                          </h4>
+                          <div className="mt-1">
+                            {renderStars(review.rating)}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <p className="text-gray-700 dark:text-gray-200 pl-[10px] sm:pl-[52px]">
-                    {review?.description}
-                  </p>
-                </article>
-              ))}
+                    <p className="text-gray-700 dark:text-gray-200 pl-[10px] sm:pl-[52px]">
+                      {review?.description}
+                    </p>
+                  </article>
+                ))}
 
-              <Pagination
-                totalPages={totalPages}
-                currentPage={page}
-                handlePagination={handlePagination}
-              />
-            </div>
-          )}
+                <Pagination
+                  totalPages={totalPages}
+                  currentPage={page}
+                  handlePagination={handlePagination}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Review Form */}
