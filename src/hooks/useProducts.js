@@ -107,3 +107,5 @@ export const useLeastOrderedProducts = (page = 1, limit = 6) => {
     select: (res) => res.data,
   });
 };
+
+
