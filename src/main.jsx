@@ -34,10 +34,20 @@ import DashboardProducts from "./pages/DashboardProducts/DashboardProducts";
 import DashboardCoupons from "./pages/DashboardCoupons/DashboardCoupons";
 import DashboardAdmins from "./pages/DashboardAdmins/DashboardAdmins";
 import Dashboard from "./pages/Dashboard/Dashboard.jsx";
-import AuthContextProvider from "./context/AuthContext.jsx";
+import { AuthContextProvider, AuthContext } from "./context/AuthContext.jsx";
 import { OrdersContextProvider } from "./context/OrdersContext";
 import CartContextProvider from "./context/CartContext";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
+import RequireAuth from "./components/Guards/RequireAuth.jsx";
+import RequireAdmin from "./components/Guards/RequireAdmin.jsx";
+
+// ^ react query & redux setup
+import { ToastContainer } from "react-toastify";
+import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import ScrollToTop from "./components/ArrowUp/ScrollToTop.jsx";
+import WishlistContextProvider from "./context/Wishlist.Context.jsx";
+const queryClient = new QueryClient();
 
 // ^ routing setup
 const router = createBrowserRouter([
@@ -84,10 +94,21 @@ const router = createBrowserRouter([
       { path: "register", element: <Register></Register> },
       { path: "wishlist", element: <Wishlist></Wishlist> },
       { path: "cart", element: <Cart></Cart> },
-      { path: "checkout", element: <Checkout></Checkout> },
+      {
+        path: "checkout",
+        element: (
+          <RequireAuth>
+            <Checkout />
+          </RequireAuth>
+        ),
+      },
       {
         path: "order-confirmation/:id",
-        element: <OrderConfirmation></OrderConfirmation>,
+        element: (
+          <RequireAuth>
+            <OrderConfirmation />
+          </RequireAuth>
+        ),
       },
       {
         path: "gifts",
@@ -114,7 +135,11 @@ const router = createBrowserRouter([
       // ^ dashboard
       {
         path: "dashboard",
-        element: <Dashboard></Dashboard>,
+        element: (
+          <RequireAdmin>
+            <Dashboard></Dashboard>
+          </RequireAdmin>
+        ),
         children: [
           {
             index: true,
@@ -137,14 +162,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
-// ^ react query & redux setup
-import { ToastContainer } from "react-toastify";
-import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import ScrollToTop from "./components/ArrowUp/ScrollToTop.jsx";
-import WishlistContextProvider from "./context/Wishlist.Context.jsx";
-const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   // <StrictMode>

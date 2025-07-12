@@ -7,6 +7,8 @@ import { WishlistContext } from "../../context/Wishlist.Context.jsx";
 import { useAllWishlist } from "../../hooks/useWishlist.js";
 import { useCart } from "../../context/CartContext.jsx";
 
+import AppInitializer from "../../components/AppInitializer/AppInitializer.jsx";
+
 export default function Layout() {
   const path = useLocation().pathname;
 
@@ -40,9 +42,13 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col">
+
+    {/* ✅ Interceptor runs once here */}
+      <AppInitializer />
       {path.includes("login") || path.includes("register") || path.includes("dashboard") ? null : <Navbar />}
 
       <div className={`flex-grow ${path.includes("login") || path.includes("register") || path.includes("dashboard") ? "pt-0" : "pt-16"}`}>
+
         <Outlet />
       </div>
 
