@@ -364,7 +364,7 @@ const Profile = () => {
                           {order.shippingStatus !== "cancelled" && (
                             <button
                               onClick={() => handleCancelOrder(order._id)}
-                              className="text-red-500 hover:text-white hover:bg-red-500 px-3  outline rounded-full text-sm cursor-pointer inline ml-4"
+                              className="text-red-500 hover:text-white hover:bg-red-500 px-3  outline rounded-full text-sm cursor-pointer inline "
                             >
                               Cancel
                             </button>
@@ -465,7 +465,7 @@ const Profile = () => {
       refetch();
       toast.success("Order cancelled successfully");
     } catch (error) {
-      toast.error("Failed to cancel order");
+      toast.error(error);
     }
   };
   return (
