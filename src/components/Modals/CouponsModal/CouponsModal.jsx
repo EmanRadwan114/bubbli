@@ -1,4 +1,6 @@
-import { useForm, Controller } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import {
   useAddCoupon,
   useUpdateCoupon,
@@ -6,7 +8,15 @@ import {
 } from "../../../hooks/useCoupons";
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
-import { useEffect } from "react";
+
+// Define what fields are allowed for add / update
+const ALLOWED_FIELDS = [
+  "CouponCode",
+  "CouponPercentage",
+  "expirationDate",
+  "maxUsageLimit",
+  "isActive",
+];
 
 export default function CouponsModal({
   activeModal,
@@ -18,64 +28,104 @@ export default function CouponsModal({
   const isUpdate = activeModal === "update";
   const isView = activeModal === "getById";
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      CouponCode: "",
-      CouponPercentage: "",
-      expirationDate: "",
-      maxUsageLimit: "",
-      isActive: false,
-    },
-  });
-
   const addCoupon = useAddCoupon();
   const updateCoupon = useUpdateCoupon();
-  const { data: couponData, isLoading } = useGetCouponById(couponId);
+  const { data: fetchedData, isLoading } = useGetCouponById(couponId);
 
+  // Local form data state
+  const [formData, setFormData] = useState({
+    CouponCode: "",
+    CouponPercentage: "",
+    expirationDate: "",
+    maxUsageLimit: "",
+    isActive: false,
+  });
+
+  // Watch API data and modal type to set form data
   useEffect(() => {
-    if (isUpdate && couponData) {
-      reset(couponData);
+    if ((isUpdate || isView) && fetchedData) {
+      const data = fetchedData;
+      setFormData({
+        CouponCode: data.CouponCode ?? "",
+        CouponPercentage: data.CouponPercentage?.toString() ?? "",
+        expirationDate: data.expirationDate?.split("T")[0] ?? "",
+        maxUsageLimit: data.maxUsageLimit?.toString() ?? "",
+        isActive: data.isActive ?? false,
+      });
+    } else if (isAdd) {
+      setFormData({
+        CouponCode: "",
+        CouponPercentage: "",
+        expirationDate: "",
+        maxUsageLimit: "",
+        isActive: false,
+      });
     }
-  }, [couponData, isUpdate, reset]);
+  }, [isAdd, isUpdate, isView, fetchedData]);
 
-  const closeModal = () => {
-    reset();
+  const handleClose = () => {
     onClose();
   };
 
-  const onSubmit = (formValues) => {
-    console.log("Submitting:", formValues);
+  const validationSchema = Yup.object().shape({
+    CouponCode: Yup.string()
+      .matches(
+        /^(?!\d+$)[a-zA-Z0-9_]+$/,
+        "Must include letters (not just numbers)"
+      )
+      .required("Coupon Code is required"),
+    CouponPercentage: Yup.number()
+      .min(1)
+      .max(100)
+      .required("Percentage is required"),
+    expirationDate: Yup.date().required("Expiration date is required"),
+    maxUsageLimit: Yup.number().required("Max usage limit is required"),
+    isActive: Yup.boolean(),
+  });
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    const cleanedValues = {
+      CouponCode: values.CouponCode,
+      CouponPercentage: Number(values.CouponPercentage),
+      expirationDate: values.expirationDate,
+      maxUsageLimit: Number(values.maxUsageLimit),
+      isActive: values.isActive,
+    };
+
     if (isAdd) {
-      addCoupon.mutate(formValues, {
+      addCoupon.mutate(cleanedValues, {
         onSuccess: () => {
           toast.success("Coupon added successfully");
           onRefresh();
-          closeModal();
+          handleClose();
         },
         onError: () => {
           toast.error("Failed to add coupon");
         },
+        onSettled: () => setSubmitting(false),
       });
     }
 
-    if (isUpdate && couponId) {
+    if (isUpdate && couponId && fetchedData) {
       const updatedFields = {};
-      Object.keys(formValues).forEach((key) => {
-        if (
-          formValues[key] !== "" &&
-          formValues[key] !== null &&
-          formValues[key] !== couponData?.[key]
-        ) {
-          updatedFields[key] = formValues[key];
+
+      ALLOWED_FIELDS.forEach((key) => {
+        const oldVal = fetchedData[key];
+
+        if (key === "expirationDate") {
+          const oldDate = oldVal?.split("T")[0];
+          if (cleanedValues[key] !== oldDate) {
+            updatedFields[key] = cleanedValues[key];
+          }
+        } else if (cleanedValues[key] !== oldVal) {
+          updatedFields[key] = cleanedValues[key];
         }
       });
 
-      if (Object.keys(updatedFields).length === 0) return;
+      if (Object.keys(updatedFields).length === 0) {
+        setSubmitting(false);
+        return;
+      }
 
       updateCoupon.mutate(
         { id: couponId, data: updatedFields },
@@ -83,11 +133,12 @@ export default function CouponsModal({
           onSuccess: () => {
             toast.success("Coupon updated successfully");
             onRefresh();
-            closeModal();
+            handleClose();
           },
           onError: () => {
             toast.error("Failed to update coupon");
           },
+          onSettled: () => setSubmitting(false),
         }
       );
     }
@@ -98,141 +149,143 @@ export default function CouponsModal({
   return (
     <div
       className="fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex items-center justify-center p-4"
-      onClick={closeModal}>
+      onClick={handleClose}>
       <div
         className="bg-white w-full max-w-md rounded-xl p-6 space-y-4 relative"
         onClick={(e) => e.stopPropagation()}>
         <button
-          onClick={closeModal}
+          onClick={handleClose}
           className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 hover:bg-[rgba(0,0,0,0.15)] p-1 px-2 rounded-lg cursor-pointer">
           <X size={20} />
         </button>
 
         {(isAdd || isUpdate) && (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <h2 className="text-2xl font-bold text-teal-600 mb-2 border-b pb-2">
-              {isAdd ? "Add New Coupon" : "Update Coupon"}
-            </h2>
+          <Formik
+            initialValues={formData}
+            enableReinitialize
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}>
+            {({ isSubmitting }) => (
+              <Form className="space-y-4">
+                <h2 className="text-2xl font-bold text-teal-600 mb-2 border-b pb-2">
+                  {isAdd ? "Add New Coupon" : "Update Coupon"}
+                </h2>
 
-            <div>
-              <label className="block mb-1 font-medium text-teal-900">
-                Coupon Code
-              </label>
-              <input
-                {...register("CouponCode", {
-                  required: isAdd,
-                  pattern: /^(?!\d+$)[a-zA-Z0-9_]+$/,
-                })}
-                placeholder="Enter coupon code"
-                className="input"
-                type="text"
-              />
-              {errors.CouponCode && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.CouponCode.type === "required"
-                    ? "Coupon Code is required."
-                    : "Must include letters (not just numbers)."}
-                </p>
-              )}
-            </div>
+                <div>
+                  <label className="block mb-1 font-medium text-teal-900">
+                    Coupon Code
+                  </label>
+                  <Field
+                    name="CouponCode"
+                    type="text"
+                    className="input"
+                    placeholder="Enter coupon code"
+                  />
+                  <ErrorMessage
+                    name="CouponCode"
+                    component="p"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            <div>
-              <label className="block mb-1 font-medium text-teal-900">
-                Discount Percentage
-              </label>
-              <input
-                {...register("CouponPercentage", {
-                  required: isAdd,
-                  min: 1,
-                  max: 100,
-                })}
-                type="number"
-                placeholder="1 - 100"
-                className="input"
-              />
-              {errors.CouponPercentage && (
-                <p className="text-red-500 text-sm mt-1">
-                  Percentage must be between 1 and 100.
-                </p>
-              )}
-            </div>
+                <div>
+                  <label className="block mb-1 font-medium text-teal-900">
+                    Discount Percentage
+                  </label>
+                  <Field
+                    name="CouponPercentage"
+                    type="number"
+                    className="input"
+                    placeholder="1 - 100"
+                  />
+                  <ErrorMessage
+                    name="CouponPercentage"
+                    component="p"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            <div>
-              <label className="block mb-1 font-medium text-teal-900">
-                Expiration Date
-              </label>
-              <input
-                {...register("expirationDate", {
-                  required: isAdd,
-                })}
-                type="date"
-                className="input"
-              />
-              {errors.expirationDate && (
-                <p className="text-red-500 text-sm mt-1">
-                  Expiration date is required.
-                </p>
-              )}
-            </div>
+                <div>
+                  <label className="block mb-1 font-medium text-teal-900">
+                    Expiration Date
+                  </label>
+                  <Field name="expirationDate" type="date" className="input" />
+                  <ErrorMessage
+                    name="expirationDate"
+                    component="p"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            <div>
-              <label className="block mb-1 font-medium text-teal-900">
-                Max Usage Limit
-              </label>
-              <input
-                {...register("maxUsageLimit", {
-                  required: isAdd,
-                })}
-                type="number"
-                placeholder="Enter max usage limit"
-                className="input"
-              />
-              {errors.maxUsageLimit && (
-                <p className="text-red-500 text-sm mt-1">
-                  Max usage limit is required.
-                </p>
-              )}
-            </div>
+                <div>
+                  <label className="block mb-1 font-medium text-teal-900">
+                    Max Usage Limit
+                  </label>
+                  <Field
+                    name="maxUsageLimit"
+                    type="number"
+                    className="input"
+                    placeholder="Enter max usage limit"
+                  />
+                  <ErrorMessage
+                    name="maxUsageLimit"
+                    component="p"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
 
-            <label className="inline-flex items-center gap-2">
-              <input
-                type="checkbox"
-                {...register("isActive")}
-                className="form-checkbox accent-teal-600 cursor-pointer"
-              />
-              <span className="text-teal-900 cursor-pointer">Active</span>
-            </label>
+                <label className="inline-flex items-center gap-2">
+                  <Field
+                    type="checkbox"
+                    name="isActive"
+                    className="form-checkbox accent-teal-600 cursor-pointer"
+                  />
+                  <span className="text-teal-900 cursor-pointer">Active</span>
+                </label>
 
-            <button type="submit" className="btn-teal w-full">
-              {isAdd ? "Add Coupon" : "Update Coupon"}
-            </button>
-          </form>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="btn-teal w-full">
+                  {isSubmitting
+                    ? "Saving..."
+                    : isAdd
+                    ? "Add Coupon"
+                    : "Update Coupon"}
+                </button>
+              </Form>
+            )}
+          </Formik>
         )}
 
-        {isView && couponData && !isLoading && (
+        {isView && isLoading && (
+          <p className="text-center text-gray-500">Loading...</p>
+        )}
+        {isView && fetchedData && !isLoading && (
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-teal-600 border-b pb-2">
               Coupon Details
             </h2>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800">
-              <DetailCard label="Code" value={couponData.CouponCode} />
+              <DetailCard label="Code" value={fetchedData.CouponCode} />
               <DetailCard
                 label="Discount"
-                value={`${couponData.CouponPercentage}%`}
+                value={`${fetchedData.CouponPercentage}%`}
               />
               <DetailCard
                 label="Expires On"
-                value={new Date(couponData.expirationDate).toLocaleDateString()}
+                value={new Date(
+                  fetchedData.expirationDate
+                ).toLocaleDateString()}
               />
               <DetailCard
                 label="Max Usage Limit"
-                value={couponData.maxUsageLimit}
+                value={fetchedData.maxUsageLimit}
               />
               <DetailCard
                 label="Status"
                 value={
-                  couponData.isActive ? (
+                  fetchedData.isActive ? (
                     <span className="text-green-600 font-semibold">Active</span>
                   ) : (
                     <span className="text-red-500 font-semibold">Inactive</span>
@@ -242,10 +295,6 @@ export default function CouponsModal({
               />
             </div>
           </div>
-        )}
-
-        {isView && isLoading && (
-          <p className="text-center text-gray-500">Loading...</p>
         )}
       </div>
     </div>
