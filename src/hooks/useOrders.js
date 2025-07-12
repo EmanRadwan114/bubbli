@@ -5,7 +5,6 @@ import { useOrdersContext } from "../context/OrdersContext.jsx";
 export const useOrders = () => {
   const { getCartItems, getShippingPrice, createOrder, checkout } =
     useOrdersContext();
-
   const queryClient = useQueryClient();
 
   // Fetch cart items
@@ -24,7 +23,6 @@ export const useOrders = () => {
   const createOrderMutation = useMutation({
     mutationFn: createOrder,
     onSuccess: () => {
-      // clear cart cache
       queryClient.invalidateQueries(["cartItems"]);
     },
   });
@@ -44,7 +42,6 @@ export const useOrders = () => {
   };
 };
 
-// get order details
 export const useOrder = (orderId) => {
   return useQuery({
     queryKey: ["order", orderId],

@@ -14,6 +14,7 @@ export const useGetCouponById = (id) =>
     queryKey: ["coupon", id],
     queryFn: () => couponService.getCouponById(id),
     enabled: !!id,
+    select: (res) => res.data,
   });
 
 // POST new coupon

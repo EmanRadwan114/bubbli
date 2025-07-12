@@ -16,7 +16,6 @@ export const getCouponById = async (id) => {
 
 //^ Add New Coupon
 export const addCoupon = async (newCoupon) => {
-  console.log("Sending to server:", newCoupon);
   const response = await api.post("/coupons", newCoupon, {
     withCredentials: true,
   });
