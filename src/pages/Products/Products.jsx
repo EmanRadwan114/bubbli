@@ -83,7 +83,6 @@ export default function Products() {
 
   const onAddToCart = async (id) => {
     await addProToCart(id);
-    toast.success("Product is added to Cart");
   };
 
   const onAddToWishlist = async (id) => {
@@ -118,8 +117,12 @@ export default function Products() {
                 </div>
               ))}
             {productList.length <= 0 && (
-              <div className="min-h-dvh flex justify-center items-center flex-col gap-5">
-                <img src={img} alt="no products found" className="w-3/12"></img>
+              <div className="flex justify-center items-center flex-col gap-5 relative my-20">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/17569/17569003.png"
+                  alt="no products found"
+                  className="w-6/12"
+                ></img>
                 <p className="font-semibold">Sorry, No products found!</p>
               </div>
             )}

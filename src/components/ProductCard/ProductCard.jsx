@@ -27,44 +27,29 @@ const ProductCard = ({
         {/* Badges */}
         <div className="absolute top-2 right-2 flex flex-col gap-1 text-center min-w-[80px]">
           {product.label.includes("new") && (
-            <span
-              className="bg-[#4b9cad]  text-white/95 text-sm px-2 py-1 rounded-full capitalize 
-           hover:opacity-90 transition-all shadow-sm"
-            >
+            <span className="bg-[#4b9cad] text-white/95 text-sm px-2 py-1 rounded-full capitalize hover:opacity-90 transition-all shadow-sm">
               New
             </span>
           )}
           {product.label.includes("bestseller") && (
-            <span
-              className="bg-[#d46a4e]  text-white/95 text-sm px-2 py-1 rounded-full capitalize 
-           hover:opacity-90 transition-all shadow-sm"
-            >
+            <span className="bg-[#d46a4e] text-white/95 text-sm px-2 py-1 rounded-full capitalize hover:opacity-90 transition-all shadow-sm">
               Bestseller
             </span>
           )}
           {product.label.includes("limited") && (
-            <span
-              className="bg-[#8a6bac]  text-white/95 text-sm px-2 py-1 rounded-full capitalize 
-           hover:opacity-90 transition-all shadow-sm"
-            >
+            <span className="bg-[#8a6bac] text-white/95 text-sm px-2 py-1 rounded-full capitalize hover:opacity-90 transition-all shadow-sm">
               Limited
             </span>
           )}
         </div>
         <div className="absolute top-2 left-2 flex flex-col gap-1 text-center min-w-[80px]">
           {product.label.includes("deal") && (
-            <span
-              className="bg-[#d99a5a]  text-white/95 text-sm px-2 py-1 rounded-full capitalize 
-           hover:opacity-90 transition-all shadow-sm"
-            >
+            <span className="bg-[#d99a5a] text-white/95 text-sm px-2 py-1 rounded-full capitalize hover:opacity-90 transition-all shadow-sm">
               Deal
             </span>
           )}
           {product.label.includes("hot") && (
-            <span
-              className="bg-[#c76a7f]  text-white/95 text-sm px-2 py-1 rounded-full capitalize 
-           hover:opacity-90 transition-all shadow-sm"
-            >
+            <span className="bg-[#c76a7f] text-white/95 text-sm px-2 py-1 rounded-full capitalize hover:opacity-90 transition-all shadow-sm">
               Hot
             </span>
           )}
@@ -72,16 +57,16 @@ const ProductCard = ({
       </div>
 
       {/* Product details */}
-      <div className="p-4 flex-grow flex flex-col">
+      <div className="p-4 flex flex-col h-full">
         <div className="flex justify-between items-start mb-2">
-          <Link to={productLink} className=" no-underline w-9/12">
-            <h3 className="font-semibold text-xl mb-1 hover:text-accent dark:hover:text-accent-dark transition-colors">
+          <Link to={productLink} className="no-underline w-9/12">
+            <h3 className="font-semibold text-lg mb-1 hover:text-accent dark:hover:text-accent-dark transition-colors">
               {product.title}
             </h3>
           </Link>
           <button
             onClick={() => onAddToWishlist(product._id)}
-            className={`text-gray-500 cursor-pointer w-3/12 pt-1 `}
+            className="text-gray-500 cursor-pointer w-3/12 pt-1"
             aria-label="Add to wishlist"
           >
             <Heart
@@ -93,26 +78,27 @@ const ProductCard = ({
             />
           </button>
         </div>
+
         <p className="text-dark dark:text-[#bfbfc1] mb-3">
           {product.description.slice(0, 100) + "..."}
         </p>
 
         {/* Rating */}
-        <div className="flex items-start justify-between mb-2">
-          <div className="flex items-start">
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-1">
             {[...Array(5)].map((_, i) => {
               const isFull = i + 1 <= product.avgRating;
               const isHalf = i + 0.5 === product.avgRating;
 
               return (
-                <div key={i} className="relative w-6 h-6">
+                <div key={i} className="relative w-4 h-4">
                   {/* Empty Star Outline */}
-                  <Star className="w-5 h-5 text-yellow-500 fill-none" />
+                  <Star className="w-4 h-4 text-yellow-500 fill-none" />
 
                   {/* Full or Half Star Fill */}
                   {(isFull || isHalf) && (
                     <Star
-                      className={`w-5 h-5 text-yellow-500 fill-yellow-500 absolute top-0 left-0 ${
+                      className={`w-4 h-4 text-yellow-500 fill-yellow-500 absolute top-0 left-0 ${
                         isHalf ? "clip-half" : ""
                       }`}
                     />
@@ -123,39 +109,37 @@ const ProductCard = ({
             <span className="text-gray-400 ms-1">({product.avgRating})</span>
           </div>
 
-          <span className="ms-1 text-lg font-semibold hidden sm:inline">
+          <span className="ms-1 font-semibold hidden sm:inline">
             {product.totalReviews} Reviews
           </span>
         </div>
 
         {/* Price */}
+        <div className="flex justify-between items-start gap-3 mb-2">
+          {product.discount > 0 && (
+            <div className="flex items-start gap-3">
+              <span className="text-gray-400 line-through">
+                EGP {product.price}
+              </span>
+              <span className="text-gray-400 font-bold hidden sm:inline">
+                ({product.discount}% off)
+              </span>
+            </div>
+          )}
+          <span className="font-semibold">
+            EGP{" "}
+            {product.price -
+              ((product.discount ? product.discount : 0) * product.price) / 100}
+          </span>
+        </div>
+
+        {/* Button - This will be at the bottom */}
         <div className="mt-auto">
-          <div className="flex justify-between items-start gap-3 mb-2">
-            {product.discount > 0 && (
-              <div className="flex items-start gap-3 mb-2">
-                <span className="text-gray-400 text-lg line-through">
-                  EGP {product.price}
-                </span>
-
-                <span className="text-gray-400 font-bold hidden sm:inline">
-                  (discount {product.discount}%)
-                </span>
-              </div>
-            )}
-            <span className="font-semibold text-lg">
-              EGP{" "}
-              {product.price -
-                ((product.discount ? product.discount : 0) * product.price) /
-                  100}
-            </span>
-          </div>
-
-          {/* Actions */}
           <button
             onClick={() => {
               onAddToCart(product._id);
             }}
-            className="light-primary-btn dark-primary-btn text-white px-4 py-2 rounded-lg font-semibold text-lg transition-colors block w-full"
+            className="light-primary-btn dark-primary-btn text-white px-4 py-1.5 rounded-lg font-semibold transition-colors block w-full"
           >
             Add to Cart
           </button>

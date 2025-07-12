@@ -1,6 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addProduct, deleteProduct, getAllProductsBack, getProductByCategory, getProductById, updateProduct } from "../services/productsService";
-import { number } from "yup";
+import {
+  addProduct, deleteProduct, getAllProductsBack,
+  getFeaturedProducts,
+  getProductByCategory,
+  getProductById, updateProduct,
+} from "../services/productsService";
 
 export const getProductByCategoryName = (categoryName, page = 1, limit = 6) =>
   useQuery({
@@ -16,6 +20,20 @@ export const getAllProducts = (page = 1, limit = 6) => {
     keepPreviousData: true,
   });
 };
+export const useFeaturedProducts = (label = "bestseller") => {
+  return useQuery({
+    queryKey: ["featured-products", label],
+    queryFn: () => getFeaturedProducts(label),
+    keepPreviousData: true,
+  });
+};
+// export const useBestSellersProducts = () => {
+//   return useQuery({
+//     queryKey: ["best-sellers"],
+//     queryFn: () => getBestSellers(),
+//     keepPreviousData: true,
+//   });
+// };
 // get product by ID
 // export const useGetProductById = (id) =>
 //   useQuery({

@@ -361,6 +361,14 @@ const Profile = () => {
                           >
                             {order.shippingStatus}
                           </span>
+                          {order.shippingStatus !== "cancelled" && (
+                            <button
+                              onClick={() => handleCancelOrder(order._id)}
+                              className="text-red-500 hover:text-white hover:bg-red-500 px-3  outline rounded-full text-sm cursor-pointer inline ml-4"
+                            >
+                              Cancel
+                            </button>
+                          )}
                         </div>
                         <div className="mt-3">
                           <Link to={`/order-confirmation/${order._id}`} className="text-primary hover:underline">

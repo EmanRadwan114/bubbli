@@ -7,22 +7,32 @@ import {
   removeFromWishlist,
 } from "../services/wishlistService";
 import { WishlistContext } from "../context/Wishlist.Context";
+import { AuthContext } from "../context/AuthContext";
 
 export const useAllWishlist = () => {
   const { setAllUserWishlist } = useContext(WishlistContext);
 
   return useQuery({
-    queryKey: ["all-wishlist"], 
+    queryKey: ["all-wishlist"],
     queryFn: getAllUserWishlist,
     onSuccess: (data) => {
       setAllUserWishlist(data.wishlist);
     },
   });
 };
+export const useFetchWishlist = () => {
+  const { user } = useContext(AuthContext);
+
+  return useQuery({
+    queryKey: ["all-wishlist"],
+    queryFn: getAllUserWishlist,
+    enabled: !!user,
+  });
+};
 
 // ✅ Fix for useAddToWishlist
 export const useAddToWishlist = () => {
-  const queryClient = useQueryClient(); 
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id) => addToWishlist(id),
@@ -32,13 +42,13 @@ export const useAddToWishlist = () => {
     },
     onError: (error) => {
       console.log(error);
-      toast.error(error?.response?.data?.message || "Something went wrong");
+      toast.error("Login to add product to wishlist");
     },
   });
 };
 
 export const useRemoveFromWishlist = () => {
-  const queryClient = useQueryClient(); 
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id) => removeFromWishlist(id),
     onSuccess: () => {
@@ -47,7 +57,7 @@ export const useRemoveFromWishlist = () => {
     },
     onError: (error) => {
       console.log(error);
-      toast.error(error?.response?.data?.message || "Something went wrong");
+      toast.error("Login to remove product to wishlist");
     },
   });
 };
