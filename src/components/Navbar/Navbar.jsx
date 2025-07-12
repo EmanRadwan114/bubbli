@@ -1,14 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useLocation, Link as RouterLink, useNavigate } from "react-router-dom";
-import {
-  Menu,
-  Search,
-  User,
-  Heart,
-  ShoppingCart,
-  Sun,
-  Moon,
-} from "lucide-react";
+import { Menu, Search, User, Heart, ShoppingCart, Sun, Moon } from "lucide-react";
 import { WishlistContext } from "../../context/Wishlist.Context";
 import { useCart } from "../../context/CartContext";
 
@@ -18,7 +10,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const user = localStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem("user"));
   const navLinks = [
     { label: "Home", to: "/" },
     { label: "Menu", to: "/gifts" },
@@ -46,12 +38,7 @@ const Navbar = () => {
   const [theme, setTheme] = useState(() => {
     if (typeof window === "undefined") return "light";
     const savedTheme = localStorage.getItem("theme");
-    return (
-      savedTheme ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light")
-    );
+    return savedTheme || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
   });
 
   useEffect(() => {
@@ -95,11 +82,7 @@ const Navbar = () => {
       <header
         className={`
         fixed w-full z-50 transition-all duration-300
-        ${
-          scrolled || !isHomePage
-            ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm"
-            : "bg-transparent"
-        }
+        ${scrolled || !isHomePage ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-sm" : "bg-transparent"}
       `}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -107,9 +90,7 @@ const Navbar = () => {
             {/* Logo */}
             <div className="flex-shrink-0">
               <RouterLink to="/" className="flex items-center">
-                <span className="text-2xl font-bold text-primary dark:text-primary-light">
-                  Bubbli
-                </span>
+                <span className="text-2xl font-bold text-primary dark:text-primary-light">Bubbli</span>
               </RouterLink>
             </div>
 
@@ -154,15 +135,9 @@ const Navbar = () => {
               <button
                 onClick={toggleTheme}
                 className="hidden md:block p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                aria-label={`Current mode: ${theme}. Switch to ${
-                  theme === "dark" ? "light" : "dark"
-                } mode`}
+                aria-label={`Current mode: ${theme}. Switch to ${theme === "dark" ? "light" : "dark"} mode`}
               >
-                {theme === "dark" ? (
-                  <Sun className="h-5 w-5 text-yellow-400" />
-                ) : (
-                  <Moon className="h-5 w-5 text-gray-700" />
-                )}
+                {theme === "dark" ? <Sun className="h-5 w-5 text-yellow-400" /> : <Moon className="h-5 w-5 text-gray-700" />}
               </button>
 
               {/* User Icon */}
@@ -173,28 +148,17 @@ const Navbar = () => {
                 <User
                   className={`
                   h-5 w-5 
-                  ${
-                    location.pathname === "/profile"
-                      ? "text-primary dark:text-primary-light"
-                      : "text-gray-700 dark:text-gray-300"
-                  }
+                  ${location.pathname === "/profile" ? "text-primary dark:text-primary-light" : "text-gray-700 dark:text-gray-300"}
                 `}
                 />
               </RouterLink>
 
               {/* wishlist */}
-              <RouterLink
-                to="/wishlist"
-                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative"
-              >
+              <RouterLink to="/wishlist" className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative">
                 <Heart
                   className={`
                   h-5 w-5 
-                  ${
-                    location.pathname === "/wishlist"
-                      ? "text-primary dark:text-primary-light"
-                      : "text-gray-700 dark:text-gray-300"
-                  }
+                  ${location.pathname === "/wishlist" ? "text-primary dark:text-primary-light" : "text-gray-700 dark:text-gray-300"}
                 `}
                 />
                 {allUserWishlist.length > 0 && (
@@ -205,18 +169,11 @@ const Navbar = () => {
               </RouterLink>
 
               {/* Cart */}
-              <RouterLink
-                to="/cart"
-                className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative"
-              >
+              <RouterLink to="/cart" className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors relative">
                 <ShoppingCart
                   className={`
                   h-5 w-5 
-                  ${
-                    location.pathname === "/cart"
-                      ? "text-primary dark:text-primary-light"
-                      : "text-gray-700 dark:text-gray-300"
-                  }
+                  ${location.pathname === "/cart" ? "text-primary dark:text-primary-light" : "text-gray-700 dark:text-gray-300"}
                 `}
                 />
                 {cartItems > 0 && (
@@ -248,28 +205,17 @@ const Navbar = () => {
       >
         <div className="p-4">
           <div className="flex justify-between items-center mb-6">
-            <span className="text-xl font-bold text-primary dark:text-primary-light">
-              Bubbli
-            </span>
-            <button
-              onClick={() => setDrawerOpen(false)}
-              className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
-            >
+            <span className="text-xl font-bold text-primary dark:text-primary-light">Bubbli</span>
+            <button onClick={() => setDrawerOpen(false)} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
               <Menu className="h-5 w-5 text-gray-700 dark:text-gray-300" />
             </button>
           </div>
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            aria-label={`Current mode: ${theme}. Switch to ${
-              theme === "dark" ? "light" : "dark"
-            } mode`}
+            aria-label={`Current mode: ${theme}. Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
-            {theme === "dark" ? (
-              <Sun className="h-5 w-5 text-yellow-400" />
-            ) : (
-              <Moon className="h-5 w-5 text-gray-700" />
-            )}
+            {theme === "dark" ? <Sun className="h-5 w-5 text-yellow-400" /> : <Moon className="h-5 w-5 text-gray-700" />}
           </button>
 
           {/* Search Bar - Mobile */}
@@ -311,12 +257,7 @@ const Navbar = () => {
       </div>
 
       {/* Overlay when drawer is open */}
-      {drawerOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 md:hidden"
-          onClick={() => setDrawerOpen(false)}
-        />
-      )}
+      {drawerOpen && <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={() => setDrawerOpen(false)} />}
     </>
   );
 };
