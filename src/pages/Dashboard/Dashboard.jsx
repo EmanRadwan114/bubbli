@@ -5,7 +5,6 @@ import { Menu } from "lucide-react";
 
 export default function Dashboard() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
   return (
     <section>
       <div className="flex min-h-screen">
