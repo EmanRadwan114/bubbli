@@ -43,13 +43,12 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col">
-
     {/* Interceptor runs once here */}
+
       <AppInitializer />
       {path.includes("login") || path.includes("register") || path.includes("dashboard") ? null : <Navbar />}
 
       <div className={`flex-grow ${path.includes("login") || path.includes("register") || path.includes("dashboard") ? "pt-0" : "pt-16"}`}>
-
         <Outlet />
       </div>
 
