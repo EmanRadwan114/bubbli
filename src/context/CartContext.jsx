@@ -1,4 +1,3 @@
-
 import { AuthContext } from "./AuthContext";
 // import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 // import { createContext, useContext, useEffect, useState } from "react";
@@ -24,7 +23,7 @@ export default function CartContextProvider({ children }) {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["cartItems", page],
     queryFn: () => getCartItems(page),
-    enabled: !!user,
+    enabled: !!user?.role === "user",
   });
 
   const mutation = useMutation({
@@ -81,7 +80,8 @@ export default function CartContextProvider({ children }) {
         setPage,
         handleQuantity,
         addToCart: addToCartMutation.mutate,
-      }}>
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

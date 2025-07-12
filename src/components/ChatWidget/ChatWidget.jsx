@@ -58,7 +58,8 @@ const ChatWidget = () => {
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-[100px] bg-accent text-white p-4 rounded-full shadow-lg hover:bg-accent-dark cursor-pointer transition z-50">
+        className="fixed bottom-6 right-[80px] bg-accent text-white p-4 rounded-full shadow-lg hover:bg-accent-dark cursor-pointer transition z-50"
+      >
         💬
       </button>
 
@@ -76,13 +77,15 @@ const ChatWidget = () => {
                 key={index}
                 className={`flex ${
                   msg.sender === "user" ? "justify-end" : "justify-start"
-                }`}>
+                }`}
+              >
                 <div
                   className={`px-3 py-2 rounded-lg max-w-[80%] text-sm break-words ${
                     msg.sender === "user"
                       ? "bg-primary text-white rounded-br-none"
                       : "bg-secondary text-black rounded-bl-none"
-                  }`}>
+                  }`}
+                >
                   {msg.text}
                 </div>
               </div>
@@ -102,7 +105,8 @@ const ChatWidget = () => {
             />
             <button
               className="bg-primary hover:bg-accent cursor-pointer text-white px-3 ml-2 rounded"
-              onClick={sendMessage}>
+              onClick={sendMessage}
+            >
               ➤
             </button>
           </div>

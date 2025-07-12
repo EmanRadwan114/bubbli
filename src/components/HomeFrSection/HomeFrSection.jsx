@@ -116,35 +116,33 @@ const BestSellers = () => {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex overflow-x-auto pb-4 mb-8 scrollbar-hide">
-          <nav className="flex space-x-2 mx-auto">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center px-4 py-2 rounded-full transition-colors ${
-                  activeTab === tab.id
-                    ? "bg-primary dark:bg-primary-dark text-white"
-                    : "light-main-bg dark-main-bg hover:bg-opacity-80"
-                }`}
-              >
-                <span className="mr-2">
-                  {React.cloneElement(tab.icon, {
-                    className: `w-4 h-4 ${
-                      activeTab === tab.id
-                        ? "text-white"
-                        : "text-primary dark:text-primary-dark"
-                    }`,
-                  })}
-                </span>
-                {tab.label}
-              </button>
-            ))}
-          </nav>
-        </div>
+        <nav className="flex flex-wrap justify-center gap-3 mb-8">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center px-4 py-2 rounded-full transition-colors cursor-pointer ${
+                activeTab === tab.id
+                  ? "bg-primary dark:bg-primary-dark text-white"
+                  : "light-main-bg dark-main-bg hover:bg-opacity-80"
+              }`}
+            >
+              <span className="mr-2">
+                {React.cloneElement(tab.icon, {
+                  className: `w-4 h-4 ${
+                    activeTab === tab.id
+                      ? "text-white"
+                      : "text-primary dark:text-primary-dark"
+                  }`,
+                })}
+              </span>
+              {tab.label}
+            </button>
+          ))}
+        </nav>
 
         {/* Product Grid */}
-        <div className="flex flex-wrap sm:flex-row items-center justify-center gap-10 sm:gap-20 lg:px-16">
+        <div className="flex flex-wrap sm:flex-row items-center justify-center gap-10 sm:gap-20 md:px-16">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredProducts.map((product) => (
               <ProductCard

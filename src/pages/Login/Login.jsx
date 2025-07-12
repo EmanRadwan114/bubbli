@@ -51,10 +51,14 @@ const Login = () => {
   });
 
   if (isSuccess) {
-    navigate("/");
     localStorage.setItem("user", JSON.stringify(data.user));
-    toast.success(data.message);
     setUser(data.user);
+    if (data.user.role === "admin") {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+    toast.success(data.message);
   }
 
   const handleLoginSuccess = async (credentialResponse) => {
@@ -68,10 +72,14 @@ const Login = () => {
   };
 
   if (isGoogleLoginSuccess) {
-    navigate("/");
     localStorage.setItem("user", JSON.stringify(googleLoginData.user));
-    toast.success(googleLoginData.message);
     setUser(googleLoginData.user);
+    if (googleLoginData.user.role === "admin") {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+    toast.success(googleLoginData.message);
   }
 
   return (
@@ -167,84 +175,6 @@ const Login = () => {
                     {formik.errors.password}
                   </p>
                 )}
-              </div>
-
-              {/* Password Strength Meter */}
-              <div className="bg-secondary/30 dark:bg-secondary-dark/30 p-3 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <CircleAlert className="text-accent dark:text-accent-dark me-2 w-5 h-5" />
-                  <span className="text-sm font-medium text-dark dark:text-light">
-                    Password Requirements
-                  </span>
-                </div>
-                <ul className="text-xs text-dark/80 dark:text-light/80 space-y-1">
-                  <li
-                    className={`flex items-center ${
-                      formik.values.password.length >= 8 ? "text-green-500" : ""
-                    }`}
-                  >
-                    {formik.values.password.length >= 8 ? (
-                      <CircleCheck className="me-1 h-4 w-4 fill-green-500 text-white dark:fill-green-600" />
-                    ) : (
-                      <X className="w-4 h-4 me-2 text-gray-700" />
-                    )}
-                    At least 8 characters
-                  </li>
-                  <li
-                    className={`flex items-center ${
-                      /[A-Z]/.test(formik.values.password)
-                        ? "text-green-500"
-                        : ""
-                    }`}
-                  >
-                    {/[A-Z]/.test(formik.values.password) ? (
-                      <CircleCheck className="me-1 h-4 w-4 fill-green-500 text-white dark:fill-green-600" />
-                    ) : (
-                      <X className="w-4 h-4 me-2 text-gray-700" />
-                    )}
-                    At least one uppercase letter
-                  </li>
-                  <li
-                    className={`flex items-center ${
-                      /[a-z]/.test(formik.values.password)
-                        ? "text-green-500"
-                        : ""
-                    }`}
-                  >
-                    {/[a-z]/.test(formik.values.password) ? (
-                      <CircleCheck className="me-1 h-4 w-4 fill-green-500 text-white dark:fill-green-600" />
-                    ) : (
-                      <X className="w-4 h-4 me-2 text-gray-700" />
-                    )}
-                    At least one lowercase letter
-                  </li>
-                  <li
-                    className={`flex items-center ${
-                      /\d/.test(formik.values.password) ? "text-green-500" : ""
-                    }`}
-                  >
-                    {/\d/.test(formik.values.password) ? (
-                      <CircleCheck className="me-1 h-4 w-4 fill-green-500 text-white dark:fill-green-600" />
-                    ) : (
-                      <X className="w-4 h-4 me-2 text-gray-700" />
-                    )}
-                    At least one number
-                  </li>
-                  <li
-                    className={`flex items-center ${
-                      /(?=.*[@_$-])/.test(formik.values.password)
-                        ? "text-green-500"
-                        : ""
-                    }`}
-                  >
-                    {/(?=.*[@_$-])/.test(formik.values.password) ? (
-                      <CircleCheck className="me-1 h-4 w-4 fill-green-500 text-white dark:fill-green-600" />
-                    ) : (
-                      <X className="w-4 h-4 me-2 text-gray-700" />
-                    )}
-                    At least one special character (@, _, $ or -)
-                  </li>
-                </ul>
               </div>
 
               {/* Submit Button */}
