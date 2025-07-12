@@ -30,3 +30,20 @@ export const updateAdmin = async (id, updatedData) => {
   const response = await api.put(`/users/${id}`, updatedData);
   return response.data;
 };
+
+// Home Dashboard
+export const getDashboardMetric = async (params) => {
+  const { type, metric, year, month } = params;
+
+  const query = new URLSearchParams();
+  query.append("type", type);
+  query.append("metric", metric);
+  if (year) query.append("year", year);
+  if (month) query.append("month", month);
+
+  const { data } = await api.get(
+    `/admins/dashboard-stats?${query.toString()}`
+  );
+
+  return data;
+};
