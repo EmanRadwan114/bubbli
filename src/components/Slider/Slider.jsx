@@ -36,7 +36,8 @@ export default function MultiCardSlider() {
           return (
             <div
               key={item._id || index}
-              className="flex flex-col min-[330px]:flex-row justify-between max-[330px]:gap-2 w-full min-[330px]:items-center bg-card rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-2">
+              className="flex flex-col min-[330px]:flex-row justify-between max-[330px]:gap-2 w-full min-[330px]:items-center bg-card dark:bg-black rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-2"
+            >
               {/* Image */}
               <img
                 src={item.productId.thumbnail}

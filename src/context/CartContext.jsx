@@ -1,4 +1,3 @@
-
 import { AuthContext } from "./AuthContext";
 // import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 // import { createContext, useContext, useEffect, useState } from "react";
@@ -13,12 +12,14 @@ import {
   addToCartApi,
 } from "../services/cartService";
 import { useAuth } from "./AuthContext";
+import { toast } from "react-toastify";
 export const CartContext = createContext();
 
 export default function CartContextProvider({ children }) {
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
   const { user } = useContext(AuthContext);
+  const [cartItems, setCartItems] = useState(0);
 
   // Run cart logic only if user is logged in
   const { data, isLoading, refetch } = useQuery({
@@ -36,14 +37,18 @@ export default function CartContextProvider({ children }) {
 
       if (page > 1 && latestData.data.length === 0) {
         setPage((val) => val - 1);
+        toast.success("Cart is cleared successfully");
       } else {
+        toast.success("Cart is updated successfully");
         await queryClient.invalidateQueries(["cartItems", page]);
       }
     },
   });
+
   const mutationQuantity = useMutation({
     mutationFn: editQuantity,
     onSuccess: () => {
+      toast.success("Cart item is updated successfully");
       refetch?.();
     },
   });
@@ -65,23 +70,28 @@ export default function CartContextProvider({ children }) {
   // Add to Cart
   const addToCartMutation = useMutation({
     mutationFn: (productId) => addToCartApi(productId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["cartItems"]);
+    onSuccess: async () => {
+      toast.success("Product is added to cart successfully");
+      await refetch();
+      setCartItems(data?.totalItems);
     },
   });
 
   return (
     <CartContext.Provider
       value={{
-        data: user ? data : { data: [] },
+        data: user ? data : [],
         isLoading: user ? isLoading : false,
         refetch: user ? refetch : () => {},
         handleCartRemoval,
         page,
         setPage,
         handleQuantity,
-        addToCart: addToCartMutation.mutate,
-      }}>
+        addToCart: addToCartMutation.mutateAsync,
+        cartItems,
+        setCartItems,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

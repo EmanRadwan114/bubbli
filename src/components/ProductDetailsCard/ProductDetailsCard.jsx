@@ -9,6 +9,7 @@ import {
   useAllWishlist,
   useRemoveFromWishlist,
 } from "../../hooks/useWishlist";
+import { useAddToCart } from "../../hooks/useCart";
 
 const ProductDetailsCard = () => {
   const { categoryName, id } = useParams();
@@ -56,6 +57,15 @@ const ProductDetailsCard = () => {
   const { mutate: addToWishlist } = useAddToWishlist();
   const { mutate: removeFromWishlist } = useRemoveFromWishlist();
 
+  const {
+    mutateAsync: addProToCart,
+    isPending: pendingAddToCart,
+    isSuccess: addToCartSuccess,
+  } = useAddToCart();
+
+  const onAddToCart = async (id) => {
+    await addProToCart(id);
+  };
 
   // Loading state
   if (isLoading) {
@@ -86,7 +96,7 @@ const ProductDetailsCard = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 p-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 p-6 lg:px-16 pt-10">
       {/* Left Section - Images */}
       <div className="flex flex-col sm:flex-row gap-4">
         {/* Thumbnails with arrows */}
@@ -147,9 +157,9 @@ const ProductDetailsCard = () => {
       {/* Right Section - Info */}
       <div className="flex flex-col justify-between px-4">
         <div className="flex justify-between items-start mb-3">
-          <h2 className="text-2xl md:text-4xl font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-dark)]">
+          <h1 className="text-2xl md:text-4xl font-bold text-[var(--color-primary)] dark:text-[var(--color-primary-dark)]">
             {product.title}
-          </h2>
+          </h1>
           <button
             onClick={handleWishlistClick}
             className={`border rounded-lg p-2 transition ${
@@ -236,7 +246,10 @@ const ProductDetailsCard = () => {
           {product.description}
         </p>
 
-        <button className="flex items-center justify-center gap-3 w-full py-2 text-lg font-medium rounded-lg light-primary-btn dark:dark-primary-btn">
+        <button
+          className="flex items-center justify-center gap-3 w-full py-2 text-lg font-medium rounded-lg light-primary-btn dark:dark-primary-btn"
+          onClick={() => onAddToCart(product._id)}
+        >
           <Gift />
           Add to Cart
         </button>

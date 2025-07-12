@@ -40,7 +40,7 @@ const GiftTipsSection = () => {
   ];
 
   return (
-    <section className="light-main-bg dark-main-bg py-16 px-4 sm:px-6 lg:px-8">
+    <section className="light-main-bg dark-main-bg py-16 px-4 sm:px-6 md:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-dark dark:text-light mb-3">
@@ -57,7 +57,7 @@ const GiftTipsSection = () => {
             <button
               key={index}
               onClick={() => setActiveTab(index)}
-              className={`flex items-center px-4 py-2 rounded-full border-2 transition-all ${
+              className={`flex items-center px-4 py-2 rounded-full border-2 transition-all cursor-pointer ${
                 activeTab === index
                   ? "border-primary dark:border-primary-dark bg-secondary dark:bg-secondary-dark font-medium"
                   : "border-transparent hover:bg-secondary dark:hover:bg-secondary-dark"
