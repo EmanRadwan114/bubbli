@@ -53,7 +53,7 @@ const Login = () => {
   if (isSuccess) {
     localStorage.setItem("user", JSON.stringify(data.user));
     setUser(data.user);
-    if (data.user.role === "admin") {
+    if (data?.user?.role === "admin") {
       navigate("/dashboard");
     } else {
       navigate("/");
@@ -74,7 +74,7 @@ const Login = () => {
   if (isGoogleLoginSuccess) {
     localStorage.setItem("user", JSON.stringify(googleLoginData.user));
     setUser(googleLoginData.user);
-    if (googleLoginData.user.role === "admin") {
+    if (googleLoginData?.user?.role === "admin") {
       navigate("/dashboard");
     } else {
       navigate("/");

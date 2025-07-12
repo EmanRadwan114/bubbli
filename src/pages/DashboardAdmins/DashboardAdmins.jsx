@@ -18,7 +18,7 @@ export default function AdminsDashboard() {
 
   const deleteAdminMutation = useDeleteAdmin();
 
-  const admins = (data?.data || []).filter((user) => user.role === "admin");
+  const admins = (data?.data || []).filter((user) => user?.role === "admin");
   const totalPages = data?.totalPages || 1;
 
   const handleOpenModal = (type, admin = null) => {
