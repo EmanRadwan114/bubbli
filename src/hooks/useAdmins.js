@@ -35,3 +35,14 @@ export const useDeleteAdmin = () => {
     },
   });
 };
+
+// Home Dashboard
+
+export const useDashboardMetric = (params) => {
+  return useQuery({
+    queryKey: ["dashboard-metric", params],
+    queryFn: () => adminService.getDashboardMetric(params),
+    enabled: !!params.type && !!params.metric,
+    staleTime: 1000 * 60 * 5,
+  });
+};
