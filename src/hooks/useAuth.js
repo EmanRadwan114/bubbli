@@ -30,7 +30,6 @@ export const useUserGoogleLogin = () => {
     mutationFn: (token) => loginUserWithGoogle(token),
     onError: (error) => {
       console.log(error);
-
       toast.error(error?.response.data.message);
     },
   });

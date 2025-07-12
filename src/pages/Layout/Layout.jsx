@@ -25,6 +25,7 @@ export default function Layout() {
       setAllUserWishlist(ids);
     }
   }, [allWishlist]);
+
   useEffect(() => {
     async function fetchData() {
       await refetch();
