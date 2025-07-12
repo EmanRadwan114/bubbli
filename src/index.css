@@ -112,3 +112,7 @@
 .icons:hover {
   color: #007870;
 }
+
+button {
+  cursor: pointer;
+}

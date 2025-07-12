@@ -14,14 +14,8 @@ export const removeCart = async (id = undefined) => {
 };
 export const editQuantity = async ({ id, quantity }) => {
   const response = await api.put(`/cart/${id}`, { quantity });
-  console.log(response);
   return response.data;
 };
 export const addToCartApi = (productId) => {
   return api.post("/cart", { productId });
 };
-
-
-
-
-

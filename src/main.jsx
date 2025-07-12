@@ -82,7 +82,7 @@ const router = createBrowserRouter([
       },
       { path: "login", element: <Login></Login> },
       { path: "register", element: <Register></Register> },
-      { path: "favorites", element: <Wishlist></Wishlist> },
+      { path: "wishlist", element: <Wishlist></Wishlist> },
       { path: "cart", element: <Cart></Cart> },
       { path: "checkout", element: <Checkout></Checkout> },
       {
@@ -139,8 +139,6 @@ const router = createBrowserRouter([
 ]);
 
 // ^ react query & redux setup
-import { Provider } from "react-redux";
-import { store } from "./redux/store.js";
 import { ToastContainer } from "react-toastify";
 import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -151,25 +149,23 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")).render(
   // <StrictMode>
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-    <Provider store={store}>
-      <AuthContextProvider>
-        <QueryClientProvider client={queryClient}>
-          <OrdersContextProvider>
-            <CartContextProvider>
-              <WishlistContextProvider>
-                <ScrollToTop />
-                <RouterProvider router={router} />
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  className="capitalize"
-                />
-              </WishlistContextProvider>
-            </CartContextProvider>
-          </OrdersContextProvider>
-        </QueryClientProvider>
-      </AuthContextProvider>
-    </Provider>
+    <AuthContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <OrdersContextProvider>
+          <CartContextProvider>
+            <WishlistContextProvider>
+              <ScrollToTop />
+              <RouterProvider router={router} />
+              <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                className="capitalize"
+              />
+            </WishlistContextProvider>
+          </CartContextProvider>
+        </OrdersContextProvider>
+      </QueryClientProvider>
+    </AuthContextProvider>
   </GoogleOAuthProvider>
 
   /* </StrictMode> */

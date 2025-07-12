@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ProductCard from "../../components/ProductCard/ProductCard";
-import { toast } from "react-toastify";
 import {
   useAddToWishlist,
   useAllWishlist,
@@ -12,14 +11,15 @@ import {
   getProductByCategoryName,
 } from "../../hooks/useProducts";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import img from "../../assets/images/emptyCart.png";
+import img from "../../assets/images/emptyCart.svg";
 import Pagination from "../../components/Pagination/Pagination";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
-import { getAllUserWishlist } from "../../services/wishlistService";
-import { useAddToCart } from "../../hooks/useCart";
+import { WishlistContext } from "../../context/Wishlist.Context";
+import { useCart } from "../../context/CartContext";
 export default function Products() {
   const { categoryName } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
+
   // const {
   //   data: { data: categoryData = [], totalPages: catTotalPages = 1 } = {},
   //   isLoading: isCatLoading,
@@ -46,14 +46,9 @@ export default function Products() {
   function handlePagination(value) {
     setCurrentPage(value);
   }
-  const {
-    data: allWishlist,
-    isLoading: isWishlistLoading,
-    isError: isWishlistError,
-    error: wishlistError,
-  } = useAllWishlist();
 
-  const [wishlistArr, setWishlistArr] = useState([]);
+  const { allUserWishlist, setAllUserWishlist } = useContext(WishlistContext);
+  const { addToCart } = useCart();
 
   const {
     mutateAsync: addProToWishlist,
@@ -66,78 +61,72 @@ export default function Products() {
     isSuccess: removeFromWishlistSuccess,
   } = useRemoveFromWishlist();
 
-  const {
-    mutateAsync: addProToCart,
-    isPending: pendingAddToCart,
-    isSuccess: addToCartSuccess,
-  } = useAddToCart();
-
-  useEffect(() => {
-    if (allWishlist) {
-      const arr = allWishlist?.data?.map((item) => {
-        return item._id;
-      });
-      setWishlistArr([...arr]);
-    }
-  }, [allWishlist]);
-
   const onAddToCart = async (id) => {
-    await addProToCart(id);
+    await addToCart(id);
   };
 
   const onAddToWishlist = async (id) => {
-    if (wishlistArr?.includes(id)) {
-      await removeProFromWishlist(id);
-      setWishlistArr([...wishlistArr.filter((item) => item !== id)]);
-    } else {
-      await addProToWishlist(id);
-      setWishlistArr([...wishlistArr, id]);
+    const isInWishlist = allUserWishlist.includes(id);
+
+    try {
+      if (isInWishlist) {
+        await removeProFromWishlist(id);
+        setAllUserWishlist((prev) => prev.filter((itemId) => itemId !== id));
+      } else {
+        await addProToWishlist(id);
+        setAllUserWishlist((prev) => [...prev, id]);
+      }
+    } catch (error) {
+      console.error("Error while updating wishlist:", error);
     }
   };
 
-  if (isLoading) {
-    return <LoadingSpinner></LoadingSpinner>;
-  }
   return (
     <>
       <Breadcrumb></Breadcrumb>
-      <div className="flex">
-        <div className="md:flex-1/5"></div>
-        <div className="flex flex-col md:flex-4/5">
-          <div className="flex flex-wrap justify-center my-4">
-            {productList.length > 0 &&
-              productList.map((product, indx) => (
-                <div className="w-full md:w-6/12 lg:w-4/12 p-2" key={indx}>
-                  <ProductCard
-                    product={product}
-                    onAddToWishlist={onAddToWishlist}
-                    onAddToCart={onAddToCart}
-                    wishlistArr={wishlistArr}
-                  />
+      {isLoading ? (
+        <div className="min-h-screen">
+          <LoadingSpinner />;
+        </div>
+      ) : (
+        <div className="flex">
+          <div className="md:flex-1/5"></div>
+          <div className="flex flex-col md:flex-4/5">
+            <div className="flex flex-wrap justify-center my-4">
+              {productList.length > 0 &&
+                productList.map((product, indx) => (
+                  <div className="w-full md:w-6/12 lg:w-4/12 p-2" key={indx}>
+                    <ProductCard
+                      product={product}
+                      onAddToWishlist={onAddToWishlist}
+                      onAddToCart={onAddToCart}
+                      wishlistArr={allUserWishlist}
+                    />
+                  </div>
+                ))}
+              {productList.length <= 0 && (
+                <div className="flex justify-center items-center flex-col gap-5 relative my-20">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/128/17569/17569003.png"
+                    alt="no products found"
+                    className="w-6/12"
+                  ></img>
+                  <p className="font-semibold">Sorry, No products found!</p>
                 </div>
-              ))}
-            {productList.length <= 0 && (
-              <div className="flex justify-center items-center flex-col gap-5 relative my-20">
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/17569/17569003.png"
-                  alt="no products found"
-                  className="w-6/12"
-                ></img>
-                <p className="font-semibold">Sorry, No products found!</p>
-              </div>
-            )}
-          </div>
-          <div>
-            {productList.length > 0 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                handlePagination={handlePagination}
-              ></Pagination>
-            )}
+              )}
+            </div>
+            <div>
+              {productList.length > 0 && (
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  handlePagination={handlePagination}
+                ></Pagination>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

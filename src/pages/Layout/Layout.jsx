@@ -2,12 +2,39 @@ import { Outlet, useLocation } from "react-router";
 import Navbar from "./../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import ChatWidget from "../../components/ChatWidget/ChatWidget.jsx";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { WishlistContext } from "../../context/Wishlist.Context.jsx";
+import { useAllWishlist } from "../../hooks/useWishlist.js";
+import { useCart } from "../../context/CartContext.jsx";
 
 export default function Layout() {
   const path = useLocation().pathname;
 
   const { pathname } = useLocation();
+
+  const { allUserWishlist, setAllUserWishlist } = useContext(WishlistContext);
+  const { data, refetch, setCartItems } = useCart();
+
+  const {
+    data: allWishlist,
+    isLoading: isWishlistLoading,
+    isError: isWishlistError,
+    error: wishlistError,
+  } = useAllWishlist();
+
+  useEffect(() => {
+    if (allWishlist?.data) {
+      const ids = allWishlist.data.map((item) => item._id);
+      setAllUserWishlist(ids);
+    }
+  }, [allWishlist]);
+  useEffect(() => {
+    async function fetchData() {
+      await refetch();
+      setCartItems(data?.totalItems);
+    }
+    fetchData();
+  }, [data]);
 
   useEffect(() => {
     window.scrollTo({
@@ -17,23 +44,23 @@ export default function Layout() {
   }, [pathname]);
 
   return (
-    <>
-      {path.includes("login") || path.includes("register") ? null : (
-        <Navbar></Navbar>
-      )}
+    <div className="min-h-screen flex flex-col">
+      {path.includes("login") || path.includes("register") ? null : <Navbar />}
+
       <div
-        className={` ${
+        className={`flex-grow ${
           path.includes("login") || path.includes("register") ? "pt-0" : "pt-16"
         }`}
       >
-        <Outlet></Outlet>
+        <Outlet />
       </div>
-      {path.includes("login") || path.includes("register") ? null : (
-        <Footer></Footer>
-      )}
+
+      {/* Footer will automatically stick to bottom due to flex-col and min-h-screen */}
+      {path.includes("login") || path.includes("register") ? null : <Footer />}
+
       {path.includes("login") || path.includes("register") ? null : (
         <ChatWidget />
       )}
-    </>
+    </div>
   );
 }
