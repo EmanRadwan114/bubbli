@@ -3,7 +3,9 @@ import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 
 export default function RequireAdmin() {
-  const { user, loading } = useAuth();
+  const { loading } = useAuth();
+  const user = JSON.parse(localStorage.getItem("user"));
+
   const location = useLocation();
 
   if (loading) return <p>Loading...</p>;
