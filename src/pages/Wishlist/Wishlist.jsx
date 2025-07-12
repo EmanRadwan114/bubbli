@@ -20,7 +20,8 @@ const Wishlist = () => {
 
   const { setAllUserWishlist } = useContext(WishlistContext);
 
-  const { data, isLoading, isError, error } = useFetchWishlist(currentPage);
+  const { data, isLoading, isError, error, refetch } =
+    useFetchWishlist(currentPage);
 
   const { mutate: removeProFromWishlist, isPending } = useRemoveFromWishlist();
 
@@ -31,14 +32,15 @@ const Wishlist = () => {
   const wishlist = data?.data || [];
 
   const handleAddToCart = async (id) => {
-    toast.success("Item added to cart");
     await addToCart(id);
-    removeFromWishlist(id);
+    await removeFromWishlist(id);
+    refetch();
   };
 
   const handleRemoveFromWishlist = (id) => {
     removeProFromWishlist(id);
   };
+
   const handleClearWishlist = () => {
     clearWishlist();
   };
