@@ -15,7 +15,7 @@ export default function AdminSideNav() {
 
   const handleLogout = () => {
     logout();
-    toast.success("Logout successfully!");
+    toast.success("Logged Out Successfully");
     navigate(`/`);
   };
 

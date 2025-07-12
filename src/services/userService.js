@@ -27,6 +27,11 @@ export const logout = async (data) => {
 };
 
 export const refundOrder = async (id) => {
-  const res = await api.post(`/orders/cancel/${id}`, {});
-  return res.data;
+  console.log(id);
+  try {
+    const res = await api.post(`/orders/cancel/${id}`, {});
+    return res.message;
+  } catch (error) {
+    throw error.response.data.message;
+  }
 };
