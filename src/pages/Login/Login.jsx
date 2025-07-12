@@ -1,18 +1,10 @@
+import { useEffect, useContext } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import LoadingButton from "./../../components/LoadingButton/LoadingButton";
-import {
-  CircleAlert,
-  CircleCheck,
-  Gift,
-  KeyRound,
-  LockKeyhole,
-  Mail,
-  X,
-} from "lucide-react";
+import { CircleAlert, Gift, KeyRound, LockKeyhole, Mail } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useUserGoogleLogin, useUserLogin } from "../../hooks/useAuth";
-import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
@@ -26,6 +18,36 @@ const Login = () => {
     isSuccess: isGoogleLoginSuccess,
   } = useUserGoogleLogin();
   const { setUser } = useContext(AuthContext);
+
+  // ✅ Handle normal login success
+  useEffect(() => {
+    if (isSuccess && data?.user) {
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setUser(data.user);
+
+      if (data.user.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
+      toast.success(data.message);
+    }
+  }, [isSuccess, data, setUser, navigate]);
+
+  // ✅ Handle Google login success
+  useEffect(() => {
+    if (isGoogleLoginSuccess && googleLoginData?.user) {
+      localStorage.setItem("user", JSON.stringify(googleLoginData.user));
+      setUser(googleLoginData.user);
+
+      if (googleLoginData.user.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/");
+      }
+      toast.success(googleLoginData.message);
+    }
+  }, [isGoogleLoginSuccess, googleLoginData, setUser, navigate]);
 
   const formik = useFormik({
     initialValues: {
@@ -50,17 +72,7 @@ const Login = () => {
     },
   });
 
-  if (isSuccess) {
-    localStorage.setItem("user", JSON.stringify(data.user));
-    setUser(data.user);
-    if (data?.user?.role === "admin") {
-      navigate("/dashboard");
-    } else {
-      navigate("/");
-    }
-    toast.success(data.message);
-  }
-
+  // ✅ Handle Google Sign-in Button Success
   const handleLoginSuccess = async (credentialResponse) => {
     const { credential } = credentialResponse;
 
@@ -71,21 +83,10 @@ const Login = () => {
     }
   };
 
-  if (isGoogleLoginSuccess) {
-    localStorage.setItem("user", JSON.stringify(googleLoginData.user));
-    setUser(googleLoginData.user);
-    if (googleLoginData?.user?.role === "admin") {
-      navigate("/dashboard");
-    } else {
-      navigate("/");
-    }
-    toast.success(googleLoginData.message);
-  }
-
   return (
-    <section className=" bg-secondary dark:bg-secondary-dark py-4">
+    <section className="bg-secondary dark:bg-secondary-dark py-4">
       <div className="container m-auto p-2 sm:p-4 md:p-8 flex justify-center items-center bg-secondary dark:bg-secondary-dark min-h-screen">
-        <div className="w-full max-w-2xl bg-white dark:bg-black rounded-2xl  shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl dark:shadow-accent-dark/10">
+        <div className="w-full max-w-2xl bg-white dark:bg-black rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl dark:shadow-accent-dark/10">
           {/* Visual Header with Gift-themed Gradient */}
           <div className="relative bg-gradient-to-r from-primary/90 to-accent/90 dark:from-primary-dark/90 dark:to-accent-dark/90 p-8 text-center">
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=1470&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay opacity-20"></div>
@@ -107,14 +108,14 @@ const Login = () => {
             <div className="flex justify-center mb-6 relative">
               <div className="w-16 h-1 bg-primary dark:bg-primary-dark rounded-full"></div>
             </div>
-            {/* Form */}
+
+            {/* Login Form */}
             <form onSubmit={formik.handleSubmit} className="space-y-5">
               {/* Email Field */}
               <div>
                 <label
                   htmlFor="email"
-                  className="font-medium text-dark dark:text-light mb-2 flex items-center"
-                >
+                  className="font-medium text-dark dark:text-light mb-2 flex items-center">
                   <Mail className="text-accent dark:text-accent-dark w-5 h-5 me-2" />
                   Email Address
                 </label>
@@ -137,7 +138,6 @@ const Login = () => {
                 {formik.errors.email && formik.touched.email && (
                   <p className="mt-2 text-sm text-red-500 flex items-center">
                     <CircleAlert className="h-4 w-4 me-2" />
-
                     {formik.errors.email}
                   </p>
                 )}
@@ -147,8 +147,7 @@ const Login = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="font-medium text-dark dark:text-light mb-2 flex items-center"
-                >
+                  className="font-medium text-dark dark:text-light mb-2 flex items-center">
                   <LockKeyhole className="text-accent dark:text-accent-dark w-5 h-5 me-2" />
                   Password
                 </label>
@@ -171,7 +170,6 @@ const Login = () => {
                 {formik.errors.password && formik.touched.password && (
                   <p className="mt-2 text-sm text-red-500 flex items-center">
                     <CircleAlert className="h-4 w-4 me-2" />
-
                     {formik.errors.password}
                   </p>
                 )}
@@ -184,10 +182,9 @@ const Login = () => {
                 disabled={!formik.isValid || !formik.dirty || isPending}
                 className={`w-full mb-4 bg-gradient-to-r from-primary to-accent dark:from-primary-dark dark:to-accent-dark hover:opacity-90 text-white font-bold py-2.5 px-4 rounded-md transition-all duration-300 flex items-center justify-center shadow-md hover:shadow-primary/30 dark:hover:shadow-primary-dark/30 relative overflow-hidden group ${
                   !formik.isValid || !formik.dirty || isPending
-                    ? " disabled:cursor-not-allowed"
+                    ? "disabled:cursor-not-allowed"
                     : "cursor-pointer"
-                }`}
-              >
+                }`}>
                 {/* Animated background */}
                 <span className="absolute inset-0 bg-gradient-to-r from-accent to-primary dark:from-accent-dark dark:to-primary-dark opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 <span className="relative z-10 flex items-center">
@@ -196,6 +193,7 @@ const Login = () => {
                 </span>
               </LoadingButton>
             </form>
+
             {/* Google Login Box */}
             <div className="w-full sm:w-4/12 md:4/12 mx-auto">
               <GoogleLogin
@@ -205,15 +203,15 @@ const Login = () => {
                 logo_alignment="center"
               />
             </div>
-            {/* register Link */}
+
+            {/* Register Link */}
             <div className="mt-8 text-center">
-              <p className=" text-dark/80 dark:text-light/80">
+              <p className="text-dark/80 dark:text-light/80">
                 Don't have an account?{" "}
                 <Link
                   to="/register"
-                  className="font-medium text-accent dark:text-accent-dark hover:underline transition-colors"
-                >
-                  Craete a new account
+                  className="font-medium text-accent dark:text-accent-dark hover:underline transition-colors">
+                  Create a new account
                 </Link>
               </p>
             </div>

@@ -68,12 +68,24 @@ export default function CartContextProvider({ children }) {
   };
 
   // Add to Cart
+
   const addToCartMutation = useMutation({
-    mutationFn: (productId) => addToCartApi(productId),
+    mutationFn: (id) => {
+      if (!user) {
+        toast.error("Login to add product to cart");
+        return Promise.reject("User not logged in");
+      }
+      return addToCartApi(id);
+    },
+
     onSuccess: async () => {
       toast.success("Product is added to cart successfully");
       await refetch();
       setCartItems(data?.totalItems);
+    },
+    onError: (error) => {
+      // toast.error("Login to add product to cart");
+      console.log(error);
     },
   });
 

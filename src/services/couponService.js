@@ -31,7 +31,7 @@ export const updateCoupon = async (id, updatedCoupon) => {
 };
 
 //^ Apply Coupon
-export const applyCoupon = async (couponCode) => {
+export const applyCoupon = async ({ couponCode }) => {
   const response = await api.post(
     "/coupons/apply-coupon",
     { couponCode },

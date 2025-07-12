@@ -23,7 +23,7 @@ export const useAddToCart = () => {
       toast.success("Product added to cart");
     },
     onError: (error) => {
-      toast.error("Login to add product to cart");
+      // toast.error("Login to add product to cart");
       console.log(error);
     },
   });

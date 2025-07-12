@@ -1,132 +1,167 @@
 import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import Pagination from "../../components/Pagination/Pagination";
+import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
+import FilterSidebar from "../../components/FilterationSideNav/FilterationSideNav";
 import {
   useAddToWishlist,
-  useAllWishlist,
   useRemoveFromWishlist,
 } from "../../hooks/useWishlist";
-import { useParams } from "react-router";
 import {
   getAllProducts,
   getProductByCategoryName,
+  // filterProducts,
 } from "../../hooks/useProducts";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import img from "../../assets/images/emptyCart.svg";
-import Pagination from "../../components/Pagination/Pagination";
-import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 import { WishlistContext } from "../../context/Wishlist.Context";
 import { useCart } from "../../context/CartContext";
+
 export default function Products() {
   const { categoryName } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
+  const [filters, setFilters] = useState({
+    price: 1000,
+    category: categoryName || "",
+  });
+  
+  const { allUserWishlist = [], setAllUserWishlist } = useContext(WishlistContext);
+  const { addToCart } = useCart();
 
-  // const {
-  //   data: { data: categoryData = [], totalPages: catTotalPages = 1 } = {},
-  //   isLoading: isCatLoading,
-  //   isError: isCatError,
-  //   error: catError,
-  // } = getProductByCategoryName(categoryName, currentPage);
-
-  // const {
-  //   data: { data: products = [], totalPages: totalPages = 1 } = {},
-  //   isLoading: isProductsLoad,
-  //   isError: isProductsError,
-  //   error: productsError,
-  // } = getAllProducts(currentPage);
-
+  // Fetch products based on filters and category
   const {
-    data: { data: productList = [], totalPages = 1 } = {},
+    data: productsData = { data: [], totalPages: 1 },
     isLoading,
     isError,
     error,
-  } = categoryName
+  } = categoryName && !filters.category
     ? getProductByCategoryName(categoryName, currentPage)
-    : getAllProducts(currentPage);
+    : filterProducts(filters, currentPage);
 
-  function handlePagination(value) {
-    setCurrentPage(value);
-  }
+  const { data: productList = [], totalPages = 1 } = productsData;
 
-  const { allUserWishlist, setAllUserWishlist } = useContext(WishlistContext);
-  const { addToCart } = useCart();
+  // Wishlist mutations
+  const { mutateAsync: addProToWishlist } = useAddToWishlist();
+  const { mutateAsync: removeProFromWishlist } = useRemoveFromWishlist();
 
-  const {
-    mutateAsync: addProToWishlist,
-    isPending: pendingAddToWishlist,
-    isSuccess: addToWishlistSuccess,
-  } = useAddToWishlist();
-  const {
-    mutateAsync: removeProFromWishlist,
-    isPending: pendingRemoveFromWishlist,
-    isSuccess: removeFromWishlistSuccess,
-  } = useRemoveFromWishlist();
-
-  const onAddToCart = async (id) => {
-    await addToCart(id);
+  // Handle filter changes from sidebar
+  const handleFilterChange = (newFilters) => {
+    setCurrentPage(1); // Reset to first page when filters change
+    setFilters(prev => ({
+      ...prev,
+      ...newFilters,
+      // Preserve URL category if it exists
+      category: categoryName || newFilters.category || ""
+    }));
   };
 
-  const onAddToWishlist = async (id) => {
-    const isInWishlist = allUserWishlist.includes(id);
-
+  // Add to cart handler
+  const onAddToCart = async (id) => {
     try {
-      if (isInWishlist) {
-        await removeProFromWishlist(id);
-        setAllUserWishlist((prev) => prev.filter((itemId) => itemId !== id));
-      } else {
-        await addProToWishlist(id);
-        setAllUserWishlist((prev) => [...prev, id]);
-      }
+      await addToCart(id);
+      toast.success("Product added to cart!");
     } catch (error) {
-      console.error("Error while updating wishlist:", error);
+      toast.error("Failed to add product to cart");
     }
   };
 
+  // Wishlist handler
+  const onAddToWishlist = async (id) => {
+    try {
+      const isInWishlist = allUserWishlist.includes(id);
+      
+      if (isInWishlist) {
+        await removeProFromWishlist(id);
+        setAllUserWishlist(prev => prev.filter(itemId => itemId !== id));
+        toast.success("Removed from wishlist!");
+      } else {
+        await addProToWishlist(id);
+        setAllUserWishlist(prev => [...prev, id]);
+        toast.success("Added to wishlist!");
+      }
+    } catch (error) {
+      toast.error("Failed to update wishlist");
+    }
+  };
+
+  // Pagination handler
+  const handlePagination = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (isError) {
+    toast.error(error?.message || "Failed to load products");
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-500">Error loading products. Please try again.</p>
+      </div>
+    );
+  }
+
   return (
-    <>
-      <Breadcrumb></Breadcrumb>
-      {isLoading ? (
-        <div className="min-h-screen">
-          <LoadingSpinner />;
-        </div>
-      ) : (
-        <div className="flex">
-          <div className="md:flex-1/5"></div>
-          <div className="flex flex-col md:flex-4/5">
-            <div className="flex flex-wrap justify-center my-4">
-              {productList.length > 0 &&
-                productList.map((product, indx) => (
-                  <div className="w-full md:w-6/12 lg:w-4/12 p-2" key={indx}>
-                    <ProductCard
-                      product={product}
-                      onAddToWishlist={onAddToWishlist}
-                      onAddToCart={onAddToCart}
-                      wishlistArr={allUserWishlist}
-                    />
-                  </div>
-                ))}
-              {productList.length <= 0 && (
-                <div className="flex justify-center items-center flex-col gap-5 relative my-20">
-                  <img
-                    src="https://cdn-icons-png.flaticon.com/128/17569/17569003.png"
-                    alt="no products found"
-                    className="w-6/12"
-                  ></img>
-                  <p className="font-semibold">Sorry, No products found!</p>
+    <div className="container mx-auto px-4 py-8">
+      <Breadcrumb />
+      
+      <div className="flex flex-col md:flex-row gap-8">
+        {/* Filter Sidebar */}
+        <FilterSidebar 
+          filters={filters} 
+          onFilterChange={handleFilterChange}
+          initialCategory={categoryName}
+        />
+        
+        {/* Products Grid */}
+        <div className="flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 my-6">
+            {productList.length > 0 ? (
+              productList.map((product) => (
+                <div key={product._id} className="w-full p-2">
+                  <ProductCard
+                    product={product}
+                    onAddToWishlist={onAddToWishlist}
+                    onAddToCart={onAddToCart}
+                    isInWishlist={allUserWishlist.includes(product._id)}
+                  />
                 </div>
-              )}
-            </div>
-            <div>
-              {productList.length > 0 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  handlePagination={handlePagination}
-                ></Pagination>
-              )}
-            </div>
+              ))
+            ) : (
+              <div className="col-span-full flex flex-col items-center py-20">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/17569/17569003.png"
+                  alt="No products found"
+                  className="w-1/2 max-w-xs"
+                />
+                <p className="font-semibold text-lg mt-4">
+                  {filters.category 
+                    ? `No products found in ${filters.category} category`
+                    : "No products match your filters"}
+                </p>
+              </div>
+            )}
           </div>
+
+          {/* Pagination */}
+          {productList.length > 0 && totalPages > 1 && (
+            <div className="flex justify-center mt-8">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                handlePagination={handlePagination}
+              />
+            </div>
+          )}
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 }

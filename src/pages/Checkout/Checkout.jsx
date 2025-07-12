@@ -256,7 +256,7 @@ export default function Checkout() {
             <select
               id="paymentMethod"
               name="paymentMethod"
-              className={`w-full px-4 py-2 rounded border-2 cursor-pointer focus:border-teal-500 focus:outline-none ${
+              className={`w-full px-4 py-2 rounded border-2 cursor-pointer focus:border-teal-500 focus:outline-none bg-white text-black dark:bg-gray-800 dark:text-white  ${
                 formik.touched.paymentMethod && formik.errors.paymentMethod
                   ? "border-red-500"
                   : "border-gray-300"
@@ -296,6 +296,9 @@ export default function Checkout() {
           <div className="flex justify-between mb-1">
             <span>Discount:</span>
             <span>
+              <span className=" line-through me-1">
+                {couponDiscountPct}% off{" "}
+              </span>
               EGP {couponDiscountPct ? "-" : ""}
               {couponDiscountAmount.toFixed(2)}
             </span>

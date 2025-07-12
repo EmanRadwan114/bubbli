@@ -14,6 +14,27 @@ export const getProductByCategory = async (categoryName, page, limit) => {
     throw err;
   }
 };
+
+export const filterProducts = async (filters, page = 1, limit = 6) => {
+  const { price, category, ...otherFilters } = filters;
+  
+  const params = {
+    page,
+    limit,
+    ...(price && { maxPrice: price }),
+    ...(category && { category }),
+    ...otherFilters
+  };
+
+  try {
+    const response = await api.get('/products/filter', { params });
+    console.log("→ Filter response:", response.status, response.data);
+    return response.data;
+  } catch (err) {
+    console.error("filterProducts failed:", err);
+    throw err;
+  };
+};
 export const getAllProductsBack = async (page = 1, limit = 6) => {
   const path = `/products`;
   try {

@@ -13,6 +13,7 @@ import { AuthContext } from "../context/AuthContext";
 
 export const useAllWishlist = () => {
   const { setAllUserWishlist } = useContext(WishlistContext);
+  const { user } = useContext(AuthContext);
 
   return useQuery({
     queryKey: ["all-wishlist"],
@@ -20,6 +21,7 @@ export const useAllWishlist = () => {
     onSuccess: (data) => {
       setAllUserWishlist(data.wishlist);
     },
+    enabled: !!user,
   });
 };
 export const useFetchWishlist = (page = 1) => {
@@ -51,7 +53,7 @@ export const useAddToWishlist = () => {
       toast.success("Product is added to Wishlist");
     },
     onError: (error) => {
-      toast.error("Login to add product to wishlist");
+      // toast.error("Login to add product to wishlist");
       console.log(error);
     },
   });

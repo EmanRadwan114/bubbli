@@ -7,6 +7,8 @@ import { WishlistContext } from "../../context/Wishlist.Context.jsx";
 import { useAllWishlist } from "../../hooks/useWishlist.js";
 import { useCart } from "../../context/CartContext.jsx";
 
+import AppInitializer from "../../components/AppInitializer/AppInitializer.jsx";
+
 export default function Layout() {
   const path = useLocation().pathname;
 
@@ -15,12 +17,7 @@ export default function Layout() {
   const { allUserWishlist, setAllUserWishlist } = useContext(WishlistContext);
   const { data, refetch, setCartItems } = useCart();
 
-  const {
-    data: allWishlist,
-    isLoading: isWishlistLoading,
-    isError: isWishlistError,
-    error: wishlistError,
-  } = useAllWishlist();
+  const { data: allWishlist, isLoading: isWishlistLoading, isError: isWishlistError, error: wishlistError } = useAllWishlist();
 
   useEffect(() => {
     if (allWishlist?.data) {
@@ -28,6 +25,7 @@ export default function Layout() {
       setAllUserWishlist(ids);
     }
   }, [allWishlist]);
+
   useEffect(() => {
     async function fetchData() {
       await refetch();
@@ -45,22 +43,20 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {path.includes("login") || path.includes("register") ? null : <Navbar />}
 
-      <div
-        className={`flex-grow ${
-          path.includes("login") || path.includes("register") ? "pt-0" : "pt-16"
-        }`}
-      >
+    {/* ✅ Interceptor runs once here */}
+      <AppInitializer />
+      {path.includes("login") || path.includes("register") || path.includes("dashboard") ? null : <Navbar />}
+
+      <div className={`flex-grow ${path.includes("login") || path.includes("register") || path.includes("dashboard") ? "pt-0" : "pt-16"}`}>
+
         <Outlet />
       </div>
 
       {/* Footer will automatically stick to bottom due to flex-col and min-h-screen */}
-      {path.includes("login") || path.includes("register") ? null : <Footer />}
+      {path.includes("login") || path.includes("register") || path.includes("dashboard") ? null : <Footer />}
 
-      {path.includes("login") || path.includes("register") ? null : (
-        <ChatWidget />
-      )}
+      {path.includes("login") || path.includes("register") ? null : <ChatWidget />}
     </div>
   );
 }
