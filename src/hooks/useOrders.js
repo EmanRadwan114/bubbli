@@ -1,7 +1,8 @@
-import { getOrderDetails } from "../services/orderService";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useOrdersContext } from "../context/OrdersContext.jsx";
+import orderService from "../services/orderService";
 
+// ✅ Regular User & Checkout logic
 export const useOrders = () => {
   const { getCartItems, getShippingPrice, createOrder, checkout } =
     useOrdersContext();
@@ -42,10 +43,57 @@ export const useOrders = () => {
   };
 };
 
-export const useOrder = (orderId) => {
-  return useQuery({
+// ✅ Get single order by ID
+export const useOrder = (orderId) =>
+  useQuery({
     queryKey: ["order", orderId],
-    queryFn: () => getOrderDetails(orderId),
+    queryFn: () => orderService.getOrderDetails(orderId),
     enabled: !!orderId,
   });
+
+// ✅ ADMIN: Get all orders with pagination
+export const useGetAllOrders = (page, limit) =>
+  useQuery({
+    queryKey: ["orders", page, limit],
+    queryFn: () => orderService.getAllOrders(page, limit),
+    keepPreviousData: true,
+  });
+
+// ✅ ADMIN: Get orders by month for reports
+export const useGetOrdersByMonth = (year) =>
+  useQuery({
+    queryKey: ["ordersByMonth", year],
+    queryFn: () => orderService.getOrdersByMonth(year),
+    enabled: !!year,
+  });
+
+// ✅ ADMIN: Delete an order
+export const useDeleteOrder = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: orderService.deleteOrder,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["orders"]);
+    },
+  });
 };
+
+// ✅ ADMIN: Update shipping status
+export const useUpdateShippingStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, shippingStatus }) =>
+      orderService.updateOrderShippingStatus(id, shippingStatus),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["orders"]);
+      queryClient.invalidateQueries(["order"]);
+    },
+  });
+};
+
+// ✅ USER: My Orders
+export const useMyOrders = () =>
+  useQuery({
+    queryKey: ["myOrders"],
+    queryFn: () => orderService.getMyOrders(),
+  });

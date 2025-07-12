@@ -48,7 +48,7 @@ export default function AdminsDashboard() {
   const deleteAdmin = () => {
     if (!adminToDelete?._id) return;
 
-    deleteAdminMutation.mutate(adminToDelete._id, {
+    deleteAdminMutation.mutate(adminToDelete?._id, {
       onSuccess: () => {
         toast.success("Admin deleted successfully");
         cancelDelete();

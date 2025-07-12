@@ -46,11 +46,11 @@ export default function CouponsModal({
     if ((isUpdate || isView) && fetchedData) {
       const data = fetchedData;
       setFormData({
-        CouponCode: data.CouponCode ?? "",
-        CouponPercentage: data.CouponPercentage?.toString() ?? "",
-        expirationDate: data.expirationDate?.split("T")[0] ?? "",
-        maxUsageLimit: data.maxUsageLimit?.toString() ?? "",
-        isActive: data.isActive ?? false,
+        CouponCode: data?.CouponCode ?? "",
+        CouponPercentage: data?.CouponPercentage?.toString() ?? "",
+        expirationDate: data?.expirationDate?.split("T")[0] ?? "",
+        maxUsageLimit: data?.maxUsageLimit?.toString() ?? "",
+        isActive: data?.isActive ?? false,
       });
     } else if (isAdd) {
       setFormData({

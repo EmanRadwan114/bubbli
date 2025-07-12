@@ -1,7 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   addProduct, deleteProduct, getAllProductsBack,
+  getBestSellingProducts,
   getFeaturedProducts,
+  getLeastOrderedProducts,
   getProductByCategory,
   getProductById, updateProduct,
 } from "../services/productsService";
@@ -27,20 +29,7 @@ export const useFeaturedProducts = (label = "bestseller") => {
     keepPreviousData: true,
   });
 };
-// export const useBestSellersProducts = () => {
-//   return useQuery({
-//     queryKey: ["best-sellers"],
-//     queryFn: () => getBestSellers(),
-//     keepPreviousData: true,
-//   });
-// };
-// get product by ID
-// export const useGetProductById = (id) =>
-//   useQuery({
-//     queryKey: ["product", id],
-//     queryFn: () => getProductById(id),
-//   });
-// In your useProducts hook file
+
 export const useGetProductById = (id) => {
   console.log("useGetProductById called with id:", id);
 
@@ -97,5 +86,24 @@ export const useUpdateProduct = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(["products"]);
     },
+  });
+};
+
+// Get Best Slling Products
+export const useBestSellingProducts = (page = 1, limit = 6) => {
+  return useQuery({
+    queryKey: ["best-selling-products", page, limit],
+    queryFn: () => getBestSellingProducts(page, limit),
+    keepPreviousData: true,
+    select: (res) => res.data,
+  });
+};
+// Get Least Ordered Products
+export const useLeastOrderedProducts = (page = 1, limit = 6) => {
+  return useQuery({
+    queryKey: ["least-ordered-products", page, limit],
+    queryFn: () => getLeastOrderedProducts(page, limit),
+    keepPreviousData: true,
+    select: (res) => res.data,
   });
 };
