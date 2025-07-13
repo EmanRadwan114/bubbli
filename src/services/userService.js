@@ -19,9 +19,6 @@ export const changeUserData = async (data) => {
 };
 
 export const logout = async (data) => {
-  localStorage.removeItem("user");
-  const { setUser } = useContext(AuthContext);
-  setUser(null);
   const res = await api.post(`/auth/logout`, data);
   return res.data;
 };

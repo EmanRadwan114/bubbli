@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
@@ -30,6 +30,8 @@ import { logout, refundOrder } from "../../services/userService";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Pagination from "../../components/Pagination/Pagination";
 import LoadingButton from "../../components/LoadingButton/LoadingButton";
+import { AuthContext } from "../../context/AuthContext";
+import { WishlistContext } from "../../context/Wishlist.Context";
 
 const Profile = () => {
   const [editMode, setEditMode] = useState(false);
@@ -47,6 +49,9 @@ const Profile = () => {
     new: false,
     confirm: false,
   });
+
+  const { setUser } = useContext(AuthContext);
+  const { allUserWishlist, setAllUserWishlist } = useContext(WishlistContext);
 
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
 
@@ -640,10 +645,13 @@ const Profile = () => {
                   </p>
 
                   <button
-                    onClick={() => {
-                      logout();
-                      toast.success("Logged Out Successfully");
-                      navigate(`/`);
+                    onClick={async () => {
+                      localStorage.removeItem("user");
+                      setUser(null);
+                      await logout();
+                      setAllUserWishlist([]);
+                      toast.success("Logged Out Successfully!");
+                      navigate("/");
                     }}
                     className="border-2 border-red-700 text-red-700 px-4 py-2 rounded hover:bg-red-700 hover:text-white transition-colors w-4/5"
                   >
