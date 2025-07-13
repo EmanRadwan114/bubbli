@@ -133,3 +133,9 @@ export const updateProduct = async (id, productData) => {
       throw err;
     }
   };
+
+
+  export const searchProducts = async (query, page) => {
+  const res = await api.get(`/products/search?q=${query}&page=${page}&limit=8`);
+  return res.data;
+};
