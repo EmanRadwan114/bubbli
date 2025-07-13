@@ -1,15 +1,9 @@
-import { useState, useEffect } from "react";
-// import { FiFilter, FiX, FiChevronDown, FiChevronUp } from "react-icons/fi";
+// FilterationSideNav.jsx
+import { memo, useState } from "react";
+import { Filter, X, ChevronDown, ChevronUp } from "lucide-react";
 
-import {
-  Filter as FiFilter,
-  X as FiX,
-  ChevronDown as FiChevronDown,
-  ChevronUp as FiChevronUp,
-} from "lucide-react";
-const FilterSidebar = ({ filters, onFilterChange, initialCategory }) => {
+const FilterationSideNav = ({ onFilterChange }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [expandedCategory, setExpandedCategory] = useState(null);
   const [localFilters, setLocalFilters] = useState({
     decor: false,
     accessories: false,
@@ -17,169 +11,145 @@ const FilterSidebar = ({ filters, onFilterChange, initialCategory }) => {
     toys: false,
     notebook: false,
     mugs: false,
-    price: filters.price || 1000,
+    price: 150, // Changed to match Products component
   });
 
-  const categories = [
-    { id: "decor", name: "Decor" },
-    { id: "accessories", name: "Accessories" },
-    { id: "stationary", name: "Stationary" },
-    { id: "toys", name: "Toys" },
-    { id: "notebook", name: "Notebook" },
-    { id: "mugs", name: "Mugs" },
-  ];
-
-  // Initialize filters based on URL category
-  useEffect(() => {
-    if (initialCategory) {
-      const categoryFilter = categories.find(cat => 
-        cat.name.toLowerCase() === initialCategory.toLowerCase()
-      );
-      
-      if (categoryFilter) {
-        setLocalFilters(prev => ({
-          ...prev,
-          [categoryFilter.id]: true
-        }));
-      }
-    }
-  }, [initialCategory]);
-
-  const toggleMobileMenu = () => {
+  const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const toggleCategory = (category) => {
-    setExpandedCategory(expandedCategory === category ? null : category);
-  };
-
-  const handleCategoryToggle = (categoryId) => (e) => {
+  const handleFilterChange = (filterName) => (event) => {
     const newFilters = {
       ...localFilters,
-      [categoryId]: e.target.checked,
+      [filterName]: event.target.checked,
+    };
+
+    setLocalFilters(newFilters);
+    buildAndSendQuery(newFilters);
+  };
+
+  const handlePriceChange = (event) => {
+    const newValue = parseInt(event.target.value);
+    const newFilters = {
+      ...localFilters,
+      price: newValue,
     };
     setLocalFilters(newFilters);
-    
-    // Build the categories filter string
-    const selectedCategories = categories
-      .filter(cat => newFilters[cat.id])
-      .map(cat => cat.name.toLowerCase());
-    
-    onFilterChange({
-      price: newFilters.price,
-      categories: selectedCategories.join(",")
+    buildAndSendQuery(newFilters);
+  };
+
+  const buildAndSendQuery = (currentFilters) => {
+    const selectedCategories = [];
+
+    // Collect all selected categories
+    if (currentFilters.decor) selectedCategories.push("dec");
+    if (currentFilters.accessories) selectedCategories.push("accessor");
+    if (currentFilters.stationary) selectedCategories.push("stati");
+    if (currentFilters.toys) selectedCategories.push("toy");
+    if (currentFilters.notebook) selectedCategories.push("notebook");
+    if (currentFilters.mugs) selectedCategories.push("mug");
+
+    // Send both price and categories to parent
+    console.log({
+      price: currentFilters.price,
+      title: selectedCategories.join(", "),
     });
-  };
 
-  const handlePriceChange = (e) => {
-    const newValue = Number(e.target.value);
-    const newFilters = {
-      ...localFilters,
-      price: newValue,
-    };
-    setLocalFilters(newFilters);
     onFilterChange({
-      price: newValue,
-      categories: categories
-        .filter(cat => newFilters[cat.id])
-        .map(cat => cat.name.toLowerCase())
-        .join(",")
+      price: currentFilters.price,
+      title: selectedCategories.join(", "),
     });
   };
 
   return (
-    <div className="relative">
+    <div className="flex">
       {/* Mobile filter button */}
-      <button
-        onClick={toggleMobileMenu}
-        className="md:hidden fixed bottom-6 right-6 z-40 bg-primary dark:bg-primary-dark text-white dark:text-light p-3 rounded-full shadow-lg hover:bg-accent dark:hover:bg-accent-dark transition-colors"
-      >
-        <FiFilter className="text-xl" />
-      </button>
+      <div className="md:hidden fixed bottom-8 right-8 z-50">
+        <button
+          onClick={handleDrawerToggle}
+          className="light-primary-btn dark-primary-btn rounded-full p-3 shadow-lg transition-all hover:scale-110"
+        >
+          <Filter className="h-6 w-6" />
+        </button>
+      </div>
 
-      {/* Desktop/Mobile Sidebar */}
+      {/* The actual drawer */}
       <div
-        className={`fixed md:static z-30 top-0 left-0 h-full w-64 md:w-72 bg-white dark:bg-gray-800 shadow-lg md:shadow-none transform transition-transform duration-300 ease-in-out ${
+        className={`fixed md:static z-40 h-full w-80 bg-light-bg dark:bg-secondary-dark transition-transform duration-300 ease-in-out ${
           mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
-        <div className="p-4 h-full overflow-y-auto">
+        <div className="flex h-full flex-col overflow-y-auto p-4">
           {/* Header */}
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-dark dark:text-light">
-              Filter Products
-            </h2>
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-bold text-dark dark:text-light">
+              Filter Menu
+            </h3>
             <button
-              onClick={toggleMobileMenu}
-              className="md:hidden text-gray-500 dark:text-gray-400 hover:text-dark dark:hover:text-light"
+              onClick={handleDrawerToggle}
+              className="md:hidden text-dark dark:text-light"
             >
-              <FiX className="text-xl" />
+              <X className="h-6 w-6" />
             </button>
           </div>
-          <div className="border-b border-gray-200 dark:border-gray-700 mb-4"></div>
+
+          <div className="border-b border-cardAlt dark:border-secondary-dark mb-4"></div>
 
           {/* Price Filter */}
-          <div className="mb-6">
-            <label className="block font-medium mb-2 text-dark dark:text-light">
-              Max Price: {localFilters.price} EGP
+          <div className="mb-6 px-2">
+            <label className="block text-sm font-medium text-dark dark:text-light mb-2">
+              Maximum Price: {localFilters.price} EGP
             </label>
             <input
               type="range"
-              min="50"
-              max="1000"
-              step="50"
+              min="25"
+              max="600"
+              step="10"
               value={localFilters.price}
               onChange={handlePriceChange}
-              className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary dark:accent-primary-dark"
+              className="w-full h-2 bg-cardAlt dark:bg-secondary-dark rounded-lg appearance-none cursor-pointer accent-primary dark:accent-primary-dark"
             />
-            <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mt-1">
-              <span>50</span>
-              <span>1000</span>
-            </div>
           </div>
 
           {/* Categories */}
-          <div className="mb-4">
-            <h3 className="font-semibold text-dark dark:text-light mb-2">
-              Categories
-            </h3>
-            <div className="space-y-2">
-              {categories.map((category) => (
-                <div key={category.id}>
-                  <button
-                    onClick={() => toggleCategory(category.id)}
-                    className="flex items-center justify-between w-full p-2 text-left text-dark dark:text-light hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-                  >
-                    <span>{category.name}</span>
-                    {expandedCategory === category.id ? (
-                      <FiChevronUp />
-                    ) : (
-                      <FiChevronDown />
-                    )}
-                  </button>
-                  {expandedCategory === category.id && (
-                    <div className="pl-4 py-1">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          checked={localFilters[category.id]}
-                          onChange={handleCategoryToggle(category.id)}
-                          className="rounded text-primary dark:text-primary-dark border-gray-300 dark:border-gray-600 focus:ring-primary dark:focus:ring-primary-dark"
-                        />
-                        <span className="text-dark dark:text-light">
-                          {category.name}
-                        </span>
-                      </label>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+          <div className="space-y-4">
+            {[
+              "decor",
+              "accessories",
+              "stationary",
+              "toys",
+              "notebook",
+              "mugs",
+            ].map((category) => (
+              <div key={category} className="flex items-center">
+                <input
+                  type="checkbox"
+                  id={category}
+                  checked={localFilters[category]}
+                  onChange={handleFilterChange(category)}
+                  className="h-4 w-4 rounded border-gray-300 text-primary dark:text-primary-dark focus:ring-primary dark:focus:ring-primary-dark"
+                />
+                <label
+                  htmlFor={category}
+                  className="ml-3 text-sm text-dark dark:text-light capitalize"
+                >
+                  {category}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Overlay for mobile */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden"
+          onClick={handleDrawerToggle}
+        ></div>
+      )}
     </div>
   );
 };
 
-export default FilterSidebar;
+export default memo(FilterationSideNav);
