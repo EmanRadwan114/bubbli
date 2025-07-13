@@ -1,6 +1,6 @@
-// FilterationSideNav.jsx
 import { memo, useState } from "react";
-import { Filter, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Filter, X } from "lucide-react";
+import { useParams, useSearchParams } from "react-router";
 
 const FilterationSideNav = ({ onFilterChange }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -11,8 +11,12 @@ const FilterationSideNav = ({ onFilterChange }) => {
     toys: false,
     notebook: false,
     mugs: false,
-    price: 150, // Changed to match Products component
+    price: 150,
   });
+
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
+  const { categoryName } = useParams();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -23,7 +27,6 @@ const FilterationSideNav = ({ onFilterChange }) => {
       ...localFilters,
       [filterName]: event.target.checked,
     };
-
     setLocalFilters(newFilters);
     buildAndSendQuery(newFilters);
   };
@@ -41,19 +44,18 @@ const FilterationSideNav = ({ onFilterChange }) => {
   const buildAndSendQuery = (currentFilters) => {
     const selectedCategories = [];
 
-    // Collect all selected categories
-    if (currentFilters.decor) selectedCategories.push("dec");
-    if (currentFilters.accessories) selectedCategories.push("accessor");
-    if (currentFilters.stationary) selectedCategories.push("stati");
-    if (currentFilters.toys) selectedCategories.push("toy");
-    if (currentFilters.notebook) selectedCategories.push("notebook");
-    if (currentFilters.mugs) selectedCategories.push("mug");
+    categoryName
+      ? selectedCategories.push(categoryName.toLowerCase().slice(0, 3))
+      : query
+      ? selectedCategories.push(query)
+      : "";
 
-    // Send both price and categories to parent
-    console.log({
-      price: currentFilters.price,
-      title: selectedCategories.join(", "),
-    });
+    if (currentFilters.decor) selectedCategories.push("dec");
+    if (currentFilters.accessories) selectedCategories.push("access");
+    if (currentFilters.stationary) selectedCategories.push("st");
+    if (currentFilters.toys) selectedCategories.push("toy");
+    if (currentFilters.notebook) selectedCategories.push("note");
+    if (currentFilters.mugs) selectedCategories.push("mug");
 
     onFilterChange({
       price: currentFilters.price,
@@ -64,42 +66,49 @@ const FilterationSideNav = ({ onFilterChange }) => {
   return (
     <div className="flex">
       {/* Mobile filter button */}
-      <div className="md:hidden fixed bottom-8 right-8 z-50">
+      <div className="md:hidden fixed bottom-24 right-6 z-50">
         <button
           onClick={handleDrawerToggle}
-          className="light-primary-btn dark-primary-btn rounded-full p-3 shadow-lg transition-all hover:scale-110"
+          className="bg-accent dark:bg-accent text-white rounded-full p-3 shadow-lg shadow-gray-400/30 dark:shadow-gray-900/50 transition-all hover:scale-105 active:scale-95"
+          aria-label="Open filters"
         >
-          <Filter className="h-6 w-6" />
+          <Filter className="h-5 w-5" />
         </button>
       </div>
 
       {/* The actual drawer */}
       <div
-        className={`fixed md:static z-40 h-full w-80 bg-light-bg dark:bg-secondary-dark transition-transform duration-300 ease-in-out ${
-          mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        className={`fixed md:static z-40 h-full w-72 bg-white dark:bg-gray-800 shadow-xl md:shadow-none transition-transform duration-300 ease-in-out ${
+          mobileOpen ? "translate-x-0" : "-translate-x-[110%] md:translate-x-0"
         }`}
       >
-        <div className="flex h-full flex-col overflow-y-auto p-4">
+        <div className="flex h-full flex-col overflow-y-auto p-5">
           {/* Header */}
-          <div className="mb-4 flex items-center justify-between">
-            <h3 className="text-lg font-bold text-dark dark:text-light">
-              Filter Menu
+          <div className="mb-5 flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Filter Products
             </h3>
             <button
               onClick={handleDrawerToggle}
-              className="md:hidden text-dark dark:text-light"
+              className="md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+              aria-label="Close filters"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="border-b border-cardAlt dark:border-secondary-dark mb-4"></div>
+          <div className="border-b border-gray-200 dark:border-gray-700 mb-5"></div>
 
           {/* Price Filter */}
-          <div className="mb-6 px-2">
-            <label className="block text-sm font-medium text-dark dark:text-light mb-2">
-              Maximum Price: {localFilters.price} EGP
-            </label>
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Price Range
+              </label>
+              <span className="text-sm font-medium text-primary dark:text-primary-dark">
+                {localFilters.price} EGP
+              </span>
+            </div>
             <input
               type="range"
               min="25"
@@ -107,36 +116,45 @@ const FilterationSideNav = ({ onFilterChange }) => {
               step="10"
               value={localFilters.price}
               onChange={handlePriceChange}
-              className="w-full h-2 bg-cardAlt dark:bg-secondary-dark rounded-lg appearance-none cursor-pointer accent-primary dark:accent-primary-dark"
+              className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full appearance-none cursor-pointer accent-primary dark:accent-primary-dark"
             />
+            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+              <span>25 EGP</span>
+              <span>600 EGP</span>
+            </div>
           </div>
 
           {/* Categories */}
-          <div className="space-y-4">
-            {[
-              "decor",
-              "accessories",
-              "stationary",
-              "toys",
-              "notebook",
-              "mugs",
-            ].map((category) => (
-              <div key={category} className="flex items-center">
-                <input
-                  type="checkbox"
-                  id={category}
-                  checked={localFilters[category]}
-                  onChange={handleFilterChange(category)}
-                  className="h-4 w-4 rounded border-gray-300 text-primary dark:text-primary-dark focus:ring-primary dark:focus:ring-primary-dark"
-                />
-                <label
-                  htmlFor={category}
-                  className="ml-3 text-sm text-dark dark:text-light capitalize"
-                >
-                  {category}
-                </label>
-              </div>
-            ))}
+          <div className="mb-2">
+            <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+              Categories
+            </h4>
+            <div className="space-y-3">
+              {[
+                "decor",
+                "accessories",
+                "stationary",
+                "toys",
+                "notebook",
+                "mugs",
+              ].map((category) => (
+                <div key={category} className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id={category}
+                    checked={localFilters[category]}
+                    onChange={handleFilterChange(category)}
+                    className="h-4 w-4 rounded border-gray-300 text-primary dark:text-primary-dark focus:ring-2 focus:ring-primary/50 dark:focus:ring-primary-dark/50"
+                  />
+                  <label
+                    htmlFor={category}
+                    className="ml-3 text-sm text-gray-700 dark:text-gray-300 capitalize"
+                  >
+                    {category}
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -144,7 +162,7 @@ const FilterationSideNav = ({ onFilterChange }) => {
       {/* Overlay for mobile */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black bg-opacity-50 md:hidden"
+          className="fixed inset-0 z-30 bg-black/30 backdrop-blur-sm md:hidden"
           onClick={handleDrawerToggle}
         ></div>
       )}

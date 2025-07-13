@@ -15,7 +15,9 @@ import Layout from "./pages/Layout/Layout";
 import Home from "./pages/Home/Home";
 const AboutComponent = lazy(() => import("../src/pages/About/About.jsx"));
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
-const ContactsComponent = lazy(() => import("../src/pages/Contact/Contact.jsx"));
+const ContactsComponent = lazy(() =>
+  import("../src/pages/Contact/Contact.jsx")
+);
 const ProfileComponent = lazy(() => import("../src/pages/Profile/Profile.jsx"));
 import NotFound from "./pages/NotFound/NotFound";
 import Login from "./pages/Login/Login";
@@ -44,6 +46,7 @@ import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ScrollToTop from "./components/ArrowUp/ScrollToTop.jsx";
 import WishlistContextProvider from "./context/Wishlist.Context.jsx";
+import Search from "./pages/Search/Search.jsx";
 const queryClient = new QueryClient();
 
 // ^ routing setup
@@ -89,6 +92,7 @@ const router = createBrowserRouter([
       },
       { path: "login", element: <Login></Login> },
       { path: "register", element: <Register></Register> },
+      { path: "search", element: <Search></Search> },
       { path: "wishlist", element: <Wishlist></Wishlist> },
       { path: "cart", element: <Cart></Cart> },
       {
@@ -170,7 +174,11 @@ createRoot(document.getElementById("root")).render(
             <WishlistContextProvider>
               <ScrollToTop />
               <RouterProvider router={router} />
-              <ToastContainer position="top-right" autoClose={3000} className="capitalize" />
+              <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                className="capitalize"
+              />
             </WishlistContextProvider>
           </CartContextProvider>
         </OrdersContextProvider>
