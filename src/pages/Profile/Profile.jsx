@@ -642,8 +642,8 @@ const Profile = () => {
                   <button
                     onClick={async () => {
                       await logout();
-                      toast.success("Logged Out Successfully!");
                       navigate("/");
+                      toast.success("Logged Out Successfully!");
                     }}
                     className="border-2 border-red-700 text-red-700 px-4 py-2 rounded hover:bg-red-700 hover:text-white transition-colors w-4/5"
                   >
