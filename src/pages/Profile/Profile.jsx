@@ -140,12 +140,6 @@ const Profile = () => {
     }
   }, [profileData]);
 
-  const handleLogout = () => {
-    logout();
-    toast.success("Logged Out Successfully");
-    navigate(`/`);
-  };
-
   // Form handlers
   const personalDataForm = useFormik({
     enableReinitialize: true,
@@ -646,7 +640,11 @@ const Profile = () => {
                   </p>
 
                   <button
-                    onClick={handleLogOut}
+                    onClick={() => {
+                      logout();
+                      toast.success("Logged Out Successfully");
+                      navigate(`/`);
+                    }}
                     className="border-2 border-red-700 text-red-700 px-4 py-2 rounded hover:bg-red-700 hover:text-white transition-colors w-4/5"
                   >
                     Sign Out
