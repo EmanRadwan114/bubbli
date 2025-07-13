@@ -54,7 +54,6 @@ const RelatedProducts = () => {
 
   const handleAddToCart = (productId) => {
     addToCart(productId);
-    toast.success("Product added to cart.");
   };
 
   const handleToggleWishlist = (productId) => {
@@ -85,8 +84,8 @@ const RelatedProducts = () => {
     );
 
   return (
-    <div className="w-full px-4 mt-16 text-center relative">
-      <h2 className="text-3xl font-bold text-primary mb-10">
+    <div className="w-full px-4 mt-16 relative">
+      <h2 className="text-3xl font-bold text-primary mb-10 text-center">
         Related Products
       </h2>
 
@@ -143,8 +142,8 @@ const RelatedProducts = () => {
           breakpoints={{
             640: { slidesPerView: 1.5 },
             768: { slidesPerView: 2.5 },
-            1024: { slidesPerView: 3.5 },
-            1280: { slidesPerView: 4.5 },
+            1024: { slidesPerView: 3 },
+            // 1280: { slidesPerView: 3 },
           }}
           style={{
             padding: "0 40px 50px", // Added side padding for arrow space
@@ -163,10 +162,6 @@ const RelatedProducts = () => {
                     wishlistArr={wishlistArr}
                     onAddToCart={() => handleAddToCart(product._id)}
                     onAddToWishlist={() => handleToggleWishlist(product._id)}
-                    onProductClick={() =>
-                      handleProductClick(productCategoryName, product._id)
-                    }
-                    className="w-full max-w-[360px] mx-auto"
                   />
                 </div>
               </SwiperSlide>
@@ -177,7 +172,7 @@ const RelatedProducts = () => {
 
       <style jsx>{`
         .related-swiper .swiper-pagination {
-        margin: 20px;
+          margin: 20px;
           display: flex;
           justify-content: center;
           align-items: center;
