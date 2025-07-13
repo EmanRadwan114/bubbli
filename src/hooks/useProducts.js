@@ -6,7 +6,8 @@ import {
   getLeastOrderedProducts,
   getProductByCategory,
   getProductById, updateProduct,
-  searchProducts,
+  // searchProducts,
+
 } from "../services/productsService";
 
 export const getProductByCategoryName = (categoryName, page = 1, limit = 6) =>

@@ -5,7 +5,6 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
 import ProductCard from "../../components/ProductCard/ProductCard";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { getAllProducts } from "../../hooks/useProducts";
@@ -16,6 +15,7 @@ import {
   useAllWishlist,
 } from "../../hooks/useWishlist";
 import { toast } from "react-toastify";
+
 
 const RelatedProducts = () => {
   const { categoryName, id: currentProductId } = useParams();

@@ -2,9 +2,12 @@ import { useContext, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import Pagination from "../../components/Pagination/Pagination";
+import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
+import FilterSidebar from "../../components/FilterationSideNav/FilterationSideNav";
 import {
   useAddToWishlist,
-  useAllWishlist,
   useRemoveFromWishlist,
 } from "../../hooks/useWishlist";
 import { WishlistContext } from "../../context/Wishlist.Context";
