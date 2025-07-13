@@ -34,7 +34,7 @@ export default function Reviews() {
       .max(5)
       .required("Rating is required"),
     description: Yup.string()
-      .min(8, "Description must be at least 8 characters")
+      .min(3, "Description must be at least 3 characters")
       .required("Description is required"),
   });
 
