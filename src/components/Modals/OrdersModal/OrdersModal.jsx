@@ -78,14 +78,17 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
   return (
     <div
       className="fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex items-center justify-center p-4 transition-opacity duration-300 ease-in-out"
-      onClick={onClose}>
+      onClick={onClose}
+    >
       <div
-        className="bg-white w-full max-w-md rounded-xl p-6 space-y-4 relative"
-        onClick={(e) => e.stopPropagation()}>
+        className="bg-white w-full max-w-md rounded-xl p-6 space-y-4 relative  dark:bg-secondary-dark"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 hover:bg-[rgba(0,0,0,0.15)] p-1 px-2 rounded-lg cursor-pointer">
+          className="absolute top-3 right-3 dark:text-white dark:hover:text-gray-200 text-gray-600 hover:text-gray-800 hover:bg-[rgba(0,0,0,0.15)] p-1 px-2 rounded-lg cursor-pointer"
+        >
           <X size={20} />
         </button>
 
@@ -106,22 +109,24 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
               }}
               enableReinitialize
               validationSchema={validationSchema}
-              onSubmit={handleSubmit}>
+              onSubmit={handleSubmit}
+            >
               {({ isSubmitting }) => (
                 <Form>
-                  <h2 className="text-2xl font-bold text-teal-600 mb-4 border-b pb-2">
+                  <h2 className="text-2xl font-bold text-accent  mb-4 border-b pb-2">
                     Update Shipping Status
                   </h2>
 
                   <div className="space-y-4">
                     <div>
-                      <label className="block mb-1 text-teal-900 font-medium">
+                      <label className="block mb-1 text-accent  font-medium">
                         Shipping Status
                       </label>
                       <Field
                         as="select"
                         name="shippingStatus"
-                        className="input">
+                        className="input"
+                      >
                         <option value="" disabled>
                           Select Shipping Status
                         </option>
@@ -139,7 +144,8 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="btn-teal w-full">
+                      className="btn-modal-accent w-full"
+                    >
                       {isSubmitting ? "Updating..." : "Update Order"}
                     </button>
 
@@ -147,7 +153,8 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
                       type="button"
                       disabled={isSubmitting}
                       onClick={handleCancelOrder}
-                      className="btn-red w-full mt-2">
+                      className="btn-red w-full mt-2"
+                    >
                       Cancel Order
                     </button>
                   </div>
@@ -162,8 +169,8 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
         )}
 
         {isView && orderData && (
-          <div className="space-y-4 max-h-[90vh] overflow-auto">
-            <h2 className="text-2xl font-bold text-teal-600 border-b pb-2">
+          <div className="space-y-4 max-h-[90vh] overflow-auto  dark:bg-secondary-dark">
+            <h2 className="text-2xl font-bold text-accent  border-b pb-2 dark:text-accent-dark">
               Order Details
             </h2>
 
@@ -190,7 +197,7 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
               <DetailCard
                 label="Order Items"
                 value={
-                  <ul className="list-disc list-inside text-base text-black">
+                  <ul className="list-disc list-inside text-base text-black dark:text-white">
                     {orderData?.orderItems?.map((item, index) => (
                       <li key={index}>
                         {item?.product?.title} × {item?.quantity}
@@ -211,11 +218,14 @@ export function OrdersModal({ activeModal, orderId, onClose, onRefresh }) {
 function DetailCard({ label, value, fullWidth }) {
   return (
     <div
-      className={`p-3 border-2 border-teal-500 rounded-lg bg-gray-50 shadow-sm ${
+      className={`p-3 border-2 border-blue-500 rounded-lg bg-gray-50 shadow-sm dark:bg-secondary-dark ${
         fullWidth ? "col-span-2" : ""
-      }`}>
-      <span className="font-semibold text-teal-800">{label}:</span>
-      <div className="mt-1 text-base text-black break-words">{value}</div>
+      }`}
+    >
+      <span className="font-semibold text-accent dark:text-accent-dark">
+        {label}:
+      </span>
+      <div className="mt-1 text-base text-black break-words dark:text-white">{value}</div>
     </div>
   );
 }

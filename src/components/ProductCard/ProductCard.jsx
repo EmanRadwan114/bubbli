@@ -18,7 +18,7 @@ const ProductCard = ({
     price = 0,
     discount = 0,
     avgRating = 0,
-    totalReviews = 0,
+    numberOfReviews = 0,
     label = [],
   } = product;
 
@@ -33,6 +33,8 @@ const ProductCard = ({
   const hasLabel = (labelType) => {
     return Array.isArray(label) && label.includes(labelType);
   };
+
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div className="light-main-bg dark-main-bg rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full dark-shadow">
@@ -131,7 +133,9 @@ const ProductCard = ({
           </div>
 
           <span className="ms-1 font-semibold hidden sm:inline">
-            {totalReviews || 0} Reviews
+            {numberOfReviews === 1
+              ? "1 review"
+              : `${numberOfReviews || 0} reviews`}
           </span>
         </div>
 
@@ -152,12 +156,16 @@ const ProductCard = ({
 
         {/* Button */}
         <div className="mt-auto">
-          <button
-            onClick={() => _id && onAddToCart(_id)}
-            className="light-primary-btn dark-primary-btn text-white px-4 py-1.5 rounded-lg font-semibold transition-colors block w-full"
-          >
-            Add to Cart
-          </button>
+          {user?.role !== "admin" && (
+            <button
+              onClick={() => {
+                onAddToCart(product._id);
+              }}
+              className="light-primary-btn dark-primary-btn text-white px-4 py-1.5 rounded-lg font-semibold transition-colors block w-full"
+            >
+              Add to Cart
+            </button>
+          )}
         </div>
       </div>
     </div>

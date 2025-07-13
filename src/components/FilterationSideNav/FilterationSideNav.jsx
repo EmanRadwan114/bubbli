@@ -35,7 +35,7 @@ const FilterationSideNav = ({ onFilterChange }) => {
     const newValue = parseInt(event.target.value);
     const newFilters = {
       ...localFilters,
-      price: newValue,
+      category: e.target.value,
     };
     setLocalFilters(newFilters);
     buildAndSendQuery(newFilters);

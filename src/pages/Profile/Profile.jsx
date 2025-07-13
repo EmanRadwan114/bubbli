@@ -364,7 +364,7 @@ const Profile = () => {
                           {order.shippingStatus !== "cancelled" && (
                             <button
                               onClick={() => handleCancelOrder(order._id)}
-                              className="text-red-500 hover:text-white hover:bg-red-500 px-3  outline rounded-full text-sm cursor-pointer inline "
+                              className="text-red-500 hover:text-white ml-4 hover:bg-red-500 px-3  outline rounded-full text-sm cursor-pointer inline "
                             >
                               Cancel
                             </button>
