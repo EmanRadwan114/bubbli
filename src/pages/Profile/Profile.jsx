@@ -140,10 +140,10 @@ const Profile = () => {
     }
   }, [profileData]);
 
-  const handleLogOut = async () => {
-    await logout();
-    navigate("/");
-    toast.success("Logged Out Successfully!");
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged Out Successfully");
+    navigate(`/`);
   };
 
   // Form handlers

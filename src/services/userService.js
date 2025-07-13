@@ -18,11 +18,11 @@ export const changeUserData = async (data) => {
   return res.data;
 };
 
-export const logout = async () => {
-  const res = await api.post(`/auth/logout`);
+export const logout = async (data) => {
   localStorage.removeItem("user");
   const { setUser } = useContext(AuthContext);
   setUser(null);
+  const res = await api.post(`/auth/logout`, data);
   return res.data;
 };
 
