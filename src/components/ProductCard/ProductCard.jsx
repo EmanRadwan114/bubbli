@@ -11,6 +11,7 @@ const ProductCard = ({
   const productLink = categoryName
     ? `/gifts/${categoryName}/${product._id}`
     : `/gifts/product/${product._id}`;
+const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div className="light-main-bg dark-main-bg rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col h-full dark-shadow">
@@ -135,7 +136,8 @@ const ProductCard = ({
 
         {/* Button - This will be at the bottom */}
         <div className="mt-auto">
-          <button
+          {user?.role !== "admin" && (
+             <button
             onClick={() => {
               onAddToCart(product._id);
             }}
@@ -143,6 +145,8 @@ const ProductCard = ({
           >
             Add to Cart
           </button>
+          )}
+         
         </div>
       </div>
     </div>
