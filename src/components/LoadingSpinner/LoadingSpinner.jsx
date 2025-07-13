@@ -238,6 +238,6 @@ const StyledWrapper = styled.div`
       stroke-dashoffset: -351.86;
     }
   }
-`;
+`
 
 export default LoadingSpinner;

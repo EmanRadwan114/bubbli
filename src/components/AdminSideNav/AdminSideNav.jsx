@@ -4,7 +4,7 @@ import { LayoutDashboard, Boxes, Users, Lock, ClipboardCheck, Ticket, LogOut, Gr
 import { logout } from "../../services/userService";
 import { toast } from "react-toastify";
 
-export default function AdminSideNav() {
+export default function () {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -60,7 +60,6 @@ export default function AdminSideNav() {
     // Update localStorage
     localStorage.setItem("theme", theme);
 
-    // Optional: Add/remove dark class for Tailwind
     if (theme === "dark") {
       body.classList.add("dark");
     } else {
