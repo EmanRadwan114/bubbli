@@ -40,13 +40,13 @@ import CartContextProvider from "./context/CartContext";
 import Wishlist from "./pages/Wishlist/Wishlist.jsx";
 import RequireAuth from "./components/Guards/RequireAuth.jsx";
 import RequireAdmin from "./components/Guards/RequireAdmin.jsx";
-
 // ^ react query & redux setup
 import { ToastContainer } from "react-toastify";
 import RefundPolicy from "./pages/RefundPolicy/RefundPolicy.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ScrollToTop from "./components/ArrowUp/ScrollToTop.jsx";
 import WishlistContextProvider from "./context/Wishlist.Context.jsx";
+import Search from "./pages/Search/Search.jsx";
 const queryClient = new QueryClient();
 
 // ^ routing setup
@@ -92,6 +92,7 @@ const router = createBrowserRouter([
       },
       { path: "login", element: <Login></Login> },
       { path: "register", element: <Register></Register> },
+      { path: "search", element: <Search></Search> },
       { path: "wishlist", element: <Wishlist></Wishlist> },
       { path: "cart", element: <Cart></Cart> },
       {

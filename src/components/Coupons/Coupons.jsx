@@ -23,6 +23,8 @@ export default function Coupons({ onApplyCoupon }) {
         setLoading(true);
         setFeedback({ message: "", success: null });
 
+        console.log("Formik values:", values);
+        console.log("Coupon value:", values.coupon);
         const response = await applyCoupon({ couponCode: values.coupon });
 
         if (onApplyCoupon) {
@@ -36,9 +38,9 @@ export default function Coupons({ onApplyCoupon }) {
           message: response.message || "Coupon applied successfully!",
           success: true,
         });
-
-        resetForm();
       } catch (error) {
+        console.log(error);
+
         setFeedback({
           message: error.response?.data.message || "Invalid coupon",
           success: false,
@@ -56,7 +58,8 @@ export default function Coupons({ onApplyCoupon }) {
     <div className="w-full flex flex-col gap-2">
       <label
         htmlFor="coupon"
-        className="block text-sm font-medium text-primary mb-1">
+        className="block text-sm font-medium text-primary mb-1"
+      >
         Coupon Code
       </label>
       <div className="relative w-full">
@@ -79,24 +82,28 @@ export default function Coupons({ onApplyCoupon }) {
           type="button"
           onClick={handleSubmit}
           disabled={loading}
-          className="absolute top-0 right-0 h-[51px] px-5 bg-primary text-white text-sm font-semibold rounded shadow hover:bg-primary-dark transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+          className="absolute top-0 right-0 h-[51px] px-5 bg-primary text-white text-sm font-semibold rounded shadow hover:bg-primary-dark transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+        >
           {loading ? (
             <svg
               className="animate-spin h-5 w-5 mx-auto text-white"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
-              viewBox="0 0 24 24">
+              viewBox="0 0 24 24"
+            >
               <circle
                 className="opacity-25"
                 cx="12"
                 cy="12"
                 r="10"
                 stroke="currentColor"
-                strokeWidth="4"></circle>
+                strokeWidth="4"
+              ></circle>
               <path
                 className="opacity-75"
                 fill="currentColor"
-                d="M4 12a8 8 0 018-8v8z"></path>
+                d="M4 12a8 8 0 018-8v8z"
+              ></path>
             </svg>
           ) : (
             "Apply"
@@ -114,7 +121,8 @@ export default function Coupons({ onApplyCoupon }) {
             feedback.success
               ? "bg-teal-100 border-teal-500 text-teal-700"
               : "bg-red-100 border-red-500 text-red-700"
-          }`}>
+          }`}
+        >
           <span className="mt-1">
             {feedback.success ? (
               <CircleCheckBig className="w-5 h-5 text-teal-600" />

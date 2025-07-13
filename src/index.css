@@ -94,23 +94,27 @@
 /*~~~~~~~~~~~ MODAL STYE ~~~~~~~~~~~~`*/
 
 .input {
-  @apply w-full border-teal-400 border-2 rounded-md px-4 py-2 text-sm focus:border-teal-600 focus:outline-none focus:ring-0;
+  @apply w-full border-cardAlt dark:border-accent-dark border-2 rounded-md px-4 py-2 text-sm text-dark dark:text-light bg-white dark:bg-secondary-dark focus:border-accent dark:focus:border-accent-dark focus:outline-none focus:ring-0 transition-colors;
 }
 
-.btn-teal {
-  @apply bg-teal-600 text-white py-2 px-4 rounded hover:bg-teal-700 transition mt-2 cursor-pointer;
+.btn-modal-primary {
+  @apply bg-primary dark:bg-primary-dark text-white py-2 px-6 rounded  transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md;
+}
+
+.btn-modal-accent {
+  @apply bg-accent dark:bg-accent-dark text-white  py-2 px-4 rounded  transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md;
 }
 
 .btn-red {
-  @apply bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition mt-2 cursor-pointer;
+  @apply bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition  cursor-pointer;
 }
 
 /*^^^^^^^ Icons Style ^^^^^^^*/
 .icons {
-  color: rgb(50, 48, 53);
+ @apply text-gray-800 dark:text-white;
 }
 .icons:hover {
-  color: #007870;
+  @apply text-red-700 dark:text-red-400;
 }
 
 button {

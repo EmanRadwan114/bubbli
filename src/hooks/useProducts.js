@@ -1,11 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
-  addProduct, deleteProduct, getAllProductsBack,
+  addProduct,
+  deleteProduct,
+  getAllProductsBack,
   getBestSellingProducts,
   getFeaturedProducts,
   getLeastOrderedProducts,
   getProductByCategory,
-  getProductById, updateProduct,
+  getProductById,
+  updateProduct,
+  // searchProducts,
 } from "../services/productsService";
 
 export const getProductByCategoryName = (categoryName, page = 1, limit = 6) =>
@@ -15,6 +19,7 @@ export const getProductByCategoryName = (categoryName, page = 1, limit = 6) =>
     enabled: !!categoryName,
     keepPreviousData: true,
   });
+
 export const getAllProducts = (page = 1, limit = 6) => {
   return useQuery({
     queryKey: ["products", page, limit],
@@ -49,7 +54,6 @@ export const useGetProductById = (id) => {
     },
   });
 };
-
 
 // Add product
 export const useAddProduct = () => {

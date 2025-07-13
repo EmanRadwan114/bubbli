@@ -149,13 +149,16 @@ export default function CouponsModal({
   return (
     <div
       className="fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex items-center justify-center p-4"
-      onClick={handleClose}>
+      onClick={handleClose}
+    >
       <div
-        className="bg-white w-full max-w-md rounded-xl p-6 space-y-4 relative"
-        onClick={(e) => e.stopPropagation()}>
+        className="bg-white w-full max-w-md rounded-xl  dark:bg-secondary-dark p-6 space-y-4 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={handleClose}
-          className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 hover:bg-[rgba(0,0,0,0.15)] p-1 px-2 rounded-lg cursor-pointer">
+          className="absolute top-3 right-3 dark:text-white dark:hover:text-gray-200 text-gray-600 hover:text-gray-800 hover:bg-[rgba(0,0,0,0.15)] p-1 px-2 rounded-lg cursor-pointer"
+        >
           <X size={20} />
         </button>
 
@@ -164,15 +167,16 @@ export default function CouponsModal({
             initialValues={formData}
             enableReinitialize
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}>
+            onSubmit={handleSubmit}
+          >
             {({ isSubmitting }) => (
               <Form className="space-y-4">
-                <h2 className="text-2xl font-bold text-teal-600 mb-2 border-b pb-2">
+                <h2 className="text-2xl font-bold text-accent  mb-2 border-b pb-2">
                   {isAdd ? "Add New Coupon" : "Update Coupon"}
                 </h2>
 
                 <div>
-                  <label className="block mb-1 font-medium text-teal-900">
+                  <label className="block mb-1 font-medium text-accent ">
                     Coupon Code
                   </label>
                   <Field
@@ -189,7 +193,7 @@ export default function CouponsModal({
                 </div>
 
                 <div>
-                  <label className="block mb-1 font-medium text-teal-900">
+                  <label className="block mb-1 font-medium text-accent ">
                     Discount Percentage
                   </label>
                   <Field
@@ -206,7 +210,7 @@ export default function CouponsModal({
                 </div>
 
                 <div>
-                  <label className="block mb-1 font-medium text-teal-900">
+                  <label className="block mb-1 font-medium text-accent ">
                     Expiration Date
                   </label>
                   <Field name="expirationDate" type="date" className="input" />
@@ -218,7 +222,7 @@ export default function CouponsModal({
                 </div>
 
                 <div>
-                  <label className="block mb-1 font-medium text-teal-900">
+                  <label className="block mb-1 font-medium text-accent ">
                     Max Usage Limit
                   </label>
                   <Field
@@ -238,15 +242,16 @@ export default function CouponsModal({
                   <Field
                     type="checkbox"
                     name="isActive"
-                    className="form-checkbox accent-teal-600 cursor-pointer"
+                    className="form-checkbox text-accent cursor-pointer"
                   />
-                  <span className="text-teal-900 cursor-pointer">Active</span>
+                  <span className="text-accent  cursor-pointer">Active</span>
                 </label>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="btn-teal w-full">
+                  className="btn-modal-accent w-full"
+                >
                   {isSubmitting
                     ? "Saving..."
                     : isAdd
@@ -262,11 +267,11 @@ export default function CouponsModal({
           <p className="text-center text-gray-500">Loading...</p>
         )}
         {isView && fetchedData && !isLoading && (
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-teal-600 border-b pb-2">
+          <div className="space-y-4 ">
+            <h2 className="text-2xl font-bold text-accent  border-b pb-2">
               Coupon Details
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800 ">
               <DetailCard label="Code" value={fetchedData.CouponCode} />
               <DetailCard
                 label="Discount"
@@ -304,11 +309,12 @@ export default function CouponsModal({
 function DetailCard({ label, value, fullWidth }) {
   return (
     <div
-      className={`p-3 border-2 border-teal-500 rounded-lg bg-gray-50 shadow-sm ${
+      className={`p-3 border-2 border-blue-400 rounded-lg bg-gray-50 shadow-sm dark:bg-secondary-dark  ${
         fullWidth ? "sm:col-span-2" : ""
-      }`}>
-      <span className="font-semibold text-teal-800">{label}:</span>
-      <div className="mt-1 text-base text-black">{value}</div>
+      }`}
+    >
+      <span className="font-semibold text-accent dark:text-accent-dark ">{label}:</span>
+      <div className="mt-1 text-base text-black dark:text-white">{value}</div>
     </div>
   );
 }

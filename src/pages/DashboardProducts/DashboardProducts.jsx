@@ -243,7 +243,7 @@ export default function ProductsDashboard() {
                     >
                       <Eye
                         size={20}
-                        className="text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-accent-dark cursor-pointer"
+                        className="text-gray-600 dark:text-gray-300 hover:text-accent  dark:hover:text-accent-dark cursor-pointer"
                       />
                     </button>
                     <button
@@ -252,7 +252,7 @@ export default function ProductsDashboard() {
                     >
                       <Pencil
                         size={20}
-                        className="text-gray-600 dark:text-gray-300 hover:text-teal-600 dark:hover:text-accent-dark cursor-pointer"
+                        className="text-gray-600 dark:text-gray-300 hover:text-accent  dark:hover:text-accent-dark cursor-pointer"
                       />
                     </button>
                     <button
@@ -312,7 +312,7 @@ export default function ProductsDashboard() {
             Yes, Delete
           </button>
           <button
-            className="btn-teal"
+            className="btn-modal-accent"
             onClick={() => setShowDeleteConfirm(false)}
           >
             Cancel

@@ -34,7 +34,7 @@ const OrderConfirmation = () => {
     shippingPrice,
     paymentMethod,
     shippingAddress,
-    orderStatus,
+    shippingStatus,
     phone,
     createdAt,
     orderItems,
@@ -94,7 +94,7 @@ const OrderConfirmation = () => {
               <span className="font-medium text-dark dark:text-light">
                 Status:
               </span>{" "}
-              <span className="capitalize">{orderStatus}</span>
+              <span className="capitalize">{shippingStatus}</span>
             </p>
             <p>
               <span className="font-medium text-dark dark:text-light">
@@ -193,9 +193,15 @@ const OrderConfirmation = () => {
           </div>
           <div className="flex justify-between">
             <span className="text-dark dark:text-light">Discount:</span>
-            <span className="text-primary dark:text-primary-dark">
-              -{totalPriceBeforeDiscount - totalPriceAfterDiscount} EGP
-            </span>
+            {totalPriceBeforeDiscount && totalPriceAfterDiscount && (
+              <span>
+                -
+                {Math.abs(
+                  totalPriceBeforeDiscount - totalPriceAfterDiscount
+                ).toFixed(2)}{" "}
+                EGP
+              </span>
+            )}
           </div>
           <div className="flex justify-between">
             <span className="text-dark dark:text-light">Shipping:</span>

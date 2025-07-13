@@ -5,7 +5,7 @@ export const getAllUserWishlist = async () => {
   const res = await api.get("/wishlist?all=true");
   return res.data;
 };
-export const getUserWishlist = async (page = 1, limit = 8) => {
+export const getUserWishlist = async (page = 1, limit = 9) => {
   const res = await api.get(`/wishlist?page=${page}&limit=${limit}`);
   return res.data;
 };

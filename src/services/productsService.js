@@ -14,6 +14,15 @@ export const getProductByCategory = async (categoryName, page, limit) => {
     throw err;
   }
 };
+
+export const filterProducts = async (query, page) => {
+  const res = await api.get(
+    `/products/filter?title=${query.title}&price=${query.price}&page=${page}&limit=6`
+  );
+
+  return res.data;
+};
+
 export const getAllProductsBack = async (page = 1, limit = 6) => {
   const path = `/products`;
   try {
@@ -64,7 +73,6 @@ export const addReview = async (id, details) => {
   return response.data;
 };
 
-
 // ADD Product
 export const addProduct = async (newProductData) => {
   const res = await api.post("/products", newProductData);
@@ -83,32 +91,32 @@ export const updateProduct = async (id, productData) => {
   return response.data;
 };
 
-// GET BestSelling 
-  export const getBestSellingProducts = async (page = 1, limit = 6) => {
-    const path = `/products/best-selling-products`;
-    try {
-      const response = await api.get(path, {
-        params: { page, limit },
-      });
-      console.log("→ Got response:", response.status, response.data);
-      return response.data;
-    } catch (err) {
-      console.error("getBestSellingProducts failed:", err);
-      throw err;
-    }
-  };
+// GET BestSelling
+export const getBestSellingProducts = async (page = 1, limit = 6) => {
+  const path = `/products/best-selling-products`;
+  try {
+    const response = await api.get(path, {
+      params: { page, limit },
+    });
+    console.log("→ Got response:", response.status, response.data);
+    return response.data;
+  } catch (err) {
+    console.error("getBestSellingProducts failed:", err);
+    throw err;
+  }
+};
 
 // GET least-ordered
-  export const getLeastOrderedProducts = async (page = 1, limit = 6) => {
-    const path = `/products/least-ordered-products`;
-    try {
-      const response = await api.get(path, {
-        params: { page, limit },
-      });
-      console.log("→ Got response:", response.status, response.data);
-      return response.data;
-    } catch (err) {
-      console.error("getLeastOrderedProducts failed:", err);
-      throw err;
-    }
-  };
+export const getLeastOrderedProducts = async (page = 1, limit = 6) => {
+  const path = `/products/least-ordered-products`;
+  try {
+    const response = await api.get(path, {
+      params: { page, limit },
+    });
+    console.log("→ Got response:", response.status, response.data);
+    return response.data;
+  } catch (err) {
+    console.error("getLeastOrderedProducts failed:", err);
+    throw err;
+  }
+};

@@ -1,13 +1,5 @@
 import { useState } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { useDashboardMetric } from "../../hooks/useAdmins";
 import { formatChartData } from "../../utils/formatChartData";
 import ProductCard from "../../components/ProductCard/ProductCard";
@@ -35,13 +27,14 @@ export default function DashboardHome() {
   });
 
   const chartData = formatChartData(selectedOption.metric, data);
+  const user = localStorage.getItem("user");
 
   // Best Selling Prds
   const { data: bestSelling, loadingBest } = useBestSellingProducts();
-  
+
   // Least Ordered Prds
   const { data: leastOrdered, loadingLeast } = useLeastOrderedProducts();
-  
+
   return (
     <div className="space-y-8">
       {/* Analytics Progress Section */}
@@ -234,6 +227,7 @@ export default function DashboardHome() {
                   wishlistArr={[]}
                   onAddToCart={() => {}}
                   onAddToWishlist={() => {}}
+                  user={user}
                 />
               ))}
             </div>

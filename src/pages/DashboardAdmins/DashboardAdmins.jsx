@@ -61,10 +61,13 @@ export default function AdminsDashboard() {
   };
 
   return (
-    <div className="p-4">
+    <div className="px-4 py-6 dark:bg-black dark:text-light">
       {/* Add New Admin Button */}
       <div className="flex justify-end mb-4">
-        <button onClick={() => handleOpenModal("add")} className="btn-teal">
+        <button
+          onClick={() => handleOpenModal("add")}
+          className="light-primary-btn dark-primary-btn px-4 py-2 rounded"
+        >
           + Add New Admin
         </button>
       </div>
@@ -80,31 +83,40 @@ export default function AdminsDashboard() {
       {/* Admins Table */}
       {!isLoading && (
         <div className="w-full overflow-auto">
-          <div className="rounded-lg border border-gray-200 shadow-md">
+          <div className="rounded-lg border border-gray-200 dark:border-gray-700 shadow-md dark-shadow overflow-auto">
             <table className="w-full table-auto">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-secondary-dark">
                 <tr>
                   <th className="px-6 py-4 text-left">Name</th>
                   <th className="px-6 py-4 text-left">Email</th>
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 border-t border-gray-100">
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                 {admins.length > 0 ? (
                   admins.map((admin) => (
-                    <tr key={admin._id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-gray-900">{admin.name}</td>
-                      <td className="px-6 py-4 text-gray-600">{admin.email}</td>
+                    <tr
+                      key={admin._id}
+                      className="hover:bg-gray-50 dark:hover:bg-secondary-dark"
+                    >
+                      <td className="px-6 py-4 text-gray-900 dark:text-gray-300 ">
+                        {admin.name}
+                      </td>
+                      <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
+                        {admin.email}
+                      </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex justify-end gap-5">
                           <button
                             onClick={() => handleOpenModal("view", admin)}
-                            title="View">
-                            <Eye size={20} className="icons cursor-pointer" />
+                            title="View"
+                          >
+                            <Eye size={20} className="icons cursor-pointer " />
                           </button>
                           <button
                             onClick={() => confirmDelete(admin)}
-                            title="Delete">
+                            title="Delete"
+                          >
                             <Trash2
                               size={20}
                               className="text-red-600 hover:text-red-800 cursor-pointer"
@@ -142,19 +154,19 @@ export default function AdminsDashboard() {
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-[rgba(0,0,0,0.6)] flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 text-center">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-md p-6 text-center dark:bg-secondary-dark">
             <h3 className="text-xl font-semibold mb-4 text-red-600">
               Confirm Delete
             </h3>
-            <p className="text-gray-700 mb-6">
+            <p className="text-gray-700 mb-6 dark:text-white">
               Are you sure you want to delete admin{" "}
               <strong>{adminToDelete?.name}</strong>?
             </p>
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-4 ">
               <button onClick={deleteAdmin} className="btn-red">
                 Yes, Delete
               </button>
-              <button onClick={cancelDelete} className="btn-teal">
+              <button onClick={cancelDelete} className="btn-modal-accent">
                 Cancel
               </button>
             </div>

@@ -3,10 +3,29 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useProfileData, useUserOrders, useUpdateProfile, useUpdatePassword } from "../../hooks/useUser";
+import {
+  useProfileData,
+  useUserOrders,
+  useUpdateProfile,
+  useUpdatePassword,
+} from "../../hooks/useUser";
 
 // Icons
-import { Edit, Save, X, Eye, EyeOff, Mail, MapPin, Lock, User, ChevronDown, ChevronUp, ShoppingBag, Gift } from "lucide-react";
+import {
+  Edit,
+  Save,
+  X,
+  Eye,
+  EyeOff,
+  Mail,
+  MapPin,
+  Lock,
+  User,
+  ChevronDown,
+  ChevronUp,
+  ShoppingBag,
+  Gift,
+} from "lucide-react";
 import { logout, refundOrder } from "../../services/userService";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Pagination from "../../components/Pagination/Pagination";
@@ -67,8 +86,12 @@ const Profile = () => {
 
   // Validation schemas
   const profileValidationSchema = Yup.object().shape({
-    name: Yup.string().min(3, "Name must be at least 3 characters").required("Name is required"),
-    email: Yup.string().email("Invalid email address").required("Email is required"),
+    name: Yup.string()
+      .min(3, "Name must be at least 3 characters")
+      .required("Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
   });
 
   const passwordValidationSchema = Yup.object().shape({
@@ -86,20 +109,34 @@ const Profile = () => {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?#&])[A-Za-z\d@$!%*?#&]{8,}$/,
         "Must contain uppercase, lowercase, number, and special character"
       )
-      .notOneOf([Yup.ref("oldPassword"), null], "New password must be different from current password"),
+      .notOneOf(
+        [Yup.ref("oldPassword"), null],
+        "New password must be different from current password"
+      ),
   });
 
   // Data fetching
-  const { data: { data: profileData = {} } = {}, isLoading: isProfileLoading } = useProfileData();
-  const { data: { data: userOrders = [], totalPages = 1 } = {}, isLoading: isOrdersLoading, refetch } = useUserOrders(currentPage);
-  const { mutateAsync: updateUserData, isPending: isUpdatePending } = useUpdateProfile();
-  const { mutateAsync: updatePassword, isPending: isPasswordPending } = useUpdatePassword();
+  const { data: { data: profileData = {} } = {}, isLoading: isProfileLoading } =
+    useProfileData();
+  const {
+    data: { data: userOrders = [], totalPages = 1 } = {},
+    isLoading: isOrdersLoading,
+    refetch,
+  } = useUserOrders(currentPage);
+  const { mutateAsync: updateUserData, isPending: isUpdatePending } =
+    useUpdateProfile();
+  const { mutateAsync: updatePassword, isPending: isPasswordPending } =
+    useUpdatePassword();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     if (profileData?.address) {
-      setAddresses(Array.isArray(profileData.address) ? profileData.address : [profileData.address]);
+      setAddresses(
+        Array.isArray(profileData.address)
+          ? profileData.address
+          : [profileData.address]
+      );
     }
   }, [profileData]);
 
@@ -186,7 +223,9 @@ const Profile = () => {
               <Mail className="text-accent dark:text-accent-dark mr-2 mt-1" />
               {editMode ? (
                 <div className="w-full">
-                  <label className="block text-accent dark:text-accent-dark mb-1">Email</label>
+                  <label className="block text-accent dark:text-accent-dark mb-1">
+                    Email
+                  </label>
                   <input
                     name="email"
                     type="email"
@@ -194,12 +233,18 @@ const Profile = () => {
                     onChange={personalDataForm.handleChange}
                     onBlur={personalDataForm.handleBlur}
                     className={`w-full p-2 border rounded ${
-                      personalDataForm.touched.email && personalDataForm.errors.email ? "border-red-500" : "dark:border-white"
+                      personalDataForm.touched.email &&
+                      personalDataForm.errors.email
+                        ? "border-red-500"
+                        : "dark:border-white"
                     }`}
                   />
-                  {personalDataForm.touched.email && personalDataForm.errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{personalDataForm.errors.email}</p>
-                  )}
+                  {personalDataForm.touched.email &&
+                    personalDataForm.errors.email && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {personalDataForm.errors.email}
+                      </p>
+                    )}
                 </div>
               ) : (
                 <p>{profileData?.email}</p>
@@ -212,7 +257,9 @@ const Profile = () => {
                 <MapPin className="text-accent dark:text-accent-dark mr-2 mt-1" />
                 {editMode ? (
                   <div className="w-full">
-                    <label className="block text-accent dark:text-accent-dark mb-1">Addresses</label>
+                    <label className="block text-accent dark:text-accent-dark mb-1">
+                      Addresses
+                    </label>
                     <div className="space-y-2">
                       {addresses.map((address, index) => (
                         <div key={index} className="flex items-center">
@@ -226,7 +273,10 @@ const Profile = () => {
                             }}
                             className="flex-1 p-2 border dark:border-white rounded mr-2"
                           />
-                          <button onClick={() => removeAddress(index)} className="text-red-500 hover:text-red-700">
+                          <button
+                            onClick={() => removeAddress(index)}
+                            className="text-red-500 hover:text-red-700"
+                          >
                             <X />
                           </button>
                         </div>
@@ -239,7 +289,10 @@ const Profile = () => {
                           placeholder="Add new address"
                           className="flex-1 p-2 border dark:border-white rounded mr-2"
                         />
-                        <button onClick={addAddress} className="bg-primary text-white px-6 rounded hover:bg-accent transition-colors">
+                        <button
+                          onClick={addAddress}
+                          className="bg-primary text-white px-6 rounded hover:bg-accent transition-colors"
+                        >
                           Add
                         </button>
                       </div>
@@ -248,7 +301,11 @@ const Profile = () => {
                 ) : (
                   <div>
                     <p className="font-medium">Current Address:</p>
-                    <p>{addresses.length > 0 ? addresses[addresses.length - 1] : "No address provided"}</p>
+                    <p>
+                      {addresses.length > 0
+                        ? addresses[addresses.length - 1]
+                        : "No address provided"}
+                    </p>
                     {addresses.length > 1 && (
                       <div className="mt-2">
                         <p className="font-medium">Previous Addresses:</p>
@@ -266,7 +323,10 @@ const Profile = () => {
 
             {editMode && (
               <div className="col-span-2 flex justify-end space-x-2">
-                <button onClick={handleCancelEdit} className="flex items-center text-primary px-4 py-2 rounded cursor-pointer transition-colors">
+                <button
+                  onClick={handleCancelEdit}
+                  className="flex items-center text-primary px-4 py-2 rounded cursor-pointer transition-colors"
+                >
                   <X className="mr-2" />
                   Cancel
                 </button>
@@ -317,8 +377,13 @@ const Profile = () => {
         ) : userOrders?.length === 0 ? (
           <div className="text-center py-8">
             <Gift className="text-5xl text-gray-400 mx-auto mb-4" />
-            <h4 className="text-lg text-gray-600 dark:text-gray-400">No orders yet</h4>
-            <button className="mt-4 bg-primary text-white px-6 py-2 rounded hover:bg-accent transition-colors" onClick={() => navigate("/gifts")}>
+            <h4 className="text-lg text-gray-600 dark:text-gray-400">
+              No orders yet
+            </h4>
+            <button
+              className="mt-4 bg-primary text-white px-6 py-2 rounded hover:bg-accent transition-colors"
+              onClick={() => navigate("/gifts")}
+            >
               Browse Menu
             </button>
           </div>
@@ -329,15 +394,28 @@ const Profile = () => {
               <div className="space-y-2">
                 {userOrders?.map((order) => (
                   <div key={order._id} className="border rounded p-3">
-                    <div className="flex justify-between items-center cursor-pointer" onClick={() => toggleOrderExpand(order._id)}>
+                    <div
+                      className="flex justify-between items-center cursor-pointer"
+                      onClick={() => toggleOrderExpand(order._id)}
+                    >
                       <div className="flex items-center">
-                        {expandedOrder === order._id ? <ChevronUp className="mr-2" /> : <ChevronDown className="mr-2" />}
+                        {expandedOrder === order._id ? (
+                          <ChevronUp className="mr-2" />
+                        ) : (
+                          <ChevronDown className="mr-2" />
+                        )}
                         <div>
-                          <p className="font-medium">Order #{order._id.slice(19, 24)}</p>
-                          <p className="text-sm text-gray-500">{formatDate(order.createdAt)}</p>
+                          <p className="font-medium">
+                            Order #{order._id.slice(19, 24)}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {formatDate(order.createdAt)}
+                          </p>
                         </div>
                       </div>
-                      <span className="font-medium">{order.totalPrice.toFixed(2)} EGP</span>
+                      <span className="font-medium">
+                        {order.totalPrice.toFixed(2)} EGP
+                      </span>
                     </div>
 
                     {expandedOrder === order._id && (
@@ -345,7 +423,7 @@ const Profile = () => {
                         <div className="space-y-2">
                           {order.orderItems.map((item, index) => (
                             <p key={index} className="text-sm">
-                              {item.product.title}
+                              {item?.product?.title}
                             </p>
                           ))}
                         </div>
@@ -364,14 +442,17 @@ const Profile = () => {
                           {order.shippingStatus !== "cancelled" && (
                             <button
                               onClick={() => handleCancelOrder(order._id)}
-                              className="text-red-500 hover:text-white hover:bg-red-500 px-3  outline rounded-full text-sm cursor-pointer inline ml-4"
+                              className="text-red-500 hover:text-white ml-4 hover:bg-red-500 px-3  outline rounded-full text-sm cursor-pointer inline "
                             >
                               Cancel
                             </button>
                           )}
                         </div>
                         <div className="mt-3">
-                          <Link to={`/order-confirmation/${order._id}`} className="text-primary hover:underline">
+                          <Link
+                            to={`/order-confirmation/${order._id}`}
+                            className="text-primary hover:underline"
+                          >
                             Show Details
                           </Link>
                         </div>
@@ -400,21 +481,28 @@ const Profile = () => {
                   </thead>
                   <tbody>
                     {userOrders?.map((order) => (
-                      <tr key={order._id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-900">
+                      <tr
+                        key={order._id}
+                        className="border-b hover:bg-gray-50 dark:hover:bg-gray-900"
+                      >
                         <td className="py-3">#{order._id.slice(19, 24)}</td>
                         <td className="py-3">{formatDate(order.createdAt)}</td>
                         <td className="py-3">
                           <div className="space-y-1">
                             {order.orderItems.map((item, index) => (
                               <p key={index} className="text-sm">
-                                {item.product.title}
+                                {item?.product?.title}
                               </p>
                             ))}
                           </div>
                         </td>
-                        <td className="py-3">{order.totalPrice.toFixed(2)} EGP</td>
                         <td className="py-3">
-                          <span className="inline-block px-3 py-1 rounded-full text-xs bg-gray-200 dark:bg-gray-800">{order.paymentMethod}</span>
+                          {order.totalPrice.toFixed(2)} EGP
+                        </td>
+                        <td className="py-3">
+                          <span className="inline-block px-3 py-1 rounded-full text-xs bg-gray-200 dark:bg-gray-800">
+                            {order.paymentMethod}
+                          </span>
                         </td>
                         <td className="py-3">
                           <span
@@ -430,7 +518,10 @@ const Profile = () => {
                           </span>
                         </td>
                         <td className="py-3">
-                          <Link to={`/order-confirmation/${order._id}`} className="text-primary hover:underline">
+                          <Link
+                            to={`/order-confirmation/${order._id}`}
+                            className="text-primary hover:underline"
+                          >
                             <Eye />
                           </Link>
                         </td>
@@ -440,7 +531,9 @@ const Profile = () => {
                               onClick={() => handleCancelOrder(order._id)}
                               className="text-red-500 hover:text-white hover:bg-red-500 px-4  outline rounded-2xl cursor-pointer"
                             >
-                              Cancel
+                              {order?.shippingStatus == "shipped"
+                                ? "Return"
+                                : "Cancel"}
                             </button>
                           </td>
                         )}
@@ -450,7 +543,11 @@ const Profile = () => {
                 </table>
               </div>
               <div className="mt-4">
-                <Pagination currentPage={currentPage} totalPages={totalPages} handlePagination={handlePagination} />
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  handlePagination={handlePagination}
+                />
               </div>
             </div>
           </>
@@ -465,7 +562,7 @@ const Profile = () => {
       refetch();
       toast.success("Order cancelled successfully");
     } catch (error) {
-      toast.error("Failed to cancel order");
+      toast.error(error);
     }
   };
   return (
@@ -486,17 +583,31 @@ const Profile = () => {
                       className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-primary object-cover"
                     />
                     <button
-                      onClick={editMode ? personalDataForm.handleSubmit : handleEditClick}
+                      onClick={
+                        editMode
+                          ? personalDataForm.handleSubmit
+                          : handleEditClick
+                      }
                       disabled={isProfileLoading || isOrdersLoading}
                       className="absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 hover:bg-accent transition-colors"
                     >
-                      {editMode ? isUpdatePending ? <LoadingSpinner size="small" /> : <Save /> : <Edit />}
+                      {editMode ? (
+                        isUpdatePending ? (
+                          <LoadingSpinner size="small" />
+                        ) : (
+                          <Save />
+                        )
+                      ) : (
+                        <Edit />
+                      )}
                     </button>
                   </div>
 
                   {editMode ? (
                     <div className="w-full mb-4">
-                      <label className="block text-accent dark:text-accent-dark mb-1">Name</label>
+                      <label className="block text-accent dark:text-accent-dark mb-1">
+                        Name
+                      </label>
                       <input
                         name="name"
                         type="text"
@@ -504,24 +615,35 @@ const Profile = () => {
                         onChange={personalDataForm.handleChange}
                         onBlur={personalDataForm.handleBlur}
                         className={`w-full p-2 border rounded ${
-                          personalDataForm.touched.name && personalDataForm.errors.name ? "border-red-500" : "dark:border-white"
+                          personalDataForm.touched.name &&
+                          personalDataForm.errors.name
+                            ? "border-red-500"
+                            : "dark:border-white"
                         }`}
                       />
-                      {personalDataForm.touched.name && personalDataForm.errors.name && (
-                        <p className="text-red-500 text-sm mt-1">{personalDataForm.errors.name}</p>
-                      )}
+                      {personalDataForm.touched.name &&
+                        personalDataForm.errors.name && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {personalDataForm.errors.name}
+                          </p>
+                        )}
                     </div>
                   ) : (
-                    <h2 className="text-xl md:text-2xl font-semibold mb-2 capitalize">{profileData.name}</h2>
+                    <h2 className="text-xl md:text-2xl font-semibold mb-2 capitalize">
+                      {profileData.name}
+                    </h2>
                   )}
 
-                  <p className="text-gray-500 dark:text-gray-400 mb-6">Member since {new Date(profileData?.createdAt).toLocaleDateString()}</p>
+                  <p className="text-gray-500 dark:text-gray-400 mb-6">
+                    Member since{" "}
+                    {new Date(profileData?.createdAt).toLocaleDateString()}
+                  </p>
 
                   <button
-                    onClick={async () => {
-                      await logout();
-                      toast.success("Logged Out Successfully!");
-                      navigate("/");
+                    onClick={() => {
+                      logout();
+                      toast.success("Logged Out Successfully");
+                      navigate(`/`);
                     }}
                     className="border-2 border-red-700 text-red-700 px-4 py-2 rounded hover:bg-red-700 hover:text-white transition-colors w-4/5"
                   >
@@ -535,7 +657,9 @@ const Profile = () => {
                       <button
                         onClick={() => handleTabChange(0)}
                         className={`flex-1 py-2 flex items-center justify-center ${
-                          activeTab === 0 ? "text-primary border-b-2 border-primary" : "text-gray-500"
+                          activeTab === 0
+                            ? "text-primary border-b-2 border-primary"
+                            : "text-gray-500"
                         }`}
                       >
                         <User className="mr-2" />
@@ -544,7 +668,9 @@ const Profile = () => {
                       <button
                         onClick={() => handleTabChange(1)}
                         className={`flex-1 py-2 flex items-center justify-center ${
-                          activeTab === 1 ? "text-primary border-b-2 border-primary" : "text-gray-500"
+                          activeTab === 1
+                            ? "text-primary border-b-2 border-primary"
+                            : "text-gray-500"
                         }`}
                       >
                         <ShoppingBag className="mr-2" />
@@ -557,18 +683,28 @@ const Profile = () => {
             </div>
 
             {/* Right Side - Content */}
-            <div className="lg:col-span-3">{activeTab === 0 ? renderProfileSection() : renderOrderHistory()}</div>
+            <div className="lg:col-span-3">
+              {activeTab === 0 ? renderProfileSection() : renderOrderHistory()}
+            </div>
           </div>
 
           {!user?.iss && (
-            <div className={`fixed inset-0 bg-gray-900/45 flex items-center justify-center p-4 ${openPasswordDialog ? "block" : "hidden"} z-50`}>
+            <div
+              className={`fixed inset-0 bg-gray-900/45 flex items-center justify-center p-4 ${
+                openPasswordDialog ? "block" : "hidden"
+              } z-50`}
+            >
               <div className="bg-white dark:bg-gray-900 dark:text-light rounded-lg shadow-lg w-full max-w-md">
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-4">Change Password</h3>
+                  <h3 className="text-xl font-semibold mb-4">
+                    Change Password
+                  </h3>
 
                   {/* Current Password */}
                   <div className="mb-4">
-                    <label className="block text-accent dark:text-accent-dark mb-1">Current Password</label>
+                    <label className="block text-accent dark:text-accent-dark mb-1">
+                      Current Password
+                    </label>
                     <div className="relative">
                       <input
                         type={showPassword.old ? "text" : "password"}
@@ -577,21 +713,32 @@ const Profile = () => {
                         onChange={passwordForm.handleChange}
                         onBlur={passwordForm.handleBlur}
                         className={`w-full p-2 border rounded pr-10 ${
-                          passwordForm.touched.oldPassword && passwordForm.errors.oldPassword ? "border-red-500" : "dark:border-white"
+                          passwordForm.touched.oldPassword &&
+                          passwordForm.errors.oldPassword
+                            ? "border-red-500"
+                            : "dark:border-white"
                         }`}
                       />
-                      <button onClick={() => toggleShowPassword("old")} className="absolute right-2 top-2 text-gray-500">
+                      <button
+                        onClick={() => toggleShowPassword("old")}
+                        className="absolute right-2 top-2 text-gray-500"
+                      >
                         {showPassword.old ? <EyeOff /> : <Eye />}
                       </button>
                     </div>
-                    {passwordForm.touched.oldPassword && passwordForm.errors.oldPassword && (
-                      <p className="text-red-500 text-sm mt-1">{passwordForm.errors.oldPassword}</p>
-                    )}
+                    {passwordForm.touched.oldPassword &&
+                      passwordForm.errors.oldPassword && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {passwordForm.errors.oldPassword}
+                        </p>
+                      )}
                   </div>
 
                   {/* New Password */}
                   <div className="mb-4">
-                    <label className="block text-accent dark:text-accent-dark mb-1">New Password</label>
+                    <label className="block text-accent dark:text-accent-dark mb-1">
+                      New Password
+                    </label>
                     <div className="relative">
                       <input
                         type={showPassword.new ? "text" : "password"}
@@ -600,21 +747,32 @@ const Profile = () => {
                         onChange={passwordForm.handleChange}
                         onBlur={passwordForm.handleBlur}
                         className={`w-full p-2 border rounded pr-10 ${
-                          passwordForm.touched.newPassword && passwordForm.errors.newPassword ? "border-red-500" : "dark:border-white"
+                          passwordForm.touched.newPassword &&
+                          passwordForm.errors.newPassword
+                            ? "border-red-500"
+                            : "dark:border-white"
                         }`}
                       />
-                      <button onClick={() => toggleShowPassword("new")} className="absolute right-2 top-2 text-gray-500">
+                      <button
+                        onClick={() => toggleShowPassword("new")}
+                        className="absolute right-2 top-2 text-gray-500"
+                      >
                         {showPassword.new ? <EyeOff /> : <Eye />}
                       </button>
                     </div>
-                    {passwordForm.touched.newPassword && passwordForm.errors.newPassword && (
-                      <p className="text-red-500 text-sm mt-1">{passwordForm.errors.newPassword}</p>
-                    )}
+                    {passwordForm.touched.newPassword &&
+                      passwordForm.errors.newPassword && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {passwordForm.errors.newPassword}
+                        </p>
+                      )}
                   </div>
 
                   {/* Confirm Password */}
                   <div className="mb-6">
-                    <label className="block text-accent dark:text-accent-dark mb-1">Confirm New Password</label>
+                    <label className="block text-accent dark:text-accent-dark mb-1">
+                      Confirm New Password
+                    </label>
                     <div className="relative">
                       <input
                         type={showPassword.confirm ? "text" : "password"}
@@ -623,20 +781,32 @@ const Profile = () => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         onBlur={() => setConfirmPasswordTouched(true)}
                         className={`w-full p-2 border rounded pr-10 ${
-                          confirmPasswordTouched && confirmPassword !== passwordForm.values.newPassword ? "border-red-500" : "dark:border-white"
+                          confirmPasswordTouched &&
+                          confirmPassword !== passwordForm.values.newPassword
+                            ? "border-red-500"
+                            : "dark:border-white"
                         }`}
                       />
-                      <button onClick={() => toggleShowPassword("confirm")} className="absolute right-2 top-2 text-gray-500">
+                      <button
+                        onClick={() => toggleShowPassword("confirm")}
+                        className="absolute right-2 top-2 text-gray-500"
+                      >
                         {showPassword.confirm ? <EyeOff /> : <Eye />}
                       </button>
                     </div>
-                    {confirmPasswordTouched && confirmPassword !== passwordForm.values.newPassword && (
-                      <p className="text-red-500 text-sm mt-1">Passwords do not match</p>
-                    )}
+                    {confirmPasswordTouched &&
+                      confirmPassword !== passwordForm.values.newPassword && (
+                        <p className="text-red-500 text-sm mt-1">
+                          Passwords do not match
+                        </p>
+                      )}
                   </div>
 
                   <div className="flex justify-end space-x-2">
-                    <button onClick={handlePasswordDialogClose} className="text-primary px-4 py-2 rounded cursor-pointer transition-colors">
+                    <button
+                      onClick={handlePasswordDialogClose}
+                      className="text-primary px-4 py-2 rounded cursor-pointer transition-colors"
+                    >
                       Cancel
                     </button>
                     <button
@@ -644,7 +814,11 @@ const Profile = () => {
                       disabled={isPasswordPending || !confirmPassword}
                       className="bg-primary text-white px-4 py-2 rounded hover:bg-accent transition-colors"
                     >
-                      {isPasswordPending ? <LoadingButton size="small" /> : "Change Password"}
+                      {isPasswordPending ? (
+                        <LoadingButton size="small" />
+                      ) : (
+                        "Change Password"
+                      )}
                     </button>
                   </div>
                 </div>

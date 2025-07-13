@@ -74,13 +74,16 @@ export default function AdminsModal({ type, admin, onClose, onSaved }) {
   return (
     <div
       className="fixed inset-0 z-50 bg-[rgba(0,0,0,0.6)] flex items-center justify-center p-4"
-      onClick={onClose}>
+      onClick={onClose}
+    >
       <div
-        className="bg-white w-full max-w-md rounded-xl p-6 space-y-4 relative"
-        onClick={(e) => e.stopPropagation()}>
+        className="bg-white w-full max-w-md rounded-xl p-6 space-y-4  dark:bg-secondary-dark relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 hover:bg-[rgba(0,0,0,0.15)] p-1 px-2 rounded-lg cursor-pointer">
+          className="absolute top-3 dark:text-white dark:hover:text-gray-200 right-3 text-gray-600 hover:text-gray-800 hover:bg-[rgba(0,0,0,0.15)] p-1 px-2 rounded-lg cursor-pointer"
+        >
           <X size={20} />
         </button>
 
@@ -89,17 +92,18 @@ export default function AdminsModal({ type, admin, onClose, onSaved }) {
             initialValues={formData}
             enableReinitialize
             validationSchema={validationSchema}
-            onSubmit={handleSubmit}>
+            onSubmit={handleSubmit}
+          >
             {({ isSubmitting }) => (
               <Form>
-                <h2 className="text-2xl font-bold text-teal-600 mb-4 border-b pb-2">
+                <h2 className="text-2xl font-bold text-accent  mb-4 border-b pb-2">
                   {isAdd ? "Add New Admin" : "Edit Admin"}
                 </h2>
 
                 <div className="space-y-4">
                   {/* Name Field */}
                   <div>
-                    <label className="block mb-1 text-teal-900 font-medium">
+                    <label className="block mb-1 text-accent  font-medium">
                       Name*
                     </label>
                     <Field
@@ -117,7 +121,7 @@ export default function AdminsModal({ type, admin, onClose, onSaved }) {
 
                   {/* Email Field */}
                   <div>
-                    <label className="block mb-1 text-teal-900 font-medium">
+                    <label className="block mb-1 text-accent  font-medium">
                       Email*
                     </label>
                     <Field
@@ -135,7 +139,7 @@ export default function AdminsModal({ type, admin, onClose, onSaved }) {
 
                   {/* Password Field */}
                   <div>
-                    <label className="block mb-1 text-teal-900 font-medium">
+                    <label className="block mb-1 text-accent  font-medium">
                       Password*
                     </label>
                     <Field
@@ -155,7 +159,8 @@ export default function AdminsModal({ type, admin, onClose, onSaved }) {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="btn-teal w-full mt-4">
+                    className="btn-modal-accent w-full mt-4"
+                  >
                     {isSubmitting ? "Processing..." : "Add Admin"}
                   </button>
                 </div>
@@ -166,14 +171,14 @@ export default function AdminsModal({ type, admin, onClose, onSaved }) {
 
         {isView && admin && (
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-teal-600 mb-4 border-b pb-2">
+            <h2 className="text-2xl font-bold text-accent  mb-4 border-b pb-2 dark:text-accent-dark">
               Admin Details
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800">
               <DetailCard label="Name" value={admin.name} />
               <DetailCard label="Email" value={admin.email} />
             </div>
-            <button onClick={onClose} className="btn-teal w-full mt-4">
+            <button onClick={onClose} className="btn-modal-accent w-full mt-4">
               Close
             </button>
           </div>
@@ -185,9 +190,11 @@ export default function AdminsModal({ type, admin, onClose, onSaved }) {
 
 function DetailCard({ label, value }) {
   return (
-    <div className="p-3 border-2 border-teal-500 rounded-lg bg-gray-50 shadow-sm">
-      <div className="font-semibold text-teal-800">{label}</div>
-      <div className="mt-1 overflow-x-auto whitespace-nowrap scrollbar-hide">
+    <div className="p-3 border-2 border-blue-400 rounded-lg bg-gray-50 shadow-sm dark:bg-secondary-dark">
+      <div className="font-semibold text-accent dark:text-accent-dark ">
+        {label}
+      </div>
+      <div className="mt-1 overflow-x-auto whitespace-nowrap scrollbar-hide dark:text-white">
         {value}
       </div>
     </div>
