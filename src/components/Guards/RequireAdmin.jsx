@@ -11,12 +11,10 @@ export default function RequireAdmin({ children }) {
   if (loading) return <p>Loading...</p>;
 
   if (!user) {
-    toast.error("Please login to access this page");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (user.role !== "admin") {
-    toast.error("You are not authorized to access the admin dashboard");
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
