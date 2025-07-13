@@ -67,7 +67,7 @@ const Footer = () => {
             Refund Policy
           </Link>
           <Link
-            to="/contacts"
+            to="/contact"
             className="block hover:text-primary transition-colors"
           >
             Contact Us
