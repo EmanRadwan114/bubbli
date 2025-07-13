@@ -97,7 +97,7 @@ const ChatWidget = () => {
           <div className="flex border-t border-gray-400  p-2">
             <input
               type="text"
-              className="flex-1 border-2 border-gray-400  p-2 rounded text-sm"
+              className="flex-1 border-2 border-gray-400  p-2 rounded text-sm dark:text-black"
               placeholder="Type a message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
