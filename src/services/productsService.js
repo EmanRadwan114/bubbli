@@ -17,7 +17,7 @@ export const getProductByCategory = async (categoryName, page, limit) => {
 
 export const filterProducts = async (query, page) => {
   const res = await api.get(
-    `/products/filter?title=${query.title}&price=${query.price}&page=${page}&limit=8`
+    `/products/filter?title=${query.title}&price=${query.price}&page=${page}&limit=6`
   );
 
   return res.data;

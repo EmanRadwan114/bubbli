@@ -1,5 +1,5 @@
-import { useContext, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useState, useCallback, useEffect } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
@@ -12,17 +12,19 @@ import {
 } from "../../hooks/useWishlist";
 import { WishlistContext } from "../../context/Wishlist.Context";
 import { useCart } from "../../context/CartContext";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getProductByCategoryName } from "./../../hooks/useProducts";
 import {
   getAllProductsBack,
   filterProducts,
 } from "../../services/productsService";
 
-export default function Products() {
+export default function Search() {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("q");
   const { categoryName } = useParams();
   const [currentPage, setCurrentPage] = useState(1);
-  const [filters, setFilters] = useState({ title: "", price: 150 });
+  const [filters, setFilters] = useState({ title: query || "", price: 150 });
 
   const { allUserWishlist = [], setAllUserWishlist } =
     useContext(WishlistContext);
@@ -67,10 +69,17 @@ export default function Products() {
     filters.title || filters.price !== 150 ? filterErrorFlag : catErrorFlag;
   const error = filters.title || filters.price !== 150 ? filterError : catError;
 
-  const handleFilterChange = useCallback((newFilters) => {
-    setCurrentPage(1);
-    setFilters((prev) => ({ ...prev, ...newFilters }));
-  }, []);
+  const handleFilterChange = useCallback(
+    (newFilters) => {
+      setCurrentPage(1);
+      setFilters((prev) => ({
+        ...prev,
+        ...newFilters,
+      }));
+    },
+
+    [query]
+  );
 
   const handlePagination = (page) => {
     setCurrentPage(page);
@@ -94,6 +103,12 @@ export default function Products() {
       setAllUserWishlist((prev) => [...prev, id]);
     }
   };
+
+  // Automatically update title filter when query changes
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, title: query || "" }));
+    setCurrentPage(1);
+  }, [query]);
 
   // show error toast once
   if (errorFlag) {
