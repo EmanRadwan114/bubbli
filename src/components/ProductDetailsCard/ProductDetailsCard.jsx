@@ -10,6 +10,7 @@ import {
   useRemoveFromWishlist,
 } from "../../hooks/useWishlist";
 import { useAddToCart } from "../../hooks/useCart";
+import { useCart } from "../../context/CartContext";
 
 const ProductDetailsCard = () => {
   const { categoryName, id } = useParams();
@@ -57,14 +58,10 @@ const ProductDetailsCard = () => {
   const { mutate: addToWishlist } = useAddToWishlist();
   const { mutate: removeFromWishlist } = useRemoveFromWishlist();
 
-  const {
-    mutateAsync: addProToCart,
-    isPending: pendingAddToCart,
-    isSuccess: addToCartSuccess,
-  } = useAddToCart();
+  const { addToCart } = useCart();
 
   const onAddToCart = async (id) => {
-    await addProToCart(id);
+    await addToCart(id);
   };
 
   // Loading state
