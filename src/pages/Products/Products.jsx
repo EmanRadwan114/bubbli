@@ -13,11 +13,11 @@ import {
 import { WishlistContext } from "../../context/Wishlist.Context";
 import { useCart } from "../../context/CartContext";
 import { useQuery } from "@tanstack/react-query";
-import { getProductByCategoryName } from "./../../hooks/useProducts";
 import {
-  getAllProductsBack,
-  filterProducts,
-} from "../../services/productsService";
+  getAllProducts,
+  getProductByCategoryName,
+} from "./../../hooks/useProducts";
+import { filterProducts } from "../../services/productsService";
 
 export default function Products() {
   const { categoryName } = useParams();
@@ -36,7 +36,7 @@ export default function Products() {
     error: catError,
   } = categoryName
     ? getProductByCategoryName(categoryName, currentPage)
-    : getAllProductsBack(currentPage);
+    : getAllProducts(currentPage);
 
   // Filtered query
   const {
@@ -54,9 +54,7 @@ export default function Products() {
   });
 
   const displayProducts =
-    filters.title || filters.price !== 150
-      ? filteredProducts
-      : productList || [];
+    filters.title || filters.price !== 150 ? filteredProducts : productList;
 
   const displayTotalPages =
     filters.title || filters.price !== 150 ? filteredTotalPages : totalPages;
