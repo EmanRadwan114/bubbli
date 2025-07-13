@@ -171,7 +171,7 @@ const ProductCard = ({
     price = 0,
     discount = 0,
     avgRating = 0,
-    totalReviews = 0,
+    numberOfReviews = 0,
     label = [],
   } = product;
 
@@ -286,7 +286,9 @@ const ProductCard = ({
           </div>
 
           <span className="ms-1 font-semibold hidden sm:inline">
-            {totalReviews || 0} Reviews
+            {numberOfReviews === 1
+              ? "1 review"
+              : `${numberOfReviews || 0} reviews`}
           </span>
         </div>
 
