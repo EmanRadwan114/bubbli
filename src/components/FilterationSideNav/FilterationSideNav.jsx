@@ -1,5 +1,6 @@
+// FilterationSideNav.jsx
 import { memo, useState } from "react";
-import { Filter, X } from "lucide-react";
+import { Filter, X, ChevronDown, ChevronUp } from "lucide-react";
 import { useParams, useSearchParams } from "react-router";
 
 const FilterationSideNav = ({ onFilterChange }) => {
@@ -11,7 +12,7 @@ const FilterationSideNav = ({ onFilterChange }) => {
     toys: false,
     notebook: false,
     mugs: false,
-    price: 150,
+    price: 150, // Changed to match Products component
   });
 
   const [searchParams] = useSearchParams();
@@ -27,6 +28,7 @@ const FilterationSideNav = ({ onFilterChange }) => {
       ...localFilters,
       [filterName]: event.target.checked,
     };
+
     setLocalFilters(newFilters);
     buildAndSendQuery(newFilters);
   };
@@ -35,7 +37,7 @@ const FilterationSideNav = ({ onFilterChange }) => {
     const newValue = parseInt(event.target.value);
     const newFilters = {
       ...localFilters,
-      category: e.target.value,
+      price: newValue,
     };
     setLocalFilters(newFilters);
     buildAndSendQuery(newFilters);
@@ -50,12 +52,15 @@ const FilterationSideNav = ({ onFilterChange }) => {
       ? selectedCategories.push(query)
       : "";
 
+    // Collect all selected categories
     if (currentFilters.decor) selectedCategories.push("dec");
     if (currentFilters.accessories) selectedCategories.push("access");
     if (currentFilters.stationary) selectedCategories.push("st");
     if (currentFilters.toys) selectedCategories.push("toy");
     if (currentFilters.notebook) selectedCategories.push("note");
     if (currentFilters.mugs) selectedCategories.push("mug");
+
+    // Send both price and categories to parent
 
     onFilterChange({
       price: currentFilters.price,
@@ -78,8 +83,8 @@ const FilterationSideNav = ({ onFilterChange }) => {
 
       {/* The actual drawer */}
       <div
-        className={`fixed md:static z-40 h-full w-72 bg-white dark:bg-gray-800 shadow-xl md:shadow-none transition-transform duration-300 ease-in-out ${
-          mobileOpen ? "translate-x-0" : "-translate-x-[110%] md:translate-x-0"
+        className={`fixed md:static z-40 w-72 bg-white dark:bg-gray-800 shadow-xl md:shadow-none transition-transform duration-300 ease-in-out py-10 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-[120%] md:translate-x-0"
         }`}
       >
         <div className="flex h-full flex-col overflow-y-auto p-5">

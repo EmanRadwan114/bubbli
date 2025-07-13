@@ -33,12 +33,13 @@ const Wishlist = () => {
 
   const handleAddToCart = async (id) => {
     await addToCart(id);
-    await removeFromWishlist(id);
-    refetch();
+    removeProFromWishlist(id);
+    setCurrentPage((prev) => --prev);
   };
 
   const handleRemoveFromWishlist = (id) => {
     removeProFromWishlist(id);
+    setCurrentPage((prev) => --prev);
   };
 
   const handleClearWishlist = () => {
@@ -50,7 +51,7 @@ const Wishlist = () => {
   }
 
   useEffect(() => {
-    setAllUserWishlist(wishlist);
+    // setAllUserWishlist(wishlist);
   }, [data]);
 
   // if (isError) {
