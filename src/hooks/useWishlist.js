@@ -75,7 +75,6 @@ export const useRemoveFromWishlist = () => {
       toast.success("Product is removed from Wishlist");
     },
     onError: (error) => {
-      toast.error("Login to remove product from wishlist");
       console.log(error);
     },
   });
