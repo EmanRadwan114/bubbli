@@ -34,12 +34,12 @@ const Wishlist = () => {
   const handleAddToCart = async (id) => {
     await addToCart(id);
     removeProFromWishlist(id);
-    setCurrentPage((prev) => --prev);
+    // setCurrentPage((prev) => --prev);
   };
 
   const handleRemoveFromWishlist = (id) => {
     removeProFromWishlist(id);
-    setCurrentPage((prev) => --prev);
+    // setCurrentPage((prev) => --prev);
   };
 
   const handleClearWishlist = () => {
