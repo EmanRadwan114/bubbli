@@ -13,7 +13,7 @@ const Navbar = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navLinks = [
     { label: "Home", to: "/" },
-    { label: "Menu", to: "/gifts" },
+    { label: "Gifts", to: "/gifts" },
     { label: "About", to: "/about" },
     { label: "Contact Us", to: "/contact" },
   ];
