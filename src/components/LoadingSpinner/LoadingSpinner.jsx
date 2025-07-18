@@ -131,7 +131,6 @@ const StyledWrapper = styled.div`
   .spinner-container {
     display: flex;
     justify-content: center;
-    align-items: center;
     width: 100%;
     height: 100%;
     min-height: 200px;
@@ -238,6 +237,6 @@ const StyledWrapper = styled.div`
       stroke-dashoffset: -351.86;
     }
   }
-`
+`;
 
 export default LoadingSpinner;
