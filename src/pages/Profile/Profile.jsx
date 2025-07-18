@@ -389,7 +389,7 @@ const Profile = () => {
               className="mt-4 bg-primary text-white px-6 py-2 rounded hover:bg-accent transition-colors"
               onClick={() => navigate("/gifts")}
             >
-              Browse Menu
+              Browse Gifts
             </button>
           </div>
         ) : (
