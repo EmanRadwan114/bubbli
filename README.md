@@ -7,10 +7,10 @@ This repository contains the **frontend** of **Bubbli**, a modern full-stack gif
 ## 🚀 Frontend Features
 
 * Google OAuth login (UI integration)
-* Secure authentication using cookie-based sessions
+* Secure authentication using HTTP-Only cookies
 * Gift browsing & advanced filtering
 * Chatbot UI integration
-* Online payments UI flow
+* Online payments using Paymob
 * Order tracking interface
 * Admin dashboard UI (analytics & management)
 * Responsive design (mobile-first)
