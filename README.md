@@ -1,12 +1,36 @@
-# React + Vite
+# 🎁 Bubbli
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains the **frontend** of **Bubbli**, a modern full-stack gift store platform. The UI is built with React and focuses on performance, accessibility, and a smooth user experience.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Frontend Features
 
-## Expanding the ESLint configuration
+* Google OAuth login (UI integration)
+* Secure authentication using cookie-based sessions
+* Gift browsing & advanced filtering
+* Chatbot UI integration
+* Online payments UI flow
+* Order tracking interface
+* Admin dashboard UI (analytics & management)
+* Responsive design (mobile-first)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧰 Frontend Tech Stack
+
+* **React**
+* **React Router** – routing & navigation
+* **React Query** – server state management
+* **Context API** – global state management
+* **Formik** – form handling
+* **Yup** – form validation
+* **Tailwind CSS** – styling
+
+---
+
+## 📌 Notes
+
+* This repository contains **frontend only**
+* It consumes REST APIs from the Bubbli backend
+* Authentication relies on **HTTP-only cookies** handled by the backend
