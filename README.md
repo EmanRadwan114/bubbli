@@ -34,3 +34,14 @@ This repository contains the **frontend** of **Bubbli**, a modern full-stack gif
 * This repository contains **frontend only**
 * It consumes REST APIs from the Bubbli backend
 * Authentication relies on **HTTP-only cookies** handled by the backend
+
+---
+
+## ⚡ Built With Vite
+
+This project uses **Vite** for fast development and optimized production builds.
+
+## 📦 Getting Started
+
+npm install  
+npm run dev
