@@ -42,7 +42,7 @@ This repository contains the **frontend** of **Bubbli**, a modern full-stack gif
 
 This project uses **Vite** for fast development and optimized production builds.
 
-## 📦 Getting Started
+## Getting Started
 
 npm install  
 npm run dev
