@@ -25,8 +25,18 @@ export default function Cart() {
     setPage(value);
   }
 
+  const calculateSubtotal = () => {
+    if (!data?.data?.length) return 0;
+    return data.data.reduce((acc, item) => {
+      const price = item.productId.price;
+      const discount = item.productId.discount || 0;
+      const discountedPrice = price * (1 - discount / 100);
+      return acc + discountedPrice * item.quantity;
+    }, 0);
+  };
+
   const calculateTotal = () => {
-    const subtotal = data?.subtotal || 0;
+    const subtotal = calculateSubtotal();
     const shipping = 50;
     return subtotal + shipping;
   };
@@ -120,12 +130,32 @@ export default function Cart() {
                         </div>
 
                         <div className="text-right">
-                          <p className="text-gray-500 dark:text-gray-400 ">
-                            EGP {item.productId.price}.00 each
-                          </p>
+                          {item.productId.discount > 0 ? (
+                            <>
+                              <p className="text-gray-400 dark:text-gray-500 line-through text-sm">
+                                EGP {item.productId.price}.00 each
+                              </p>
+                              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                EGP{" "}
+                                {(item.productId.price * (1 - item.productId.discount / 100)).toFixed(2)}{" "}
+                                each{" "}
+                                <span className="text-green-600 dark:text-green-400 font-semibold">
+                                  (-{item.productId.discount}%)
+                                </span>
+                              </p>
+                            </>
+                          ) : (
+                            <p className="text-gray-500 dark:text-gray-400 text-sm">
+                              EGP {item.productId.price}.00 each
+                            </p>
+                          )}
                           <p className="font-semibold text-primary dark:text-primary-dark">
                             EGP{" "}
-                            {(item.productId.price * item.quantity).toFixed(2)}
+                            {(
+                              item.productId.price *
+                              (1 - (item.productId.discount || 0) / 100) *
+                              item.quantity
+                            ).toFixed(2)}
                           </p>
                         </div>
                       </div>
@@ -155,7 +185,7 @@ export default function Cart() {
                       Subtotal
                     </span>
                     <span className="font-medium">
-                      EGP {data?.subtotal?.toFixed(2) || "0.00"}
+                      EGP {calculateSubtotal().toFixed(2)}
                     </span>
                   </div>
                   <div className="flex justify-between">
