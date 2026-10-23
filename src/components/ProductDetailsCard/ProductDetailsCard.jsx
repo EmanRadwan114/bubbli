@@ -17,7 +17,9 @@ const ProductDetailsCard = () => {
 
   // Fetch product data
   const { data: response, isLoading, isError, error } = useGetProductById(id);
-  const product = response?.data?.[0];
+  const product = Array.isArray(response?.data)
+    ? response.data[0]
+    : response?.data;
 
   // State for image gallery
   const [mainImage, setMainImage] = useState(null);
